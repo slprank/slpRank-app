@@ -1,0 +1,42 @@
+{
+	"appId": "com.slippi-stats-display.app",
+	"productName": "Slippi Stats Display",
+	"directories": {
+		"output": "out"
+	},
+	"artifactName": "Slippi-Stats-Display-${version}-${os}.${ext}",
+	"win": {
+		"icon": "bin/static/icon.png",
+		"target": [
+			{
+				"target": "nsis",
+				"arch": ["x64"]
+			}
+		]
+	},
+	"linux": {
+		"icon": "bin/static/icon.png",
+		"target": [
+			{
+				"target": "AppImage",
+				"arch": ["x64"]
+			}
+		]
+	},
+	"mac": {
+		"icon": "bin/static/icon.png",
+		"target": ["default"],
+		"extraResources": ["res", "favicon.png"]
+	},
+	"executableName": "slp-rank-app",
+	"files": [
+		"src/electron.cjs",
+		"src/preload.cjs",
+		"static/icon.png",
+		"*",
+		{
+			"from": "build",
+			"to": ""
+		}
+	]
+}

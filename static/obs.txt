@@ -1,0 +1,9 @@
+Open obs
+
+Tools > obs-websocket > Settings
+
+Check - Enable WebSocket server
+
+Uncheck - Enable authentication
+
+Server Port - 4455 (default)
