@@ -1,0 +1,93 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_on_mac:
+    runs-on: macos-11
+    environment: production
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+        with:
+          node-version: 18.13.0
+      - name: install dependencies
+        run: npm install
+      - name: Echo directory
+        run: ls
+      - name: build
+        run: npm run build:mac
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Echo directory
+        run: ls
+      - uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: ./out/*.dmg; ./out/*.dmg.blockmap; ./out/*mac.zip; ./out/*.zip.blockmap; ./out/latest-mac.yml;
+          tags: false
+          draft: false
+          tag_name: v1.0.${{ github.run_number }}
+
+  build_on_ubuntu:
+    runs-on: ubuntu-20.04
+    environment: production
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+        with:
+          node-version: 18.13.0
+      - name: install dependencies
+        run: npm install
+      - name: Echo directory
+        run: ls
+      - name: build
+        run: npm run build:linux
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Echo directory
+        run: ls
+      - uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: ./out/*.AppImage; ./out/builder-debug.yml; ./out/latest-linux.yml;
+          tags: false
+          draft: false
+          tag_name: v1.0.${{ github.run_number }}
+
+  build_on_windows:
+    runs-on: windows-2019
+    environment: production
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+        with:
+          node-version: 18.13.0
+      - name: install dependencies
+        run: npm install
+      - name: Echo directory
+        run: ls
+      - name: build
+        run: npm run build:win
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Echo directory
+        run: ls
+      - uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: ./out/*.exe; ./out/*.exe.blockmap; ./out/builder-debug.yml; ./out/latest.yml;
+          tags: false
+          draft: false
+          tag_name: v1.0.${{ github.run_number }}

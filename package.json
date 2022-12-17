@@ -1,0 +1,93 @@
+{
+	"name": "slippi-stats-display",
+	"productName": "Slippi Stats Display",
+	"description": "Display slippi stats realtime",
+	"version": "1.0.0",
+	"main": "src/electron.cjs",
+	"type": "module",
+	"nodeIntegration": true,
+	"sandbox": true,
+	"scripts": {
+		"dev": "cross-env NODE_ENV=dev npm run dev:all",
+		"dev:all": "concurrently -n=svelte,electron -c='#ff3e00',blue \"npm run dev:svelte\" \"npm run dev:electron\"",
+		"dev:svelte": "vite dev",
+		"dev:electron": "electron src/electron.cjs",
+		"build": "cross-env NODE_ENV=production && npm run build:electron",
+		"build:svelte": "vite build",
+		"build:electron": "electron-builder -mwl --config build.config.json",
+		"build:linux": "cross-env NODE_ENV=production && vite build && electron-builder -l --config build.config.json",
+		"build:mac": "cross-env NODE_ENV=production && vite build && electron-builder -m --config build.config.json",
+		"build:win": "cross-env NODE_ENV=production && vite build && electron-builder -w --config build.config.json",
+		"publish:mac": "electron-builder -m --config build.config.json -p always",
+		"publish:win": "electron-builder -w --config build.config.json -p always",
+		"publish:linux": "electron-builder -l --config build.config.json -p always"
+	},
+	"engines": {
+		"npm": ">=7",
+		"yarn": "use npm - https://github.com/FractalHQ/sveltekit-electron/issues/12#issuecomment-1068399385"
+	},
+	"browserslist": [
+		"Chrome 89"
+	],
+	"dependencies": {
+		"@nut-tree/nut-js": "^2.3.0",
+		"@slippi/slippi-js": "^6.5.0",
+		"axios": "^1.2.1",
+		"chokidar": "^3.5.3",
+		"electron-context-menu": "^3.3.0",
+		"electron-github-autoupdater": "^2.0.0",
+		"electron-log": "^4.4.8",
+		"electron-reloader": "^1.2.3",
+		"electron-serve": "^1.1.0",
+		"electron-squirrel-startup": "^1.0.0",
+		"electron-unhandled": "^4.0.1",
+		"electron-updater": "^5.3.0",
+		"electron-window-state": "^5.0.3",
+		"lodash": "^4.17.21",
+		"obs-websocket-js": "^5.0.2",
+		"postcss-load-config": "^4.0.1",
+		"svelte-textfit": "^1.1.4",
+		"update-electron-app": "^2.0.1",
+		"ws": "^8.12.0"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-static": "^1.0.0-next.43",
+		"@sveltejs/kit": "1.0.1",
+		"@typescript-eslint/eslint-plugin": "^5.30.6",
+		"@typescript-eslint/parser": "^5.30.6",
+		"autoprefixer": "^10.4.13",
+		"concurrently": "^7.2.2",
+		"cross-env": "^7.0.3",
+		"dotenv": "^16.0.3",
+		"electron": "^21.3.4",
+		"electron-builder": "^23.6.0",
+		"electron-connect": "^0.6.3",
+		"electron-packager": "^16.0.0",
+		"eslint": "^8.19.0",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-svelte3": "^4.0.0",
+		"npm-run-all": "^4.1.5",
+		"postcss": "^8.4.20",
+		"prettier": "^2.7.1",
+		"prettier-plugin-svelte": "^2.7.0",
+		"sass": "^1.53.0",
+		"svelte": "^3.55.0",
+		"svelte-check": "^2.8.0",
+		"svelte-preprocess": "^4.10.7",
+		"tailwindcss": "^3.2.4",
+		"tslib": "^2.3.1",
+		"typescript": "^4.7.4",
+		"vite": "^4.0.3"
+	},
+	"build": {
+		"publish": {
+			"provider": "github",
+			"owner": "slprank",
+			"repo": "slpRank-app"
+		}
+	},
+	"author": "Sindre Vatnaland",
+	"files": [
+		"out/**/*"
+	]
+}
