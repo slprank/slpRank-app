@@ -1,27 +1,39 @@
 <script lang="ts">
+	import Counter from '$lib/Counter.svelte';
+	import Logo from '$lib/Logo.svelte';
+	import { browser } from '$app/environment';
 	import { fly } from 'svelte/transition';
-	// Get slippi file directory
-
 	import Display from '$lib/components/Display.svelte';
 
-	$: playerId1 = 'IBDW#0';
-	$: playerId2 = 'PLUB#754';
+	let desktop: string;
 
-	// Read metadata
+	$: playerId1 = 'PIP#827';
+	$: playerId2 = 'LIAX#424';
 
-	// Parse playerids to display
+	if (window.electron && browser) {
+		window.electron.receive('from-main', (data: any) => {
+			desktop = `Received Message "${data}" from Electron`;
+			console.log(desktop);
+		});
+	}
 
-	// If metadata - switch scene
+	const agent = window.electron ? 'Electron' : 'Browser';
 </script>
 
-<svelte:head>
-	<title>Setup</title>
-	<meta name="Setup" content="setup" />
-</svelte:head>
-
-<div class="content">
+<main>
 	{#if !playerId1 || !playerId2}
 		<h1 transition:fly={{ y: 200, duration: 300 }}>input for slippi directory</h1>
 	{/if}
 	<Display bind:playerId1 bind:playerId2 />
-</div>
+</main>
+
+<style>
+	main {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100vh;
+		flex-direction: column;
+		gap: 1em;
+	}
+</style>
