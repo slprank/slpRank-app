@@ -17,8 +17,8 @@ let mainWindow;
 
 function createWindow() {
 	let windowState = windowStateManager({
-		defaultWidth: 800,
-		defaultHeight: 40,
+		defaultWidth: 350,
+		defaultHeight: 800
 	});
 
 	const mainWindow = new BrowserWindow({
@@ -27,22 +27,24 @@ function createWindow() {
 		autoHideMenuBar: true,
 		trafficLightPosition: {
 			x: 17,
-			y: 32,
+			y: 32
 		},
 		minHeight: 800,
-		minWidth: 400,
+		minWidth: 420,
+		maxHeight: 800,
+		maxWidth: 420,
 		webPreferences: {
 			enableRemoteModule: true,
 			contextIsolation: true,
 			nodeIntegration: true,
 			spellcheck: false,
 			devTools: dev,
-			preload: path.join(__dirname, 'preload.cjs'),
+			preload: path.join(__dirname, 'preload.cjs')
 		},
 		x: windowState.x,
 		y: windowState.y,
 		width: windowState.width,
-		height: windowState.height,
+		height: windowState.height
 	});
 
 	windowState.manage(mainWindow);
@@ -65,9 +67,9 @@ contextMenu({
 	showCopyImage: false,
 	prepend: (defaultActions, params, browserWindow) => [
 		{
-			label: 'Make App 💻',
-		},
-	],
+			label: 'Make App 💻'
+		}
+	]
 });
 
 function loadVite(port) {
@@ -101,4 +103,18 @@ app.on('window-all-closed', () => {
 
 ipcMain.on('to-main', (event, count) => {
 	return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
+});
+
+ipcMain.handle('get/players', () => {
+	console.log('here');
+
+	const childPython = spawn('python3', ['src/python/venv/hello.py']);
+
+	childPython.stdout.on('data', (data) => {
+		console.log(`${data}`);
+	});
+	childPython.stderr.on('data', (data) => {
+		console.error(`${data}`);
+	});
+	return 'test';
 });

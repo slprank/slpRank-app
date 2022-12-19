@@ -157,9 +157,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		height: 350px;
+		height: 300px;
 		width: 350px;
 		flex-direction: column;
+		padding: 1em;
 		gap: 1em;
 	}
 

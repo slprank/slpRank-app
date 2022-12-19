@@ -26,7 +26,8 @@
 		"electron-reloader": "^1.2.3",
 		"electron-serve": "^1.1.0",
 		"electron-window-state": "^5.0.3",
-		"postcss-load-config": "^4.0.1"
+		"postcss-load-config": "^4.0.1",
+		"python-shell": "^3.0.1"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "1.0.0-next.43",

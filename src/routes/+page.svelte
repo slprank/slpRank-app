@@ -1,16 +1,17 @@
 <script lang="ts">
-	import Counter from '$lib/Counter.svelte';
-	import Logo from '$lib/Logo.svelte';
 	import { browser } from '$app/environment';
 	import { fly } from 'svelte/transition';
 	import Display from '$lib/components/Display.svelte';
 
 	let desktop: string;
 
+	console.log();
+
 	$: playerId1 = 'PIP#827';
-	$: playerId2 = 'LIAX#424';
+	$: playerId2 = 'DISB#606';
 
 	if (window.electron && browser) {
+		console.log('he');
 		window.electron.receive('from-main', (data: any) => {
 			desktop = `Received Message "${data}" from Electron`;
 			console.log(desktop);
