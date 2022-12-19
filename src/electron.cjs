@@ -13,12 +13,16 @@ try {
 const serveURL = serve({ directory: '.' });
 const port = process.env.PORT || 5173;
 const dev = !app.isPackaged;
+
+const WIDTH = 420;
+const HEIGHT = 800;
+
 let mainWindow;
 
 function createWindow() {
 	let windowState = windowStateManager({
-		defaultWidth: 350,
-		defaultHeight: 800
+		defaultWidth: WIDTH,
+		defaultHeight: HEIGHT
 	});
 
 	const mainWindow = new BrowserWindow({
@@ -29,10 +33,10 @@ function createWindow() {
 			x: 17,
 			y: 32
 		},
-		minHeight: 800,
-		minWidth: 420,
-		maxHeight: 800,
-		maxWidth: 420,
+		minHeight: HEIGHT,
+		minWidth: WIDTH,
+		maxHeight: HEIGHT,
+		maxWidth: WIDTH,
 		webPreferences: {
 			enableRemoteModule: true,
 			contextIsolation: true,

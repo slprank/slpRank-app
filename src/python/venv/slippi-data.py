@@ -7,6 +7,10 @@ path = sys.argv[1]
 
 # Get recent file in path
 
+# Folder metadata
+
+# Get file based on metadata last update
+
 game = Game(path)
 
 player1 = game.metadata.players[0].netplay.code

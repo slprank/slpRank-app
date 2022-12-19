@@ -8,13 +8,15 @@
 	const ms = 1000;
 
 	let tempPath: string = '';
+	//localStorage.removeItem('slippi-path');
+
+	// /Users/sindrevatnaland/Slippi/Game_20221014T153837.slp
 
 	let path = localStorage.getItem('slippi-path') ?? '';
 
 	console.log(path);
 
 	$: {
-		// /Users/sindrevatnaland/Slippi/Game_20221014T153837.slp
 		clearInterval(clear);
 		clear = setInterval(() => path && getData(path), ms);
 	}
@@ -42,7 +44,8 @@
 		});
 		window.electron.receive('remove-data', async (data: any) => {
 			console.log(data);
-			localStorage.removeItem('slippi-data');
+			path = '';
+			localStorage.removeItem('slippi-path');
 		});
 	}
 </script>
