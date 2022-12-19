@@ -3,24 +3,31 @@
 	import { fly } from 'svelte/transition';
 	import Display from '$lib/components/Display.svelte';
 
-	let desktop: string;
+	let clear: NodeJS.Timeout;
+
+	const ms = 5000;
+
+	$: {
+		clearInterval(clear);
+		clear = setInterval(getData, ms);
+	}
 
 	const getData = async () => {
-		window.electron.getPlayers();
+		// Add directory
+		window.electron.getPlayers(/* Directory */);
+		// Save directory to localStorage
+
+		// Run function on interval
 	};
 
 	$: playerId1 = 'PIP#827';
 	$: playerId2 = 'DISB#606';
 
 	if (window.electron && browser) {
-		window.electron.receive('from-main', (data: any) => {
-			desktop = `Received Message "${data}" from Electron`;
-			console.log(desktop);
-		});
-
 		window.electron.receive('get-data', async (data: any) => {
-			console.log('data:');
-			console.log(await data);
+			const players = data.split(' ');
+			playerId1 = players[0];
+			playerId2 = players[1];
 		});
 	}
 
