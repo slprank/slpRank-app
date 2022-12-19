@@ -105,15 +105,17 @@ ipcMain.on('to-main', (event, count) => {
 	return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
 });
 
-ipcMain.handle('get/players', async () => {
+ipcMain.handle('get/players', async (_, path) => {
+	console.log(path);
+
 	const { spawn } = require('child_process');
 
-	const childPython = spawn('python3', ['src/python/venv/slippi-data.py']);
+	const childPython = spawn('python3', [`src/python/venv/slippi-data.py`, path]);
 
 	childPython.stdout.on('data', (data) => {
 		mainWindow.webContents.send('get-data', `${data}`);
 	});
 	childPython.stderr.on('data', (data) => {
-		console.error(`${data}`);
+		mainWindow.webContents.send('remove-data', `${data}`);
 	});
 });

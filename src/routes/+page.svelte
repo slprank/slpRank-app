@@ -7,42 +7,68 @@
 
 	const ms = 1000;
 
+	let tempPath: string = '';
+
+	let path = localStorage.getItem('slippi-path') ?? '';
+
+	console.log(path);
+
 	$: {
+		// /Users/sindrevatnaland/Slippi/Game_20221014T153837.slp
 		clearInterval(clear);
-		clear = setInterval(getData, ms);
+		clear = setInterval(() => path && getData(path), ms);
 	}
 
-	const getData = async () => {
-		// Add directory
-		window.electron.getPlayers(/* Directory */);
-		// Save directory to localStorage
-
-		// Run function on interval
+	const setPath = () => {
+		path = tempPath;
+		localStorage.setItem('slippi-path', tempPath);
+		tempPath = '';
 	};
 
-	$: playerId1 = 'PIP#827';
-	$: playerId2 = 'DISB#606';
+	const getData = async (path: string) => {
+		window.electron.getPlayers(path);
+	};
+
+	$: playerId1 = '';
+	$: playerId2 = '';
 
 	if (window.electron && browser) {
 		window.electron.receive('get-data', async (data: any) => {
+			console.log(data);
 			const players = data.split(' ');
 			playerId1 = players[0];
 			playerId2 = players[1];
+			console.log(players[2]);
+		});
+		window.electron.receive('remove-data', async (data: any) => {
+			console.log(data);
+			localStorage.removeItem('slippi-data');
 		});
 	}
-
-	const agent = window.electron ? 'Electron' : 'Browser';
 </script>
 
 <main>
 	{#if !playerId1 || !playerId2}
-		<h1 transition:fly={{ y: 200, duration: 300 }}>input for slippi directory</h1>
+		<div class="content">
+			<h1 transition:fly={{ y: 200, duration: 300 }}>input for slippi directory</h1>
+			<input bind:value={tempPath} />
+			<button on:click={setPath}>Submit</button>
+		</div>
 	{/if}
 	<Display bind:playerId1 bind:playerId2 />
 </main>
 
 <style>
 	main {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100vh;
+		flex-direction: column;
+		gap: 1em;
+	}
+
+	.content {
 		display: flex;
 		align-items: center;
 		justify-content: center;

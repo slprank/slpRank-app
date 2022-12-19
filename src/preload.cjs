@@ -12,5 +12,5 @@ contextBridge.exposeInMainWorld('electron', {
 	receive: (channel, func) => {
 		ipcRenderer.on(channel, (event, ...args) => func(...args));
 	},
-	getPlayers: () => ipcRenderer.invoke('get/players')
+	getPlayers: (path) => ipcRenderer.invoke('get/players', path)
 });
