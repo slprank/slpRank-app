@@ -5,7 +5,7 @@
 
 	let clear: NodeJS.Timeout;
 
-	const ms = 5000;
+	const ms = 1000;
 
 	$: {
 		clearInterval(clear);
@@ -35,7 +35,6 @@
 </script>
 
 <main>
-	<button style="margin-top: 50px" on:click={getData}>Get Data</button>
 	{#if !playerId1 || !playerId2}
 		<h1 transition:fly={{ y: 200, duration: 300 }}>input for slippi directory</h1>
 	{/if}

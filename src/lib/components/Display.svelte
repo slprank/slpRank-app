@@ -92,8 +92,8 @@
 			<h2>{playerRank1}</h2>
 			<h2>{player1.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
 			<div class="col-2-container">
-				<h2 class="grid_item">Wins: {player1.rankedNetplayProfile.wins}</h2>
-				<h2 class="grid_item">Losses: {player1.rankedNetplayProfile.losses}</h2>
+				<h2 class="grid_item">Wins: {player1.rankedNetplayProfile.wins ?? 0}</h2>
+				<h2 class="grid_item">Losses: {player1.rankedNetplayProfile.losses ?? 0}</h2>
 			</div>
 			<div class={`col-${player1.rankedNetplayProfile.characters.length}-container`}>
 				{#each player1.rankedNetplayProfile.characters as character}
@@ -122,8 +122,8 @@
 			<h2>{playerRank2}</h2>
 			<h2>{player2.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
 			<div class="col-2-container">
-				<h2 class="grid_item">Wins: {player2.rankedNetplayProfile.wins}</h2>
-				<h2 class="grid_item">Losses: {player2.rankedNetplayProfile.losses}</h2>
+				<h2 class="grid_item">Wins: {player2.rankedNetplayProfile.wins ?? 0}</h2>
+				<h2 class="grid_item">Losses: {player2.rankedNetplayProfile.losses ?? 0}</h2>
 			</div>
 			<div class={`col-${player2.rankedNetplayProfile.characters.length}-container`}>
 				{#each player2.rankedNetplayProfile.characters as character}
