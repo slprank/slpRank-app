@@ -5,13 +5,15 @@
 
 	let desktop: string;
 
-	console.log();
+	let getPlayers = async () => await window?.electron.getPlayers();
+
+	console.log(getPlayers());
 
 	$: playerId1 = 'PIP#827';
 	$: playerId2 = 'DISB#606';
 
 	if (window.electron && browser) {
-		console.log('he');
+		console.log('hheh');
 		window.electron.receive('from-main', (data: any) => {
 			desktop = `Received Message "${data}" from Electron`;
 			console.log(desktop);

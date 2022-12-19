@@ -107,6 +107,7 @@ ipcMain.on('to-main', (event, count) => {
 
 ipcMain.handle('get/players', () => {
 	console.log('here');
+	const { spawn } = require('child-process');
 
 	const childPython = spawn('python3', ['src/python/venv/hello.py']);
 
