@@ -105,17 +105,16 @@ ipcMain.on('to-main', (event, count) => {
 	return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
 });
 
-ipcMain.handle('get/players', () => {
-	console.log('here');
-	const { spawn } = require('child-process');
+ipcMain.handle('get/players', async () => {
+	const { spawn } = require('child_process');
 
 	const childPython = spawn('python3', ['src/python/venv/hello.py']);
 
 	childPython.stdout.on('data', (data) => {
 		console.log(`${data}`);
+		mainWindow.webContents.send('get-data', `${data}`);
 	});
 	childPython.stderr.on('data', (data) => {
 		console.error(`${data}`);
 	});
-	return 'test';
 });

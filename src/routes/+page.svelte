@@ -5,18 +5,22 @@
 
 	let desktop: string;
 
-	let getPlayers = async () => await window?.electron.getPlayers();
-
-	console.log(getPlayers());
+	const getData = async () => {
+		window.electron.getPlayers();
+	};
 
 	$: playerId1 = 'PIP#827';
 	$: playerId2 = 'DISB#606';
 
 	if (window.electron && browser) {
-		console.log('hheh');
 		window.electron.receive('from-main', (data: any) => {
 			desktop = `Received Message "${data}" from Electron`;
 			console.log(desktop);
+		});
+
+		window.electron.receive('get-data', async (data: any) => {
+			console.log('data:');
+			console.log(await data);
 		});
 	}
 
@@ -24,6 +28,7 @@
 </script>
 
 <main>
+	<button style="margin-top: 50px" on:click={getData}>Get Data</button>
 	{#if !playerId1 || !playerId2}
 		<h1 transition:fly={{ y: 200, duration: 300 }}>input for slippi directory</h1>
 	{/if}
