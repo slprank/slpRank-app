@@ -2,6 +2,8 @@
 	import { browser } from '$app/environment';
 	import { fly } from 'svelte/transition';
 	import Display from '$lib/components/Display.svelte';
+	import StatDisplay from '$lib/components/StatDisplay.svelte';
+	import type { GameStartType, MetadataType, StatsType } from '@slippi/slippi-js';
 
 	let clear: NodeJS.Timeout;
 
@@ -35,16 +37,27 @@
 	$: playerId2 = '';
 
 	if (window.electron && browser) {
-		window.electron.receive('get-data', async (data: any) => {
-			console.log(data);
-			const players = data.split(' ');
-			playerId1 = players[0];
-			playerId2 = players[1];
-			console.log(players[2]);
+		window.electron.receive('get-settings', async (data: GameStartType) => {
+			console.log('settings', data);
+			playerId1 = data?.players[0].names?.code ?? '';
+			playerId2 = data?.players[1].names?.code ?? '';
 		});
-		window.electron.receive('remove-data', async (data: any) => {
-			console.log(data);
+		window.electron.receive('get-metadata', async (data: MetadataType) => {
+			console.log('metadata', data);
+			playerId1 = data?.players[0].names?.code ?? '';
+			playerId2 = data?.players[1].names?.code ?? '';
+		});
+		window.electron.receive('get-stats', async (data: StatsType) => {
+			console.log('stats', data);
+			playerId1 = data?.players[0].names?.code ?? '';
+			playerId2 = data?.players[1].names?.code ?? '';
+		});
+
+		window.electron.receive('clear-data', async (err: any) => {
+			console.log(err);
 			path = '';
+			playerId1 = '';
+			playerId2 = '';
 			localStorage.removeItem('slippi-path');
 		});
 	}
@@ -58,7 +71,11 @@
 			<button on:click={setPath}>Submit</button>
 		</div>
 	{/if}
+	<!-- In game display -->
 	<Display bind:playerId1 bind:playerId2 />
+
+	<!-- Stats display -->
+	<StatDisplay />
 </main>
 
 <style>

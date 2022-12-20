@@ -22,6 +22,7 @@
 		"Chrome 89"
 	],
 	"dependencies": {
+		"@slippi/slippi-js": "^6.5.0",
 		"electron-context-menu": "^3.3.0",
 		"electron-reloader": "^1.2.3",
 		"electron-serve": "^1.1.0",

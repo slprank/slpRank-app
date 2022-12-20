@@ -112,6 +112,39 @@ ipcMain.on('to-main', (event, count) => {
 ipcMain.handle('get/players', async (_, path) => {
 	console.log(path);
 
+	// Get folder metadata
+
+	// Get latest slippi file based on recent update metadata of Slippi folder
+
+	// If no files containing name - scan for latest
+
+	// Copy file with new name
+
+	const { SlippiGame } = require('@slippi/slippi-js');
+
+	const game = new SlippiGame(path);
+
+	const settings = game.getSettings();
+	const metadata = game.getMetadata();
+	const stats = game.getStats();
+
+	mainWindow.webContents.send('get-settings', settings);
+	mainWindow.webContents.send('get-metadata', metadata);
+	mainWindow.webContents.send('get-stats', stats);
+
+	ReadFolderData();
+});
+
+function GetNewestFileInFolder() {
+	const fs = require('fs');
+	const path = require('path');
+
+	const files = fs.readdirSync(dir).map((filename) => path.parse(filename).name);
+	console.log(files);
+	// return newest file - highest value file name
+}
+
+function GetSlippiFromPython() {
 	const { spawn } = require('child_process');
 
 	const childPython = spawn('python3', [`src/python/venv/slippi-data.py`, path]);
@@ -122,4 +155,4 @@ ipcMain.handle('get/players', async (_, path) => {
 	childPython.stderr.on('data', (data) => {
 		mainWindow.webContents.send('remove-data', `${data}`);
 	});
-});
+}
