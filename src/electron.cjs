@@ -109,16 +109,8 @@ ipcMain.on('to-main', (event, count) => {
 	return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
 });
 
-ipcMain.handle('get/players', async (_, path) => {
-	console.log(path);
-
-	// Get folder metadata
-
-	// Get latest slippi file based on recent update metadata of Slippi folder
-
-	// If no files containing name - scan for latest
-
-	// Copy file with new name
+ipcMain.handle('get/players', async (_, dir) => {
+	const gamePath = GetLatestGamePath(dir);
 
 	const { SlippiGame } = require('@slippi/slippi-js');
 
@@ -135,13 +127,27 @@ ipcMain.handle('get/players', async (_, path) => {
 	ReadFolderData();
 });
 
-function GetNewestFileInFolder() {
+function GetLatestGamePath(gameDir) {
 	const fs = require('fs');
 	const path = require('path');
 
+	const folder = fs.statSync('/Users/sindrevatnaland/Slippi'); // Change to gamedir
+	folder.mtime;
+
+	// Create name for gamefile
+
+	// If game exist - return
+
+	// else scan for latest game
+
+	// Make copy of latest game with new name
+
 	const files = fs.readdirSync(dir).map((filename) => path.parse(filename).name);
 	console.log(files);
+
 	// return newest file - highest value file name
+
+	// return path for newest file
 }
 
 function GetSlippiFromPython() {
