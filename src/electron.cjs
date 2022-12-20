@@ -35,8 +35,8 @@ function createWindow() {
 		},
 		minHeight: HEIGHT,
 		minWidth: WIDTH,
-		maxHeight: HEIGHT,
-		maxWidth: WIDTH,
+		maxHeight: dev ? 1024 : HEIGHT,
+		maxWidth: dev ? 1024 : WIDTH,
 		webPreferences: {
 			enableRemoteModule: true,
 			contextIsolation: true,
@@ -111,18 +111,20 @@ ipcMain.on('to-main', (event, count) => {
 
 ipcMain.handle('get/slippi', async (_, dir) => {
 	const gamePath = GetLatestGamePath(dir);
-	console.log(dir);
+	console.log(gamePath);
 
 	const { SlippiGame } = require('@slippi/slippi-js');
 
-	const game = new SlippiGame(`${dir}/Game_20221014T153837.slp`);
+	const game = new SlippiGame(gamePath);
 
 	const settings = game.getSettings();
 	const metadata = game.getMetadata();
 	const stats = game.getStats();
+	const placements = game.getWinners();
 
 	mainWindow.webContents.send('get-settings', settings);
 	mainWindow.webContents.send('get-metadata', metadata);
+	mainWindow.webContents.send('get-placements', placements);
 	mainWindow.webContents.send('get-stats', stats);
 });
 
@@ -130,26 +132,27 @@ function GetLatestGamePath(dir) {
 	const fs = require('fs');
 	const path = require('path');
 
-	const folder = fs.statSync(dir); // Change to
+	const folder = fs.statSync(dir);
 
 	const assumedGameFile = `Game_${
 		folder.mtime.toISOString().replaceAll('-', '').replaceAll(':', '').split('.')[0]
 	}.slp`;
 
-	let gameDir = `${dir}/${assumedGameFile}`;
+	const targetGame = `${dir}/${assumedGameFile}`;
 
-	if (fs.existsSync(gameDir)) return gameDir;
+	if (fs.existsSync(targetGame)) return targetGame;
 
-	console.log('does not exist');
+	let files = fs.readdirSync(dir).map((filename) => `${path.parse(filename).name}.slp`);
 
-	// else scan for latest game
+	files = files.filter((f) => f[0] != '.');
 
-	// Make copy of latest game with new name
+	if (files.length == 0) return null;
 
-	//const files = fs.readdirSync(folder).map((filename) => path.parse(filename).name);
-	//console.log(files);
+	newGame = files.sort((a, b) => a.length - b.length);
 
-	// return newest file - highest value file name
+	const sourceGame = `${dir}/${newGame}`;
 
-	// return path for newest file
+	fs.copyFileSync(sourceGame, targetGame);
+
+	return targetGame;
 }

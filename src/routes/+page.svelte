@@ -3,9 +3,9 @@
 	import { fly } from 'svelte/transition';
 	import Display from '$lib/components/Display.svelte';
 	import StatDisplay from '$lib/components/StatDisplay.svelte';
-	import type { GameStartType, MetadataType, StatsType } from '@slippi/slippi-js';
+	import type { GameStartType, MetadataType, PlacementType, StatsType } from '@slippi/slippi-js';
 
-	// /Users/sindrevatnaland/Slippi/Game_20221014T153837.slp
+	// /Users/sindrevatnaland/Slippi
 
 	let clear: NodeJS.Timeout;
 
@@ -22,6 +22,9 @@
 
 	$: playerId1 = '';
 	$: playerId2 = '';
+	$: stats = {} as StatsType;
+
+	$: isGameOver = false;
 
 	const setPath = () => {
 		path = tempPath;
@@ -33,17 +36,21 @@
 	};
 
 	if (window.electron && browser) {
-		window.electron.receive('get-settings', async (data: GameStartType) => {
-			console.log('settings', data);
+		window.electron.receive('get-settings', async (settings: GameStartType) => {
+			console.log('settings', settings);
 		});
-		window.electron.receive('get-metadata', async (data: MetadataType) => {
-			console.log('metadata', data);
-			playerId1 = data?.players[0].names?.code ?? '';
-			playerId2 = data?.players[1].names?.code ?? '';
+		window.electron.receive('get-metadata', async (metadata: MetadataType) => {
+			console.log('metadata', metadata);
+			playerId1 = metadata?.players[0].names?.code ?? '';
+			playerId2 = metadata?.players[1].names?.code ?? '';
 		});
-		window.electron.receive('get-stats', async (data: StatsType) => {
-			console.log('stats', data);
-			// Create stats for finished game
+		window.electron.receive('get-placements', async (placements: PlacementType[]) => {
+			console.log('game end', placements);
+			isGameOver = !!placements.length;
+		});
+		window.electron.receive('get-stats', async (gameStats: StatsType) => {
+			console.log('stats', gameStats);
+			stats = gameStats;
 		});
 
 		window.electron.receive('clear-data', async (err: any) => {
@@ -51,9 +58,16 @@
 			path = '';
 			playerId1 = '';
 			playerId2 = '';
-			localStorage.removeItem('slippi-path');
 		});
 	}
+
+	// Fix input for slippi directory
+
+	// Option to change background color
+
+	// Add slippi stats
+
+	// Smooth out transitions
 </script>
 
 <main>
@@ -65,10 +79,15 @@
 		</div>
 	{/if}
 	<!-- If game has no ending -->
-	<Display bind:playerId1 bind:playerId2 />
-
-	<!-- If game has ending -->
-	<StatDisplay bind:playerId1 bind:playerId2 />
+	{#if isGameOver}
+		<div>
+			<StatDisplay bind:playerId1 bind:playerId2 bind:stats />
+		</div>
+	{:else}
+		<div>
+			<Display bind:playerId1 bind:playerId2 />
+		</div>
+	{/if}
 </main>
 
 <style>

@@ -3,10 +3,9 @@
 	import type { User } from '$lib/components/Types.svelte';
 	import { fly } from 'svelte/transition';
 
-	// Listen for changes in playerIds
 	$: player1 = {} as User;
 	$: player2 = {} as User;
-	// If id changes - request data for new Ids
+
 	export let playerId1: string = '';
 	export let playerId2: string = '';
 

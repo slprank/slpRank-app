@@ -2,13 +2,14 @@
 	import { GetCurlRequest } from '$lib/helpers/Api.svelte';
 	import type { User } from '$lib/components/Types.svelte';
 	import { fly } from 'svelte/transition';
+	import type { StatsType } from '@slippi/slippi-js';
 
-	// Listen for changes in playerIds
 	$: player1 = {} as User;
 	$: player2 = {} as User;
-	// If id changes - request data for new Ids
+
 	export let playerId1: string = '';
 	export let playerId2: string = '';
+	export let stats: StatsType = {} as StatsType;
 
 	async function UpdatePlayer1(playerId: string) {
 		player1 = (await GetCurlRequest(playerId)) ?? ({} as User);
@@ -67,6 +68,8 @@
 		}
 	}
 
+	$: console.log(stats); // Utilize
+
 	$: playerRank1 = GetPlayerRank(player1);
 	$: playerRank2 = GetPlayerRank(player2);
 
@@ -82,63 +85,69 @@
 {#if player1.displayName && player2.displayName}
 	<div class="content" transition:fly={{ y: 200, duration: 300 }}>
 		<div class="character-box">
-			<h1>{player1.displayName}</h1>
-			<h3>{player1.connectCode.code}</h3>
+			<h2>{player1.displayName}</h2>
 			<img
-				style="width: 56px; height: 56px;"
+				style="width: 24px; height: 24px;"
 				src={`./rank-icons/${playerRank1}.svg`}
 				alt={'rank'}
 			/>
-			<h2>{playerRank1}</h2>
+			<div class="stat-container">
+				<div class="stat">
+					<h4>NEUTRAL WINS</h4>
+					<h4>{'28'}%</h4>
+				</div>
+				<hr class="hr" />
+				<div class="stat">
+					<h4>AVERAGE PUNISH</h4>
+					<h4>{'42.5'}%</h4>
+				</div>
+				<hr class="hr" />
+				<div class="stat">
+					<h4>OPENINGS / KILL</h4>
+					<h4>{'6.8'}</h4>
+				</div>
+				<hr class="hr" />
+				<div class="stat">
+					<h4>CENTER CONTROL</h4>
+					<h4>{'37'}%</h4>
+				</div>
+				<hr class="hr" />
+			</div>
+			<h5>{player1.connectCode.code}</h5>
 			<h2>{player1.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
-			<div class="col-2-container">
-				<h2 class="grid_item">Wins: {player1.rankedNetplayProfile.wins ?? 0}</h2>
-				<h2 class="grid_item">Losses: {player1.rankedNetplayProfile.losses ?? 0}</h2>
-			</div>
-			<div class={`col-${player1.rankedNetplayProfile.characters.length}-container`}>
-				{#each player1.rankedNetplayProfile.characters as character}
-					<div class="character-icon-box">
-						<img
-							style="width: 24px; height: 24px;"
-							src={`./character-icons/${character.icon}`}
-							alt={character.character}
-						/>
-						<div>
-							{`${((character.gameCount / player1.totalGames) * 100).toFixed(1)}%`}
-						</div>
-					</div>
-				{/each}
-			</div>
 		</div>
 		<hr style="width: 100vw" />
 		<div class="character-box">
-			<h1>{player2.displayName}</h1>
-			<h3>{player2.connectCode.code}</h3>
+			<h2>{player2.displayName}</h2>
 			<img
-				style="width: 56px; height: 56px;"
-				src={`./rank-icons/${playerRank2}.svg`}
+				style="width: 24px; height: 24px;"
+				src={`./rank-icons/${playerRank1}.svg`}
 				alt={'rank'}
 			/>
-			<h2>{playerRank2}</h2>
+			<div class="stat-container">
+				<div class="stat">
+					<h4>NEUTRAL WINS</h4>
+					<h4>{'28'}%</h4>
+				</div>
+				<hr class="hr" />
+				<div class="stat">
+					<h4>AVERAGE PUNISH</h4>
+					<h4>{'42.5'}%</h4>
+				</div>
+				<hr class="hr" />
+				<div class="stat">
+					<h4>OPENINGS / KILL</h4>
+					<h4>{'6.8'}</h4>
+				</div>
+				<hr class="hr" />
+				<div class="stat">
+					<h4>CENTER CONTROL</h4>
+					<h4>{'37'}%</h4>
+				</div>
+				<hr class="hr" />
+			</div>
+			<h5>{player2.connectCode.code}</h5>
 			<h2>{player2.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
-			<div class="col-2-container">
-				<h2 class="grid_item">Wins: {player2.rankedNetplayProfile.wins ?? 0}</h2>
-				<h2 class="grid_item">Losses: {player2.rankedNetplayProfile.losses ?? 0}</h2>
-			</div>
-			<div class={`col-${player2.rankedNetplayProfile.characters.length}-container`}>
-				{#each player2.rankedNetplayProfile.characters as character}
-					<div class="character-icon-box">
-						<img
-							style="width: 24px; height: 24px;"
-							src={`./character-icons/${character.icon}`}
-							alt={character.character}
-						/>
-						<div>
-							{`${((character.gameCount / player2.totalGames) * 100).toFixed(1)}%`}
-						</div>
-					</div>
-				{/each}
-			</div>
 		</div>
 	</div>
 {/if}
@@ -161,7 +170,15 @@
 		width: 350px;
 		flex-direction: column;
 		padding: 1em;
-		gap: 1em;
+		gap: 0.6em;
+	}
+	.stat-container {
+		display: flex;
+		height: 100%;
+		width: 70%;
+		flex-direction: column;
+		padding: 1em;
+		gap: 0.2em;
 	}
 
 	.character-icon-box {
@@ -178,11 +195,18 @@
 		grid-gap: 10px;
 	}
 
-	.col-2-container {
-		display: grid;
+	.stat {
+		display: flex;
 		grid-template-columns: repeat(2, 1fr);
 		grid-template-rows: repeat(1);
 		grid-gap: 10px;
+		align-content: space-around;
+		justify-content: space-between;
+	}
+
+	.value {
+		display: flex;
+		right: 0;
 	}
 
 	.grid_item {
@@ -190,6 +214,11 @@
 		justify-content: center;
 		align-items: center;
 		font-size: 1.5em;
+	}
+
+	hr {
+		width: 100%;
+		margin: 0.2em;
 	}
 
 	h1 {
@@ -206,6 +235,14 @@
 
 	h3 {
 		font-size: 1.2rem;
+		margin: 0;
+	}
+	h4 {
+		font-size: 1rem;
+		margin: 0;
+	}
+	h5 {
+		font-size: 0.8rem;
 		margin: 0;
 	}
 </style>
