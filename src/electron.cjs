@@ -109,12 +109,13 @@ ipcMain.on('to-main', (event, count) => {
 	return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
 });
 
-ipcMain.handle('get/players', async (_, dir) => {
+ipcMain.handle('get/slippi', async (_, dir) => {
 	const gamePath = GetLatestGamePath(dir);
+	console.log(dir);
 
 	const { SlippiGame } = require('@slippi/slippi-js');
 
-	const game = new SlippiGame(path);
+	const game = new SlippiGame(`${dir}/Game_20221014T153837.slp`);
 
 	const settings = game.getSettings();
 	const metadata = game.getMetadata();
@@ -123,42 +124,32 @@ ipcMain.handle('get/players', async (_, dir) => {
 	mainWindow.webContents.send('get-settings', settings);
 	mainWindow.webContents.send('get-metadata', metadata);
 	mainWindow.webContents.send('get-stats', stats);
-
-	ReadFolderData();
 });
 
-function GetLatestGamePath(gameDir) {
+function GetLatestGamePath(dir) {
 	const fs = require('fs');
 	const path = require('path');
 
-	const folder = fs.statSync('/Users/sindrevatnaland/Slippi'); // Change to gamedir
-	folder.mtime;
+	const folder = fs.statSync(dir); // Change to
 
-	// Create name for gamefile
+	const assumedGameFile = `Game_${
+		folder.mtime.toISOString().replaceAll('-', '').replaceAll(':', '').split('.')[0]
+	}.slp`;
 
-	// If game exist - return
+	let gameDir = `${dir}/${assumedGameFile}`;
+
+	if (fs.existsSync(gameDir)) return gameDir;
+
+	console.log('does not exist');
 
 	// else scan for latest game
 
 	// Make copy of latest game with new name
 
-	const files = fs.readdirSync(dir).map((filename) => path.parse(filename).name);
-	console.log(files);
+	//const files = fs.readdirSync(folder).map((filename) => path.parse(filename).name);
+	//console.log(files);
 
 	// return newest file - highest value file name
 
 	// return path for newest file
-}
-
-function GetSlippiFromPython() {
-	const { spawn } = require('child_process');
-
-	const childPython = spawn('python3', [`src/python/venv/slippi-data.py`, path]);
-
-	childPython.stdout.on('data', (data) => {
-		mainWindow.webContents.send('get-data', `${data}`);
-	});
-	childPython.stderr.on('data', (data) => {
-		mainWindow.webContents.send('remove-data', `${data}`);
-	});
 }

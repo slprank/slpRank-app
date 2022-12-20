@@ -13,7 +13,7 @@
 
 	let tempPath: string = localStorage.getItem('slippi-path') ?? '';
 
-	let path: string;
+	let path: string = '';
 
 	$: {
 		clearInterval(clear);
@@ -26,18 +26,15 @@
 	const setPath = () => {
 		path = tempPath;
 		localStorage.setItem('slippi-path', tempPath);
-		tempPath = '';
 	};
 
-	const getData = async (path: string) => {
-		window.electron.getPlayers(path);
+	const getData = async (dir: string) => {
+		window.electron.getPlayers(dir);
 	};
 
 	if (window.electron && browser) {
 		window.electron.receive('get-settings', async (data: GameStartType) => {
 			console.log('settings', data);
-			playerId1 = data?.players[0].names?.code ?? '';
-			playerId2 = data?.players[1].names?.code ?? '';
 		});
 		window.electron.receive('get-metadata', async (data: MetadataType) => {
 			console.log('metadata', data);
@@ -46,8 +43,7 @@
 		});
 		window.electron.receive('get-stats', async (data: StatsType) => {
 			console.log('stats', data);
-			playerId1 = data?.players[0].names?.code ?? '';
-			playerId2 = data?.players[1].names?.code ?? '';
+			// Create stats for finished game
 		});
 
 		window.electron.receive('clear-data', async (err: any) => {
