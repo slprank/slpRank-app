@@ -9,14 +9,12 @@
 
 	const ms = 1000;
 
-	let tempPath: string = '';
+	let tempPath: string = localStorage.getItem('slippi-path') ?? '';
 
 	// Make "Submit" button required
 	// /Users/sindrevatnaland/Slippi/Game_20221014T153837.slp
 
-	let path = localStorage.getItem('slippi-path') ?? '';
-
-	console.log(path);
+	let path: string;
 
 	$: {
 		clearInterval(clear);
