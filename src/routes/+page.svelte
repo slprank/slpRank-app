@@ -5,14 +5,13 @@
 	import StatDisplay from '$lib/components/StatDisplay.svelte';
 	import type { GameStartType, MetadataType, StatsType } from '@slippi/slippi-js';
 
+	// /Users/sindrevatnaland/Slippi/Game_20221014T153837.slp
+
 	let clear: NodeJS.Timeout;
 
 	const ms = 1000;
 
 	let tempPath: string = localStorage.getItem('slippi-path') ?? '';
-
-	// Make "Submit" button required
-	// /Users/sindrevatnaland/Slippi/Game_20221014T153837.slp
 
 	let path: string;
 
@@ -20,6 +19,9 @@
 		clearInterval(clear);
 		clear = setInterval(() => path && getData(path), ms);
 	}
+
+	$: playerId1 = '';
+	$: playerId2 = '';
 
 	const setPath = () => {
 		path = tempPath;
@@ -30,9 +32,6 @@
 	const getData = async (path: string) => {
 		window.electron.getPlayers(path);
 	};
-
-	$: playerId1 = '';
-	$: playerId2 = '';
 
 	if (window.electron && browser) {
 		window.electron.receive('get-settings', async (data: GameStartType) => {
@@ -69,11 +68,11 @@
 			<button on:click={setPath}>Submit</button>
 		</div>
 	{/if}
-	<!-- In game display -->
+	<!-- If game has no ending -->
 	<Display bind:playerId1 bind:playerId2 />
 
-	<!-- Stats display -->
-	<StatDisplay />
+	<!-- If game has ending -->
+	<StatDisplay bind:playerId1 bind:playerId2 />
 </main>
 
 <style>
