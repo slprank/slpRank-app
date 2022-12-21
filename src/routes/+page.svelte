@@ -15,6 +15,32 @@
 
 	let path: string = '';
 
+	$: backgroundColor = '';
+
+	/*
+	$: textColor = '';
+
+	$: updateTextColor(backgroundColor);
+
+	function updateTextColor(backgroundColor: string) {
+		const color = backgroundColor.slice(1, 7);
+		var r = parseInt(color.substring(0, 2), 16) / 255;
+		var g = parseInt(color.substring(2, 4), 16) / 255;
+		var b = parseInt(color.substring(4, 6), 16) / 255;
+		var hue = 0;
+		if (r >= g && g >= b) {
+			hue = (60 * (g - b)) / (r - b);
+		} else if (g > r && r >= b) {
+			hue = 60 * (2 - (r - b) / (g - b));
+		}
+		if (hue <= 7) {
+			textColor = 'white';
+		} else {
+			textColor = 'black';
+		}
+	}
+	*/
+
 	$: {
 		clearInterval(clear);
 		clear = setInterval(() => path && getData(path), ms);
@@ -61,21 +87,48 @@
 		});
 	}
 
-	// Fix input for slippi directory
-
-	// Option to change background color
+	function SelectDirectory() {
+		window.electron.selectFolder().then((result: any) => {
+			tempPath = result;
+		});
+	}
 
 	// Add slippi stats
 
 	// Smooth out transitions
 </script>
 
-<main>
+<main style={`background: ${backgroundColor}`}>
 	{#if !playerId1 || !playerId2}
-		<div class="content">
-			<h1 transition:fly={{ y: 200, duration: 300 }}>input for slippi directory</h1>
-			<input bind:value={tempPath} />
-			<button on:click={setPath}>Submit</button>
+		<div class="content" transition:fly={{ y: 200, duration: 300 }}>
+			<h1 style="margin-top: 2em">Slippi game directory</h1>
+			<div class="options-container">
+				<button on:click={SelectDirectory} type="button" class="btn btn-primary"
+					>Select Directory</button
+				>
+				<p>{tempPath}</p>
+				<div class="option">
+					<h5 style="margin-top: auto; margin-bottom: auto;">Background color:</h5>
+					<input
+						bind:value={backgroundColor}
+						type="color"
+						class="form-control form-control-color"
+						id="exampleColorInput"
+					/>
+				</div>
+				<!--
+				<div class="option">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>Text color:</h5>
+					<input
+						bind:value={textColor}
+						type="color"
+						class="form-control form-control-color"
+						id="exampleColorInput"
+					/>
+				</div>
+				-->
+			</div>
+			<button type="button" class="btn btn-success" on:click={setPath}>Start</button>
 		</div>
 	{/if}
 	<!-- If game has no ending -->
@@ -95,7 +148,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		height: 100vh;
+		height: 95vh;
 		flex-direction: column;
 		gap: 1em;
 	}
@@ -107,5 +160,23 @@
 		height: 100vh;
 		flex-direction: column;
 		gap: 1em;
+	}
+
+	.options-container {
+		display: flex;
+		height: 100%;
+		width: 95%;
+		flex-direction: column;
+		padding: 1em;
+		gap: 1em;
+	}
+
+	.option {
+		display: flex;
+		grid-template-columns: repeat(2, 1fr);
+		grid-template-rows: repeat(1);
+		grid-gap: 10px;
+		align-content: space-around;
+		justify-content: space-between;
 	}
 </style>

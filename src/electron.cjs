@@ -1,6 +1,6 @@
 const windowStateManager = require('electron-window-state');
 const contextMenu = require('electron-context-menu');
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const serve = require('electron-serve');
 const path = require('path');
 
@@ -107,6 +107,17 @@ app.on('window-all-closed', () => {
 
 ipcMain.on('to-main', (event, count) => {
 	return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
+});
+
+ipcMain.handle('dialog:openDirectory', async () => {
+	const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+		properties: ['openDirectory']
+	});
+	if (canceled) {
+		return;
+	} else {
+		return filePaths[0];
+	}
 });
 
 ipcMain.handle('get/slippi', async (_, dir) => {

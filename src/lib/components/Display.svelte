@@ -109,7 +109,7 @@
 				{/each}
 			</div>
 		</div>
-		<hr style="width: 100vw" />
+		<hr style="width: 95vw" />
 		<div class="character-box">
 			<h1>{player2.displayName}</h1>
 			<h3>{player2.connectCode.code}</h3>

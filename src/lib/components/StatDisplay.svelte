@@ -116,7 +116,7 @@
 			<h5>{player1.connectCode.code}</h5>
 			<h2>{player1.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
 		</div>
-		<hr style="width: 100vw" />
+		<hr style="width: 95vw" />
 		<div class="character-box">
 			<h2>{player2.displayName}</h2>
 			<img
