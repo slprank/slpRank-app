@@ -104,12 +104,12 @@
 				<hr class="hr" />
 				<div class="stat">
 					<h4>INPUTS / SEC</h4>
-					<h4>{(player1Stats?.inputsPerMinute?.ratio ?? (0 * 100) / 60).toFixed(1)}</h4>
+					<h4>{(((player1Stats?.inputsPerMinute?.ratio ?? 0) * 100) / 60).toFixed(1)}</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
 					<h4>OPENINGS / KILL</h4>
-					<h4>{((player1Stats?.openingsPerKill?.ratio ?? 0) * 100).toFixed(1)}</h4>
+					<h4>{(player1Stats?.openingsPerKill?.ratio ?? 0).toFixed(1)}</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
@@ -136,12 +136,12 @@
 				<hr class="hr" />
 				<div class="stat">
 					<h4>INPUTS / SEC</h4>
-					<h4>{(player2Stats?.inputsPerMinute?.ratio ?? (0 * 100) / 60).toFixed(1)}</h4>
+					<h4>{(((player2Stats?.inputsPerMinute?.ratio ?? 0) * 100) / 60).toFixed(1)}</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
 					<h4>OPENINGS / KILL</h4>
-					<h4>{((player2Stats?.openingsPerKill?.ratio ?? 0) * 100).toFixed(1)}</h4>
+					<h4>{(player2Stats?.openingsPerKill?.ratio ?? 0).toFixed(1)}</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
