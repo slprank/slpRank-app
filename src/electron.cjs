@@ -122,7 +122,6 @@ ipcMain.handle('dialog:openDirectory', async () => {
 
 ipcMain.handle('get/slippi', async (_, dir) => {
 	const gamePath = GetLatestGamePath(dir);
-	console.log(gamePath);
 
 	const { SlippiGame } = require('@slippi/slippi-js');
 

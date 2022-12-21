@@ -2,7 +2,7 @@
 	import { GetCurlRequest } from '$lib/helpers/Api.svelte';
 	import type { User } from '$lib/components/Types.svelte';
 	import { fly } from 'svelte/transition';
-	import type { StatsType } from '@slippi/slippi-js';
+	import type { OverallType, StatsType } from '@slippi/slippi-js';
 
 	$: player1 = {} as User;
 	$: player2 = {} as User;
@@ -11,15 +11,22 @@
 	export let playerId2: string = '';
 	export let stats: StatsType = {} as StatsType;
 
+	$: player1Stats = {} as OverallType;
+	$: player2Stats = {} as OverallType;
+
 	async function UpdatePlayer1(playerId: string) {
 		player1 = (await GetCurlRequest(playerId)) ?? ({} as User);
+		player1Stats = stats.overall[0];
 		console.log('player1', player1);
 	}
 
 	async function UpdatePlayer2(playerId: string) {
 		player2 = (await GetCurlRequest(playerId)) ?? ({} as User);
+		player2Stats = stats.overall[2];
 		console.log('player2', player2);
 	}
+
+	console.log(stats);
 
 	function GetPlayerRank(player: User) {
 		const rating = parseInt(player?.rankedNetplayProfile?.ratingOrdinal.toFixed());
@@ -68,8 +75,6 @@
 		}
 	}
 
-	$: console.log(stats); // Utilize
-
 	$: playerRank1 = GetPlayerRank(player1);
 	$: playerRank2 = GetPlayerRank(player2);
 
@@ -94,27 +99,26 @@
 			<div class="stat-container">
 				<div class="stat">
 					<h4>NEUTRAL WINS</h4>
-					<h4>{'28'}%</h4>
+					<h4>{((player1Stats?.neutralWinRatio?.ratio ?? 0) * 100).toFixed(1)}%</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
-					<h4>AVERAGE PUNISH</h4>
-					<h4>{'42.5'}%</h4>
+					<h4>INPUTS / SEC</h4>
+					<h4>{(player1Stats?.inputsPerMinute?.ratio ?? (0 * 100) / 60).toFixed(1)}</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
 					<h4>OPENINGS / KILL</h4>
-					<h4>{'6.8'}</h4>
+					<h4>{((player1Stats?.openingsPerKill?.ratio ?? 0) * 100).toFixed(1)}</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
-					<h4>CENTER CONTROL</h4>
-					<h4>{'37'}%</h4>
+					<h4>TOTAL DAMAGE</h4>
+					<h4>{((player1Stats?.totalDamage ?? 0) * 100).toFixed(1)}%</h4>
 				</div>
 				<hr class="hr" />
 			</div>
 			<h5>{player1.connectCode.code}</h5>
-			<h2>{player1.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
 		</div>
 		<hr style="width: 95vw" />
 		<div class="character-box">
@@ -127,22 +131,22 @@
 			<div class="stat-container">
 				<div class="stat">
 					<h4>NEUTRAL WINS</h4>
-					<h4>{'28'}%</h4>
+					<h4>{((player2Stats?.neutralWinRatio?.ratio ?? 0) * 100).toFixed(1)}%</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
-					<h4>AVERAGE PUNISH</h4>
-					<h4>{'42.5'}%</h4>
+					<h4>INPUTS / SEC</h4>
+					<h4>{(player2Stats?.inputsPerMinute?.ratio ?? (0 * 100) / 60).toFixed(1)}</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
 					<h4>OPENINGS / KILL</h4>
-					<h4>{'6.8'}</h4>
+					<h4>{((player2Stats?.openingsPerKill?.ratio ?? 0) * 100).toFixed(1)}</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
-					<h4>CENTER CONTROL</h4>
-					<h4>{'37'}%</h4>
+					<h4>TOTAL DAMAGE</h4>
+					<h4>{((player2Stats?.totalDamage ?? 0) * 100).toFixed(1)}%</h4>
 				</div>
 				<hr class="hr" />
 			</div>
