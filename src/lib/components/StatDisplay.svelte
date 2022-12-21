@@ -2,7 +2,7 @@
 	import { GetCurlRequest } from '$lib/helpers/Api.svelte';
 	import type { User } from '$lib/components/Types.svelte';
 	import { fly } from 'svelte/transition';
-	import type { OverallType, StatsType } from '@slippi/slippi-js';
+	import type { GameStartType, MetadataType, OverallType, StatsType } from '@slippi/slippi-js';
 
 	let clear: NodeJS.Timeout;
 
@@ -22,19 +22,28 @@
 	export let playerId1: string = '';
 	export let playerId2: string = '';
 	export let stats: StatsType = {} as StatsType;
+	export let settings: GameStartType = {} as GameStartType;
 	export let textColor = '';
 
 	$: player1Stats = {} as OverallType;
 	$: player2Stats = {} as OverallType;
+	$: player1Stocks = 4;
+	$: player2Stocks = 4;
+	$: player1CharacterId = 0;
+	$: player2CharacterId = 0;
 
 	async function UpdatePlayer1(playerId: string) {
 		player1 = (await GetCurlRequest(playerId)) ?? ({} as User);
 		player1Stats = stats.overall[0];
+		player1Stocks = stats.stocks.filter((s) => s.playerIndex == 0).length;
+		player1CharacterId = settings?.players[0]?.characterId ?? 0;
 	}
 
 	async function UpdatePlayer2(playerId: string) {
 		player2 = (await GetCurlRequest(playerId)) ?? ({} as User);
 		player2Stats = stats.overall[1];
+		player2Stocks = stats.stocks.filter((s) => s.playerIndex == 1).length;
+		player2CharacterId = settings?.players[1]?.characterId ?? 0;
 	}
 
 	console.log(stats);
@@ -219,6 +228,20 @@
 		grid-template-columns: repeat(3, 1fr);
 		grid-template-rows: repeat(1);
 		grid-gap: 10px;
+	}
+
+	.stock-container {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(1);
+		grid-gap: 10px;
+	}
+
+	.stock {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 1.5em;
 	}
 
 	.stat {
