@@ -17,6 +17,8 @@
 	}
 
 	let tempPath: string = localStorage.getItem('slippi-path') ?? '';
+	let tempBackgroundColor: string = localStorage.getItem('background-color') ?? '';
+	let tempTextColor: string = localStorage.getItem('text-color') ?? '';
 
 	$: path = '';
 	$: slippiStats = false;
@@ -57,8 +59,11 @@
 
 	const setPath = () => {
 		path = tempPath;
+		slippiStats = tempSlippiStats;
 		localStorage.setItem('slippi-path', tempPath);
-		localStorage.setItem('slippi-stats', slippiStats.toString());
+		localStorage.setItem('slippi-stats', tempSlippiStats.toString());
+		localStorage.setItem('background-color', tempBackgroundColor);
+		localStorage.setItem('text-color', tempTextColor);
 	};
 
 	const getData = async (dir: string) => {
@@ -95,30 +100,32 @@
 	// Smooth out transitions
 </script>
 
-<main style={`background: ${backgroundColor}`}>
+<main style={`background: ${tempBackgroundColor}`}>
 	{#if !playerId1 || !playerId2}
 		<div class="content" transition:fly={{ y: 200, duration: 300 }}>
-			<h1 style={`margin-top: 2em; color: ${textColor}`}>Slippi game directory</h1>
+			<h1 style={`margin-top: 2em; color: ${tempTextColor}`}>Slippi game directory</h1>
 			<button on:click={SelectDirectory} type="button" class="btn btn-primary"
 				>Select Directory</button
 			>
-			<p style={`color: ${textColor}`}>{tempPath ?? 'No directory selected'}</p>
+			<p style={`color: ${tempTextColor}`}>{tempPath ?? 'No directory selected'}</p>
 			<div class="options-container">
-				<div class="option" style="--theme-color: {'textColor'}">
-					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>
+				<div class="option">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
 						Background color:
 					</h5>
 					<input
-						bind:value={backgroundColor}
+						bind:value={tempBackgroundColor}
 						type="color"
 						class="form-control form-control-color"
 						id="exampleColorInput"
 					/>
 				</div>
 				<div class="option">
-					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>Text color:</h5>
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
+						Text color:
+					</h5>
 					<input
-						bind:value={textColor}
+						bind:value={tempTextColor}
 						type="color"
 						class="form-control form-control-color"
 						id="exampleColorInput"
@@ -126,7 +133,7 @@
 				</div>
 
 				<div class="option">
-					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
 						Post game stats:
 					</h5>
 					<input
