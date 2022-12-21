@@ -108,7 +108,7 @@
 	<div class="content" transition:fly={{ y: 200, duration: 300 }}>
 		<div class="character-box">
 			<h2 style={`color: ${textColor}`}>{player1.displayName}</h2>
-			<h5 style={`color: ${textColor}`}>{player2.connectCode.code}</h5>
+			<h5 style={`color: ${textColor}`}>{player1.connectCode.code}</h5>
 			<img
 				style="width: 24px; height: 24px;"
 				src={`./rank-icons/${playerRank1}.svg`}
