@@ -114,7 +114,7 @@
 				<hr class="hr" />
 				<div class="stat">
 					<h4>TOTAL DAMAGE</h4>
-					<h4>{((player1Stats?.totalDamage ?? 0) * 100).toFixed(1)}%</h4>
+					<h4>{(player1Stats?.totalDamage ?? 0).toFixed(1)}%</h4>
 				</div>
 				<hr class="hr" />
 			</div>
@@ -146,7 +146,7 @@
 				<hr class="hr" />
 				<div class="stat">
 					<h4>TOTAL DAMAGE</h4>
-					<h4>{((player2Stats?.totalDamage ?? 0) * 100).toFixed(1)}%</h4>
+					<h4>{(player2Stats?.totalDamage ?? 0).toFixed(1)}%</h4>
 				</div>
 				<hr class="hr" />
 			</div>
