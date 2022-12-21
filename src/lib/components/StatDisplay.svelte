@@ -4,12 +4,25 @@
 	import { fly } from 'svelte/transition';
 	import type { OverallType, StatsType } from '@slippi/slippi-js';
 
+	let clear: NodeJS.Timeout;
+
+	const ms = 100;
+
+	$: {
+		clearInterval(clear);
+		clear = setInterval(() => {
+			UpdatePlayer1(playerId1);
+			UpdatePlayer2(playerId2);
+		}, ms);
+	}
+
 	$: player1 = {} as User;
 	$: player2 = {} as User;
 
 	export let playerId1: string = '';
 	export let playerId2: string = '';
 	export let stats: StatsType = {} as StatsType;
+	export let textColor = '';
 
 	$: player1Stats = {} as OverallType;
 	$: player2Stats = {} as OverallType;
@@ -17,13 +30,11 @@
 	async function UpdatePlayer1(playerId: string) {
 		player1 = (await GetCurlRequest(playerId)) ?? ({} as User);
 		player1Stats = stats.overall[0];
-		console.log('player1', player1);
 	}
 
 	async function UpdatePlayer2(playerId: string) {
 		player2 = (await GetCurlRequest(playerId)) ?? ({} as User);
-		player2Stats = stats.overall[2];
-		console.log('player2', player2);
+		player2Stats = stats.overall[1];
 	}
 
 	console.log(stats);
@@ -77,9 +88,6 @@
 
 	$: playerRank1 = GetPlayerRank(player1);
 	$: playerRank2 = GetPlayerRank(player2);
-
-	$: UpdatePlayer1(playerId1);
-	$: UpdatePlayer2(playerId2);
 </script>
 
 <svelte:head>
@@ -90,7 +98,8 @@
 {#if player1.displayName && player2.displayName}
 	<div class="content" transition:fly={{ y: 200, duration: 300 }}>
 		<div class="character-box">
-			<h2>{player1.displayName}</h2>
+			<h2 style={`color: ${textColor}`}>{player1.displayName}</h2>
+			<h5 style={`color: ${textColor}`}>{player2.connectCode.code}</h5>
 			<img
 				style="width: 24px; height: 24px;"
 				src={`./rank-icons/${playerRank1}.svg`}
@@ -98,60 +107,73 @@
 			/>
 			<div class="stat-container">
 				<div class="stat">
-					<h4>NEUTRAL WINS</h4>
-					<h4>{((player1Stats?.neutralWinRatio?.ratio ?? 0) * 100).toFixed(1)}%</h4>
+					<h4 style={`color: ${textColor}`}>NEUTRAL WINS</h4>
+					<h4 style={`color: ${textColor}`}>
+						{((player1Stats?.neutralWinRatio?.ratio ?? 0) * 100).toFixed(1)}%
+					</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
-					<h4>INPUTS / SEC</h4>
-					<h4>{(((player1Stats?.inputsPerMinute?.ratio ?? 0) * 100) / 60).toFixed(1)}</h4>
+					<h4 style={`color: ${textColor}`}>OPENINGS / KILL</h4>
+					<h4 style={`color: ${textColor}`}>
+						{(player1Stats?.openingsPerKill?.ratio ?? 0).toFixed(1)}
+					</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
-					<h4>OPENINGS / KILL</h4>
-					<h4>{(player1Stats?.openingsPerKill?.ratio ?? 0).toFixed(1)}</h4>
+					<h4 style={`color: ${textColor}`}>INPUTS / SEC</h4>
+					<h4 style={`color: ${textColor}`}>
+						{((player1Stats?.inputsPerMinute?.ratio ?? 0) / 60).toFixed(1)}
+					</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
-					<h4>TOTAL DAMAGE</h4>
-					<h4>{(player1Stats?.totalDamage ?? 0).toFixed(1)}%</h4>
+					<h4 style={`color: ${textColor}`}>TOTAL DAMAGE</h4>
+					<h4 style={`color: ${textColor}`}>{(player1Stats?.totalDamage ?? 0).toFixed(1)}%</h4>
 				</div>
 				<hr class="hr" />
 			</div>
-			<h5>{player1.connectCode.code}</h5>
+			<h5 style={`color: ${textColor}`}>{player1.connectCode.code}</h5>
+			<h2 style={`color: ${textColor}`}>{player1.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
 		</div>
 		<hr style="width: 95vw" />
 		<div class="character-box">
-			<h2>{player2.displayName}</h2>
+			<h2 style={`color: ${textColor}`}>{player2.displayName}</h2>
+			<h5 style={`color: ${textColor}`}>{player2.connectCode.code}</h5>
 			<img
 				style="width: 24px; height: 24px;"
-				src={`./rank-icons/${playerRank1}.svg`}
+				src={`./rank-icons/${playerRank2}.svg`}
 				alt={'rank'}
 			/>
 			<div class="stat-container">
 				<div class="stat">
-					<h4>NEUTRAL WINS</h4>
-					<h4>{((player2Stats?.neutralWinRatio?.ratio ?? 0) * 100).toFixed(1)}%</h4>
+					<h4 style={`color: ${textColor}`}>NEUTRAL WINS</h4>
+					<h4 style={`color: ${textColor}`}>
+						{((player2Stats?.neutralWinRatio?.ratio ?? 0) * 100).toFixed(1)}%
+					</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
-					<h4>INPUTS / SEC</h4>
-					<h4>{(((player2Stats?.inputsPerMinute?.ratio ?? 0) * 100) / 60).toFixed(1)}</h4>
+					<h4 style={`color: ${textColor}`}>OPENINGS / KILL</h4>
+					<h4 style={`color: ${textColor}`}>
+						{(player2Stats?.openingsPerKill?.ratio ?? 0).toFixed(1)}
+					</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
-					<h4>OPENINGS / KILL</h4>
-					<h4>{(player2Stats?.openingsPerKill?.ratio ?? 0).toFixed(1)}</h4>
+					<h4 style={`color: ${textColor}`}>INPUTS / SEC</h4>
+					<h4 style={`color: ${textColor}`}>
+						{((player2Stats?.inputsPerMinute?.ratio ?? 0) / 60).toFixed(1)}
+					</h4>
 				</div>
 				<hr class="hr" />
 				<div class="stat">
-					<h4>TOTAL DAMAGE</h4>
-					<h4>{(player2Stats?.totalDamage ?? 0).toFixed(1)}%</h4>
+					<h4 style={`color: ${textColor}`}>TOTAL DAMAGE</h4>
+					<h4 style={`color: ${textColor}`}>{(player2Stats?.totalDamage ?? 0).toFixed(1)}%</h4>
 				</div>
 				<hr class="hr" />
 			</div>
-			<h5>{player2.connectCode.code}</h5>
-			<h2>{player2.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
+			<h2 style={`color: ${textColor}`}>{player2.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
 		</div>
 	</div>
 {/if}

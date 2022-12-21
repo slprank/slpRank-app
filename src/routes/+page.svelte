@@ -11,13 +11,21 @@
 
 	const ms = 1000;
 
+	$: {
+		clearInterval(clear);
+		clear = setInterval(() => path && getData(path), ms);
+	}
+
 	let tempPath: string = localStorage.getItem('slippi-path') ?? '';
 
-	let path: string = '';
+	$: path = '';
+	$: slippiStats = false;
 
 	$: backgroundColor = '';
+	$: textColor = '';
 
 	/*
+	
 	$: textColor = '';
 
 	$: updateTextColor(backgroundColor);
@@ -41,11 +49,6 @@
 	}
 	*/
 
-	$: {
-		clearInterval(clear);
-		clear = setInterval(() => path && getData(path), ms);
-	}
-
 	$: playerId1 = '';
 	$: playerId2 = '';
 	$: stats = {} as StatsType;
@@ -55,6 +58,7 @@
 	const setPath = () => {
 		path = tempPath;
 		localStorage.setItem('slippi-path', tempPath);
+		localStorage.setItem('slippi-stats', slippiStats.toString());
 	};
 
 	const getData = async (dir: string) => {
@@ -78,13 +82,6 @@
 			console.log('stats', gameStats);
 			stats = gameStats;
 		});
-
-		window.electron.receive('clear-data', async (err: any) => {
-			console.log(err);
-			path = '';
-			playerId1 = '';
-			playerId2 = '';
-		});
 	}
 
 	function SelectDirectory() {
@@ -101,14 +98,16 @@
 <main style={`background: ${backgroundColor}`}>
 	{#if !playerId1 || !playerId2}
 		<div class="content" transition:fly={{ y: 200, duration: 300 }}>
-			<h1 style="margin-top: 2em">Slippi game directory</h1>
+			<h1 style={`margin-top: 2em; color: ${textColor}`}>Slippi game directory</h1>
+			<button on:click={SelectDirectory} type="button" class="btn btn-primary"
+				>Select Directory</button
+			>
+			<p style={`color: ${textColor}`}>{tempPath ?? 'No directory selected'}</p>
 			<div class="options-container">
-				<button on:click={SelectDirectory} type="button" class="btn btn-primary"
-					>Select Directory</button
-				>
-				<p>{tempPath}</p>
-				<div class="option">
-					<h5 style="margin-top: auto; margin-bottom: auto;">Background color:</h5>
+				<div class="option" style="--theme-color: {'textColor'}">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>
+						Background color:
+					</h5>
 					<input
 						bind:value={backgroundColor}
 						type="color"
@@ -116,7 +115,6 @@
 						id="exampleColorInput"
 					/>
 				</div>
-				<!--
 				<div class="option">
 					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>Text color:</h5>
 					<input
@@ -126,19 +124,31 @@
 						id="exampleColorInput"
 					/>
 				</div>
-				-->
+
+				<div class="option">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>
+						Post game stats:
+					</h5>
+					<input
+						bind:value={slippiStats}
+						class="form-check-input"
+						type="checkbox"
+						id="flexCheckDefault"
+						style="height: 35px; width: 47px"
+					/>
+				</div>
 			</div>
 			<button type="button" class="btn btn-success" on:click={setPath}>Start</button>
 		</div>
 	{/if}
 	<!-- If game has no ending -->
-	{#if isGameOver}
+	{#if isGameOver && slippiStats}
 		<div>
-			<StatDisplay bind:playerId1 bind:playerId2 bind:stats />
+			<StatDisplay bind:playerId1 bind:playerId2 bind:stats bind:textColor />
 		</div>
 	{:else}
 		<div>
-			<Display bind:playerId1 bind:playerId2 />
+			<Display bind:playerId1 bind:playerId2 bind:textColor />
 		</div>
 	{/if}
 </main>
@@ -148,9 +158,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		height: 95vh;
+		height: 100vh;
 		flex-direction: column;
 		gap: 1em;
+		overflow: hidden;
 	}
 
 	.content {
@@ -158,6 +169,7 @@
 		align-items: center;
 		justify-content: center;
 		height: 100vh;
+		width: 420px;
 		flex-direction: column;
 		gap: 1em;
 	}

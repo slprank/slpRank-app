@@ -33,6 +33,7 @@
 		});
 
 		let rawPlayerData = await response.json();
+		if (!rawPlayerData.data.getConnectCode) return;
 		let userData = rawPlayerData.data.getConnectCode.user as User;
 		userData.totalGames = userData.rankedNetplayProfile.characters
 			.map((c) => c.gameCount)

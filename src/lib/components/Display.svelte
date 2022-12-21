@@ -8,15 +8,14 @@
 
 	export let playerId1: string = '';
 	export let playerId2: string = '';
+	export let textColor = '';
 
 	async function UpdatePlayer1(playerId: string) {
 		player1 = (await GetCurlRequest(playerId)) ?? ({} as User);
-		console.log('player1', player1);
 	}
 
 	async function UpdatePlayer2(playerId: string) {
 		player2 = (await GetCurlRequest(playerId)) ?? ({} as User);
-		console.log('player2', player2);
 	}
 
 	function GetPlayerRank(player: User) {
@@ -81,18 +80,22 @@
 {#if player1.displayName && player2.displayName}
 	<div class="content" transition:fly={{ y: 200, duration: 300 }}>
 		<div class="character-box">
-			<h1>{player1.displayName}</h1>
-			<h3>{player1.connectCode.code}</h3>
+			<h1 style={`color: ${textColor}`}>{player1.displayName}</h1>
+			<h3 style={`color: ${textColor}`}>{player1.connectCode.code}</h3>
 			<img
 				style="width: 56px; height: 56px;"
 				src={`./rank-icons/${playerRank1}.svg`}
 				alt={'rank'}
 			/>
-			<h2>{playerRank1}</h2>
-			<h2>{player1.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
+			<h2 style={`color: ${textColor}`}>{playerRank1}</h2>
+			<h2 style={`color: ${textColor}`}>{player1.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
 			<div class="col-2-container">
-				<h2 class="grid_item">Wins: {player1.rankedNetplayProfile.wins ?? 0}</h2>
-				<h2 class="grid_item">Losses: {player1.rankedNetplayProfile.losses ?? 0}</h2>
+				<h2 class="grid_item" style={`color: ${textColor}`}>
+					Wins: {player1.rankedNetplayProfile.wins ?? 0}
+				</h2>
+				<h2 class="grid_item" style={`color: ${textColor}`}>
+					Losses: {player1.rankedNetplayProfile.losses ?? 0}
+				</h2>
 			</div>
 			<div class={`col-${player1.rankedNetplayProfile.characters.length}-container`}>
 				{#each player1.rankedNetplayProfile.characters as character}
@@ -102,27 +105,31 @@
 							src={`./character-icons/${character.icon}`}
 							alt={character.character}
 						/>
-						<div>
+						<h5 style={`color: ${textColor}`}>
 							{`${((character.gameCount / player1.totalGames) * 100).toFixed(1)}%`}
-						</div>
+						</h5>
 					</div>
 				{/each}
 			</div>
 		</div>
 		<hr style="width: 95vw" />
 		<div class="character-box">
-			<h1>{player2.displayName}</h1>
-			<h3>{player2.connectCode.code}</h3>
+			<h1 style={`color: ${textColor}`}>{player2.displayName}</h1>
+			<h3 style={`color: ${textColor}`}>{player2.connectCode.code}</h3>
 			<img
 				style="width: 56px; height: 56px;"
 				src={`./rank-icons/${playerRank2}.svg`}
 				alt={'rank'}
 			/>
-			<h2>{playerRank2}</h2>
-			<h2>{player2.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
+			<h2 style={`color: ${textColor}`}>{playerRank2}</h2>
+			<h2 style={`color: ${textColor}`}>{player2.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
 			<div class="col-2-container">
-				<h2 class="grid_item">Wins: {player2.rankedNetplayProfile.wins ?? 0}</h2>
-				<h2 class="grid_item">Losses: {player2.rankedNetplayProfile.losses ?? 0}</h2>
+				<h2 class="grid_item" style={`color: ${textColor}`}>
+					Wins: {player2.rankedNetplayProfile.wins ?? 0}
+				</h2>
+				<h2 class="grid_item" style={`color: ${textColor}`}>
+					Losses: {player2.rankedNetplayProfile.losses ?? 0}
+				</h2>
 			</div>
 			<div class={`col-${player2.rankedNetplayProfile.characters.length}-container`}>
 				{#each player2.rankedNetplayProfile.characters as character}
@@ -132,9 +139,9 @@
 							src={`./character-icons/${character.icon}`}
 							alt={character.character}
 						/>
-						<div>
+						<p style={`color: ${textColor}`}>
 							{`${((character.gameCount / player2.totalGames) * 100).toFixed(1)}%`}
-						</div>
+						</p>
 					</div>
 				{/each}
 			</div>

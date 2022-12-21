@@ -129,13 +129,16 @@ ipcMain.handle('get/slippi', async (_, dir) => {
 
 	const settings = game.getSettings();
 	const metadata = game.getMetadata();
-	const stats = game.getStats();
 	const placements = game.getWinners();
+
+	if (!!placements.length) {
+		const stats = game.getStats();
+		mainWindow.webContents.send('get-stats', stats);
+	}
 
 	mainWindow.webContents.send('get-settings', settings);
 	mainWindow.webContents.send('get-metadata', metadata);
 	mainWindow.webContents.send('get-placements', placements);
-	mainWindow.webContents.send('get-stats', stats);
 });
 
 function GetLatestGamePath(dir) {
