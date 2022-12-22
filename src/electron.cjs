@@ -13,7 +13,8 @@ const {
 	SlpParserEvent,
 	FrameEntryType,
 	SlpStream,
-	SlpStreamEvent
+	SlpStreamEvent,
+	SlippiGame
 } = require('@slippi/slippi-js');
 const serve = require('electron-serve');
 const path = require('path');
@@ -35,28 +36,31 @@ var dolphinConnection = new DolphinConnection();
 var parser = new SlpParser();
 var slpStream = new SlpStream();
 
+let gameDirectory = '';
+
 slpStream.on(SlpStreamEvent.COMMAND, (event) => {
 	// console.log("Commmand parsed by SlpStream: " + event.command + event.payload)
 	parser.handleCommand(event.command, event.payload);
-	if (event.command == 54) {
+	if (event.command == Command.GAME_START) {
 		mainWindow.webContents.send('player1-id', parser.getSettings().players[0].connectCode);
 		mainWindow.webContents.send('player2-id', parser.getSettings().players[1].connectCode);
+		mainWindow.webContents.send('settings', parser.getSettings());
 	}
 });
 
 parser.on(SlpParserEvent.END, (frameEntry) => {
 	// console.log(frameEntry.players[1].post.positionY);
 	mainWindow.webContents.send('game-end', frameEntry);
-	console.log('frame', frameEntry);
+	GetLatestGameStats(gameDirectory);
 });
 
 dolphinConnection.on(ConnectionEvent.STATUS_CHANGE, (status) => {
 	// Disconnect from Slippi server when we disconnect from Dolphin
 	if (status === ConnectionStatus.DISCONNECTED) {
-		mainWindow.webContents.send('disconnected-event', 'disconnected');
+		mainWindow.webContents.send('disconnected-event', false);
 	}
 	if (status === ConnectionStatus.CONNECTED) {
-		mainWindow.webContents.send('connected-event', 'connected');
+		mainWindow.webContents.send('connected-event', true);
 		console.log('status', status);
 	}
 });
@@ -204,3 +208,27 @@ ipcMain.on('ipc', (event, arg) => {
 		}
 	}
 });
+
+ipcMain.handle('get/slippi', async (_, dir) => {
+	gameDirectory = dir;
+	GetLatestGameStats(dir);
+});
+
+function GetLatestGameStats(dir) {
+	const fs = require('fs');
+	const path = require('path');
+
+	const folder = fs.statSync(dir);
+
+	let files = fs.readdirSync(dir).map((filename) => `${path.parse(filename).name}.slp`);
+
+	files = files.filter((f) => f[0] != '.');
+
+	if (files.length == 0) return null;
+
+	newGame = files.sort((a, b) => a.length - b.length);
+
+	const sourceGame = `${dir}/${newGame[newGame.length - 1]}`;
+
+	mainWindow.webContents.send('stats', new SlippiGame(sourceGame).getStats());
+}

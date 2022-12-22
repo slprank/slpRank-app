@@ -8,13 +8,8 @@
 
 	const ms = 100;
 
-	$: {
-		clearInterval(clear);
-		clear = setInterval(() => {
-			UpdatePlayer1(playerId1);
-			UpdatePlayer2(playerId2);
-		}, ms);
-	}
+	$: UpdatePlayer1(playerId1);
+	$: UpdatePlayer2(playerId2);
 
 	$: player1 = {} as User;
 	$: player2 = {} as User;
