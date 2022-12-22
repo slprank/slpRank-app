@@ -41,7 +41,7 @@ let gameDirectory = '';
 slpStream.on(SlpStreamEvent.COMMAND, (event) => {
 	// console.log("Commmand parsed by SlpStream: " + event.command + event.payload)
 	parser.handleCommand(event.command, event.payload);
-	if (event.command == Command.GAME_START) {
+	if (event.command == 54) {
 		mainWindow.webContents.send('player1-id', parser.getSettings().players[0].connectCode);
 		mainWindow.webContents.send('player2-id', parser.getSettings().players[1].connectCode);
 		mainWindow.webContents.send('settings', parser.getSettings());
