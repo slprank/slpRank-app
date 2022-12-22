@@ -101,7 +101,7 @@
 						id="exampleColorInput"
 					/>
 				</div>
-
+				<!--
 				<div class="option">
 					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
 						Post game stats:
@@ -114,6 +114,7 @@
 						style="height: 35px; width: 47px"
 					/>
 				</div>
+				-->
 			</div>
 			<button type="button" class="btn btn-success" on:click={storeData}>Start</button>
 		</div>

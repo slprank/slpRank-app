@@ -31,7 +31,6 @@
 		});
 
 		let rawPlayerData = await response.json();
-		console.log(playerId, rawPlayerData.data.getConnectCode);
 		if (!rawPlayerData.data.getConnectCode) return;
 		let userData = rawPlayerData.data.getConnectCode.user as User;
 		userData.totalGames = userData.rankedNetplayProfile.characters
