@@ -12,6 +12,7 @@
 
 	async function UpdatePlayer1(playerId: string) {
 		player1 = (await GetCurlRequest(playerId)) ?? ({} as User);
+		console.log(player1);
 	}
 
 	async function UpdatePlayer2(playerId: string) {

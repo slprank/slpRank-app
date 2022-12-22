@@ -1,6 +1,20 @@
 const windowStateManager = require('electron-window-state');
 const contextMenu = require('electron-context-menu');
 const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const {
+	SlpParser,
+	DolphinConnection,
+	Ports,
+	ConnectionEvent,
+	ConnectionStatus,
+	DolphinMessageType,
+	Command,
+	SlpCommandEventPayload,
+	SlpParserEvent,
+	FrameEntryType,
+	SlpStream,
+	SlpStreamEvent
+} = require('@slippi/slippi-js');
 const serve = require('electron-serve');
 const path = require('path');
 
@@ -17,6 +31,58 @@ const dev = !app.isPackaged;
 const WIDTH = 420;
 const HEIGHT = 800;
 
+var dolphinConnection = new DolphinConnection();
+var parser = new SlpParser();
+var slpStream = new SlpStream();
+
+slpStream.on(SlpStreamEvent.COMMAND, (event) => {
+	// console.log("Commmand parsed by SlpStream: " + event.command + event.payload)
+	parser.handleCommand(event.command, event.payload);
+	if (event.command == 54) {
+		mainWindow.webContents.send('player1-id', parser.getSettings().players[0].connectCode);
+		mainWindow.webContents.send('player2-id', parser.getSettings().players[1].connectCode);
+	}
+});
+
+parser.on(SlpParserEvent.END, (frameEntry) => {
+	// console.log(frameEntry.players[1].post.positionY);
+	mainWindow.webContents.send('game-end', frameEntry);
+	console.log('frame', frameEntry);
+});
+
+dolphinConnection.on(ConnectionEvent.STATUS_CHANGE, (status) => {
+	// Disconnect from Slippi server when we disconnect from Dolphin
+	if (status === ConnectionStatus.DISCONNECTED) {
+		mainWindow.webContents.send('disconnected-event', 'disconnected');
+	}
+	if (status === ConnectionStatus.CONNECTED) {
+		mainWindow.webContents.send('connected-event', 'connected');
+		console.log('status', status);
+	}
+});
+
+dolphinConnection.on(ConnectionEvent.MESSAGE, (message) => {
+	switch (message.type) {
+		case DolphinMessageType.CONNECT_REPLY:
+			console.log('Connected: ' + message);
+			break;
+		case DolphinMessageType.GAME_EVENT:
+			var decoded = Buffer.from(message.payload, 'base64');
+			slpStream.write(decoded);
+			break;
+	}
+});
+
+dolphinConnection.on(ConnectionEvent.ERROR, (err) => {
+	// Log the error messages we get from Dolphin
+	console.log('Dolphin connection error', err);
+});
+
+dolphinConnection.on(ConnectionEvent.ERROR, (err) => {
+	// Log the error messages we get from Dolphin
+	console.log('Dolphin connection error', err);
+});
+
 let mainWindow;
 
 function createWindow() {
@@ -31,7 +97,7 @@ function createWindow() {
 		autoHideMenuBar: true,
 		trafficLightPosition: {
 			x: 17,
-			y: 32
+			y: 17
 		},
 		minHeight: HEIGHT,
 		minWidth: WIDTH,
@@ -91,6 +157,15 @@ function createMainWindow() {
 		mainWindow = null;
 	});
 
+	mainWindow.webContents.once('dom-ready', () => {
+		// Make the disconnected label appear first
+		mainWindow.webContents.send('disconnected-event', 'disconnected');
+		if (dolphinConnection.getStatus() === ConnectionStatus.DISCONNECTED) {
+			// Now try connect to our local Dolphin instance
+			dolphinConnection.connect('127.0.0.1', Ports.DEFAULT);
+		}
+	});
+
 	if (dev) loadVite(port);
 	else serveURL(mainWindow);
 }
@@ -120,52 +195,12 @@ ipcMain.handle('dialog:openDirectory', async () => {
 	}
 });
 
-ipcMain.handle('get/slippi', async (_, dir) => {
-	const gamePath = GetLatestGamePath(dir);
-
-	const { SlippiGame } = require('@slippi/slippi-js');
-
-	const game = new SlippiGame(gamePath);
-
-	const settings = game.getSettings();
-	const metadata = game.getMetadata();
-	const placements = game.getWinners();
-
-	if (!!placements.length) {
-		const stats = game.getStats();
-		mainWindow.webContents.send('get-stats', stats);
+ipcMain.on('ipc', (event, arg) => {
+	// Command to connect to Dolphin
+	if (arg === 'connectDolphin') {
+		if (dolphinConnection.getStatus() === ConnectionStatus.DISCONNECTED) {
+			// Now try connect to our local Dolphin instance
+			dolphinConnection.connect('127.0.0.1', Ports.DEFAULT);
+		}
 	}
-
-	mainWindow.webContents.send('get-settings', settings);
-	mainWindow.webContents.send('get-metadata', metadata);
-	mainWindow.webContents.send('get-placements', placements);
 });
-
-function GetLatestGamePath(dir) {
-	const fs = require('fs');
-	const path = require('path');
-
-	const folder = fs.statSync(dir);
-
-	const assumedGameFile = `Game_${
-		folder.mtime.toISOString().replaceAll('-', '').replaceAll(':', '').split('.')[0]
-	}.slp`;
-
-	const targetGame = `${dir}/${assumedGameFile}`;
-
-	if (fs.existsSync(targetGame)) return targetGame;
-
-	let files = fs.readdirSync(dir).map((filename) => `${path.parse(filename).name}.slp`);
-
-	files = files.filter((f) => f[0] != '.');
-
-	if (files.length == 0) return null;
-
-	newGame = files.sort((a, b) => a.length - b.length);
-
-	const sourceGame = `${dir}/${newGame}`;
-
-	fs.copyFileSync(sourceGame, targetGame);
-
-	return targetGame;
-}
