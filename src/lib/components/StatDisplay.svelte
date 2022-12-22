@@ -2,7 +2,7 @@
 	import { GetCurlRequest } from '$lib/helpers/Api.svelte';
 	import type { User } from '$lib/components/Types.svelte';
 	import { fly } from 'svelte/transition';
-	import type { GameStartType, MetadataType, OverallType, StatsType } from '@slippi/slippi-js';
+	import type { GameStartType, OverallType, StatsType } from '@slippi/slippi-js';
 
 	let clear: NodeJS.Timeout;
 
@@ -45,8 +45,6 @@
 		player2Stocks = stats.stocks.filter((s) => s.playerIndex == 1).length;
 		player2CharacterId = settings?.players[1]?.characterId ?? 0;
 	}
-
-	console.log(stats);
 
 	function GetPlayerRank(player: User) {
 		const rating = parseInt(player?.rankedNetplayProfile?.ratingOrdinal.toFixed());

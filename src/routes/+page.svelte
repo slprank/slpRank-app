@@ -3,13 +3,7 @@
 	import { fly } from 'svelte/transition';
 	import Display from '$lib/components/Display.svelte';
 	import StatDisplay from '$lib/components/StatDisplay.svelte';
-	import type {
-		FramesType,
-		GameStartType,
-		MetadataType,
-		PlacementType,
-		StatsType
-	} from '@slippi/slippi-js';
+	import type { GameStartType, MetadataType, PlacementType, StatsType } from '@slippi/slippi-js';
 
 	let clear: NodeJS.Timeout;
 
@@ -59,6 +53,7 @@
 	$: playerId2 = '';
 	$: stats = {} as StatsType;
 	$: metadata = {} as MetadataType;
+	$: settings = {} as GameStartType;
 
 	$: isGameOver = false;
 
@@ -69,6 +64,7 @@
 		localStorage.setItem('slippi-path', tempPath);
 		localStorage.setItem('background-color', tempBackgroundColor);
 		localStorage.setItem('text-color', tempTextColor);
+		getData(tempPath);
 	};
 
 	const getData = async (dir: string) => {
@@ -76,8 +72,9 @@
 	};
 
 	if (window.electron && browser) {
-		window.electron.receive('get-settings', async (settings: GameStartType) => {
+		window.electron.receive('get-settings', async (newSettings: GameStartType) => {
 			console.log('settings', settings);
+			settings = newSettings;
 		});
 		window.electron.receive('get-metadata', async (newMetadata: MetadataType) => {
 			console.log('metadata', metadata);
@@ -157,7 +154,7 @@
 	<!-- If game has no ending -->
 	{#if isGameOver && slippiStats}
 		<div>
-			<StatDisplay bind:playerId1 bind:playerId2 bind:stats bind:metadata bind:textColor />
+			<StatDisplay bind:playerId1 bind:playerId2 bind:stats bind:settings bind:textColor />
 		</div>
 	{:else}
 		<div>
