@@ -250,7 +250,7 @@
 			</div>
 			<button
 				type="button"
-				disabled={!hasSlippiCriteria}
+				disabled={!hasSlippiCriteria || !dolphinConnected}
 				class="btn btn-success"
 				on:click={storeData}>Start</button
 			>
