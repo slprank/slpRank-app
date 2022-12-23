@@ -266,7 +266,7 @@
 		</div>
 	{:else}
 		<div in:fly={{ y: 200, duration: 300, delay: 300 }} out:fly={{ y: -200, duration: 300 }}>
-			<Display bind:playerId1 bind:playerId2 bind:textColor bind:displayOptions />
+			<Display playerIds={[playerId1, playerId2]} bind:textColor bind:displayOptions />
 		</div>
 	{/if}
 </main>
