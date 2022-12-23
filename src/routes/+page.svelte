@@ -46,7 +46,6 @@
 	$: hasSlippiCriteria = !slippiStats || (slippiStats && tempPath);
 
 	const storeData = () => {
-		window.electron.getDolphinStatus();
 		backgroundColor = tempBackgroundColor;
 		textColor = tempTextColor;
 		localStorage.setItem('slippi-path', tempPath);
