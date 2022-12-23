@@ -90,7 +90,7 @@
 <main style={`background: ${tempBackgroundColor}`}>
 	{#if !start || !dolphinConnected}
 		<div class="content" in:fly={{ y: 200, duration: 300 }} out:fly={{ y: -200, duration: 300 }}>
-			<h1 style={`margin-top: 2em; color: ${tempTextColor}`}>
+			<h1 style={`margin-top: 1em; color: ${tempTextColor}`}>
 				Dolphin: {dolphinStatus}
 			</h1>
 			<h2 style={`margin-top: 2em; color: ${tempTextColor}`}>Slippi game directory</h2>

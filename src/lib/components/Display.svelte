@@ -94,6 +94,9 @@
 				alt={'rank'}
 			/>
 			<h2 style={`color: ${textColor}`}>{playerRank1}</h2>
+			<h3 style={`color: ${textColor}`}>
+				Regional placement: {player1?.rankedNetplayProfile?.dailyRegionalPlacement}
+			</h3>
 			<h2 style={`color: ${textColor}`}>
 				{player1?.rankedNetplayProfile?.ratingOrdinal.toFixed(1)}
 			</h2>
@@ -130,6 +133,9 @@
 				alt={'rank'}
 			/>
 			<h2 style={`color: ${textColor}`}>{playerRank2}</h2>
+			<h3 style={`color: ${textColor}`}>
+				Regional placement: {player2?.rankedNetplayProfile?.dailyRegionalPlacement}
+			</h3>
 			<h2 style={`color: ${textColor}`}>
 				{player2?.rankedNetplayProfile?.ratingOrdinal.toFixed(1)}
 			</h2>
@@ -181,7 +187,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		height: 300px;
+		height: 350px;
 		width: 350px;
 		flex-direction: column;
 		padding: 1em;
