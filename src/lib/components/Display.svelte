@@ -169,7 +169,7 @@
 		in:fly={{ y: 200, duration: 300, delay: 300 }}
 		out:fly={{ y: -200, duration: 150 }}
 	>
-		Getting game..
+		Waiting for game..
 	</h1>
 {/if}
 
