@@ -135,7 +135,6 @@
 				</div>
 				<hr class="hr" />
 			</div>
-			<h5 style={`color: ${textColor}`}>{player1.connectCode.code}</h5>
 			<h2 style={`color: ${textColor}`}>{player1.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
 		</div>
 		<hr style="width: 95vw" />
