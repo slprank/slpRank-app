@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { GetCurlRequest } from '$lib/helpers/Api.svelte';
-	import type { User } from '$lib/components/Types.svelte';
+	import { fetchSlippiUser } from '$lib/util/api';
+	import type { User } from '$lib/util/types';
 	import { fly } from 'svelte/transition';
 	import type { GameStartType, OverallType, StatsType } from '@slippi/slippi-js';
+	import { getPlayerRank } from '$lib/util/rank';
 
 	$: player1 = {} as User;
 	$: player2 = {} as User;
@@ -21,14 +22,14 @@
 	$: player2CharacterId = 0;
 
 	async function UpdatePlayer1(playerId: string) {
-		player1 = (await GetCurlRequest(playerId)) ?? ({} as User);
+		player1 = (await fetchSlippiUser(playerId)) ?? ({} as User);
 		player1Stats = stats?.overall[0];
 		player1Stocks = stats?.stocks?.filter((s) => s.playerIndex == 0).length;
 		player1CharacterId = settings?.players[0]?.characterId ?? 0;
 	}
 
 	async function UpdatePlayer2(playerId: string) {
-		player2 = (await GetCurlRequest(playerId)) ?? ({} as User);
+		player2 = (await fetchSlippiUser(playerId)) ?? ({} as User);
 		player2Stats = stats?.overall[1];
 		player2Stocks = stats?.stocks?.filter((s) => s.playerIndex == 1).length;
 		player2CharacterId = settings?.players[1]?.characterId ?? 0;
@@ -36,56 +37,6 @@
 
 	$: UpdatePlayer1(playerId1);
 	$: UpdatePlayer2(playerId2);
-
-	function GetPlayerRank(player: User) {
-		const rating = parseInt(player?.rankedNetplayProfile?.ratingOrdinal.toFixed());
-		const regionalPlacement = player?.rankedNetplayProfile?.dailyRegionalPlacement;
-		switch (true) {
-			case rating < 766:
-				return 'BRONZE 1';
-			case rating < 914:
-				return 'BRONZE 2';
-			case rating < 1055:
-				return 'BRONZE 3';
-			case rating < 1189:
-				return 'SILVER 1';
-			case rating < 1316:
-				return 'SILVER 2';
-			case rating < 1436:
-				return 'SILVER 3';
-			case rating < 1549:
-				return 'GOLD 1';
-			case rating < 1654:
-				return 'GOLD 2';
-			case rating < 1752:
-				return 'GOLD 3';
-			case rating < 1843:
-				return 'PLATINUM 1';
-			case rating < 1928:
-				return 'PLATINUM 2';
-			case rating < 2004:
-				return 'PLATINUM 3';
-			case rating < 2074:
-				return 'DIAMOND 1';
-			case rating < 2137:
-				return 'DIAMOND 2';
-			case rating < 2192:
-				return 'DIAMOND 3';
-			case rating < 2275 && regionalPlacement > 50:
-				return 'MASTER 1';
-			case rating < 2350 && regionalPlacement > 50:
-				return 'MASTER 2';
-			case rating >= 2350 && regionalPlacement > 50:
-				return 'MASTER 3';
-			case rating >= 2192 && regionalPlacement <= 50:
-				return 'GRANDMASTER';
-			default:
-				return 'NONE';
-		}
-	}
-
-	$: playerRank1 = GetPlayerRank(player1);
-	$: playerRank2 = GetPlayerRank(player2);
 
 	$: console.log(player2);
 </script>
@@ -103,10 +54,10 @@
 	>
 		<div class="character-box">
 			<h2 style={`color: ${textColor}`}>{player1.displayName}</h2>
-			<h5 style={`color: ${textColor}`}>{player1.connectCode.code}</h5>
+			<h5 style={`color: ${textColor}`}>{player1.connectCode}</h5>
 			<img
 				style="width: 24px; height: 24px;"
-				src={`./rank-icons/${playerRank1}.svg`}
+				src={`./rank-icons/${player1.rankedNetplayProfile.rank}.svg`}
 				alt={'rank'}
 			/>
 			<div class="stat-container">
@@ -145,10 +96,10 @@
 		<hr style="width: 95vw" />
 		<div class="character-box">
 			<h2 style={`color: ${textColor}`}>{player2.displayName}</h2>
-			<h5 style={`color: ${textColor}`}>{player2.connectCode.code}</h5>
+			<h5 style={`color: ${textColor}`}>{player2.connectCode}</h5>
 			<img
 				style="width: 24px; height: 24px;"
-				src={`./rank-icons/${playerRank2}.svg`}
+				src={`./rank-icons/${player2.rankedNetplayProfile.rank}.svg`}
 				alt={'rank'}
 			/>
 			<div class="stat-container">
@@ -181,10 +132,10 @@
 			</div>
 			<div class="col-2-container">
 				<h2 class="grid-item" style={`color: ${textColor}`}>
-					Wins: {player2?.rankedNetplayProfile?.wins ?? 0}
+					Wins: {player2?.rankedNetplayProfile?.wins}
 				</h2>
 				<h2 class="grid-item" style={`color: ${textColor}`}>
-					Losses: {player2?.rankedNetplayProfile?.losses ?? 0}
+					Losses: {player2?.rankedNetplayProfile?.losses}
 				</h2>
 			</div>
 			<h5 style={`color: ${textColor}`}>
