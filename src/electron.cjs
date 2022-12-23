@@ -30,7 +30,7 @@ const port = process.env.PORT || 5173;
 const dev = !app.isPackaged;
 
 const WIDTH = 420;
-const HEIGHT = 800;
+const HEIGHT = 1024;
 
 var dolphinConnection = new DolphinConnection();
 var parser = new SlpParser();

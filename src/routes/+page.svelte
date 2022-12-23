@@ -7,15 +7,15 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		window.electron.getDolphinStatus();
 		console.log('here');
+		window.electron.getDolphinStatus();
 	});
 
 	let tempPath: string = localStorage.getItem('slippi-path') ?? '';
 	let tempBackgroundColor: string = localStorage.getItem('background-color') ?? '#333333';
 	let tempTextColor: string = localStorage.getItem('text-color') ?? '#ffffff';
 
-	let slippiStats = false;
+	let slippiStats = localStorage.getItem('slippi-stats') == 'true';
 
 	$: backgroundColor = '';
 	$: textColor = '';
@@ -27,18 +27,43 @@
 	$: settings = {} as GameStartType;
 	$: gameOver = true;
 
+	$: displayOptions = {
+		playerTag: Boolean(localStorage.getItem('playerTag') == 'true'),
+		playerCode: Boolean(localStorage.getItem('playerCode') == 'true'),
+		rankIcon: Boolean(localStorage.getItem('rankIcon') == 'true'),
+		rankText: Boolean(localStorage.getItem('rankText') == 'true'),
+		playerRating: Boolean(localStorage.getItem('playerRating') == 'true'),
+		playerPlacement: Boolean(localStorage.getItem('playerPlacement') == 'true'),
+		playerWinLoss: Boolean(localStorage.getItem('playerWinLoss') == 'true'),
+		playerCharacters: Boolean(localStorage.getItem('playerCharacters') == 'true')
+	};
+
+	$: console.log(displayOptions);
+
 	$: dolphinStatus = 'connected';
 	$: dolphinConnected = true;
 
 	$: hasSlippiCriteria = !slippiStats || (slippiStats && tempPath);
 
 	const storeData = () => {
+		console.log(slippiStats);
 		backgroundColor = tempBackgroundColor;
 		textColor = tempTextColor;
 		localStorage.setItem('slippi-path', tempPath);
 		localStorage.setItem('background-color', tempBackgroundColor);
 		localStorage.setItem('text-color', tempTextColor);
-		window.electron.getStats(tempPath);
+		localStorage.setItem('slippi-stats', slippiStats.toString());
+
+		localStorage.setItem('playerTag', displayOptions.playerTag.toString());
+		localStorage.setItem('playerCode', displayOptions.playerCode.toString());
+		localStorage.setItem('rankIcon', displayOptions.rankIcon.toString());
+		localStorage.setItem('rankText', displayOptions.rankText.toString());
+		localStorage.setItem('playerRating', displayOptions.playerRating.toString());
+		localStorage.setItem('playerWinLoss', displayOptions.playerWinLoss.toString());
+		localStorage.setItem('playerCharacters', displayOptions.playerCharacters.toString());
+
+		if (tempPath == 'undefined') tempPath = '';
+		if (tempPath) window.electron.getStats(tempPath ?? '');
 		start = true;
 	};
 
@@ -64,33 +89,32 @@
 			console.log(data);
 		});
 		window.electron.receive('disconnected-event', async (data: string) => {
-			console.log('dis');
 			dolphinConnected = false;
 			dolphinStatus = data;
 		});
 		window.electron.receive('connected-event', async (data: string) => {
-			console.log('conn');
 			dolphinConnected = true;
 			dolphinStatus = data;
 		});
 		window.electron.receive('connecting-event', async (data: string) => {
-			console.log('hmm');
 			dolphinConnected = false;
 			dolphinStatus = data;
 		});
 	}
 	function SelectDirectory() {
 		window.electron.selectFolder().then((result: any) => {
-			tempPath = result;
-			window.electron.getStats(result);
+			tempPath = result ?? '';
+			if (tempPath == 'undefined') tempPath = '';
+			if (tempPath) window.electron.getStats(result);
 		});
 	}
 </script>
 
 <main style={`background: ${tempBackgroundColor}`}>
-	{#if !start || !dolphinConnected}
+	<!--|| !dolphinConnected fix-->
+	{#if !start}
 		<div class="content" in:fly={{ y: 200, duration: 300 }} out:fly={{ y: -200, duration: 300 }}>
-			<h1 style={`margin-top: 1em; color: ${tempTextColor}`}>
+			<h1 style={`color: ${tempTextColor}`}>
 				Dolphin: {dolphinStatus}
 			</h1>
 			<h2 style={`margin-top: 2em; color: ${tempTextColor}`}>Slippi game directory</h2>
@@ -133,10 +157,107 @@
 						style="height: 35px; width: 47px"
 					/>
 				</div>
+				<hr style="width: 95vw; margin-top: 0.5em; margin-bottom: 0.5em;" />
+				<div class="option">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
+						Player tag:
+					</h5>
+					<input
+						bind:checked={displayOptions.playerTag}
+						class="form-check-input"
+						type="checkbox"
+						id="flexCheckDefault"
+						style="height: 35px; width: 47px"
+					/>
+				</div>
+				<div class="option">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
+						Player code:
+					</h5>
+					<input
+						bind:checked={displayOptions.playerCode}
+						class="form-check-input"
+						type="checkbox"
+						id="flexCheckDefault"
+						style="height: 35px; width: 47px"
+					/>
+				</div>
+				<div class="option">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
+						Rank icon:
+					</h5>
+					<input
+						bind:checked={displayOptions.rankIcon}
+						class="form-check-input"
+						type="checkbox"
+						id="flexCheckDefault"
+						style="height: 35px; width: 47px"
+					/>
+				</div>
+				<div class="option">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
+						Rank (text):
+					</h5>
+					<input
+						bind:checked={displayOptions.rankText}
+						class="form-check-input"
+						type="checkbox"
+						id="flexCheckDefault"
+						style="height: 35px; width: 47px"
+					/>
+				</div>
+				<div class="option">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
+						Player rating:
+					</h5>
+					<input
+						bind:checked={displayOptions.playerRating}
+						class="form-check-input"
+						type="checkbox"
+						id="flexCheckDefault"
+						style="height: 35px; width: 47px"
+					/>
+				</div>
+				<div class="option">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
+						Player placement:
+					</h5>
+					<input
+						bind:checked={displayOptions.playerPlacement}
+						class="form-check-input"
+						type="checkbox"
+						id="flexCheckDefault"
+						style="height: 35px; width: 47px"
+					/>
+				</div>
+				<div class="option">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
+						Player Win/Loss::
+					</h5>
+					<input
+						bind:checked={displayOptions.playerWinLoss}
+						class="form-check-input"
+						type="checkbox"
+						id="flexCheckDefault"
+						style="height: 35px; width: 47px"
+					/>
+				</div>
+				<div class="option">
+					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
+						Characters:
+					</h5>
+					<input
+						bind:checked={displayOptions.playerCharacters}
+						class="form-check-input"
+						type="checkbox"
+						id="flexCheckDefault"
+						style="height: 35px; width: 47px"
+					/>
+				</div>
 			</div>
 			<button
 				type="button"
-				disabled={!hasSlippiCriteria || !dolphinConnected}
+				disabled={!hasSlippiCriteria}
 				class="btn btn-success"
 				on:click={storeData}>Start</button
 			>
@@ -152,7 +273,7 @@
 		</div>
 	{:else}
 		<div in:fly={{ y: 200, duration: 300, delay: 300 }} out:fly={{ y: -200, duration: 300 }}>
-			<Display bind:playerId1 bind:playerId2 bind:textColor />
+			<Display bind:playerId1 bind:playerId2 bind:textColor bind:displayOptions />
 		</div>
 	{/if}
 </main>
