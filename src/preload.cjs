@@ -13,5 +13,6 @@ contextBridge.exposeInMainWorld('electron', {
 		ipcRenderer.on(channel, (event, ...args) => func(...args));
 	},
 	getStats: (dir) => ipcRenderer.invoke('get/stats', dir),
+	getDolphinStatus: () => ipcRenderer.invoke('dolphin/status'),
 	selectFolder: () => ipcRenderer.invoke('dialog:openDirectory')
 });

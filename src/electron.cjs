@@ -218,6 +218,19 @@ ipcMain.handle('get/stats', async (_, dir) => {
 	GetLatestGameStats(dir);
 });
 
+ipcMain.handleOnce('dolphin/status', async (_, dir) => {
+	const status = dolphinConnection.getStatus();
+	if (status === ConnectionStatus.DISCONNECTED) {
+		mainWindow.webContents.send('disconnected-event', 'disconnected');
+	}
+	if (status === ConnectionStatus.CONNECTED) {
+		mainWindow.webContents.send('connected-event', 'connected');
+	}
+	if (status === ConnectionStatus.CONNECTING) {
+		mainWindow.webContents.send('connecting-event', 'connecting');
+	}
+});
+
 function GetLatestGameStats(dir) {
 	const fs = require('fs');
 	const path = require('path');

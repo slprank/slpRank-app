@@ -4,6 +4,12 @@
 	import Display from '$lib/components/Display.svelte';
 	import StatDisplay from '$lib/components/StatDisplay.svelte';
 	import type { GameStartType, MetadataType, PlacementType, StatsType } from '@slippi/slippi-js';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		window.electron.getDolphinStatus();
+		console.log('here');
+	});
 
 	let tempPath: string = localStorage.getItem('slippi-path') ?? '';
 	let tempBackgroundColor: string = localStorage.getItem('background-color') ?? '#333333';
@@ -21,8 +27,8 @@
 	$: settings = {} as GameStartType;
 	$: gameOver = true;
 
-	$: dolphinStatus = 'connecting';
-	$: dolphinConnected = false;
+	$: dolphinStatus = 'connected';
+	$: dolphinConnected = true;
 
 	$: hasSlippiCriteria = !slippiStats || (slippiStats && tempPath);
 
@@ -58,14 +64,17 @@
 			console.log(data);
 		});
 		window.electron.receive('disconnected-event', async (data: string) => {
+			console.log('dis');
 			dolphinConnected = false;
 			dolphinStatus = data;
 		});
 		window.electron.receive('connected-event', async (data: string) => {
+			console.log('conn');
 			dolphinConnected = true;
 			dolphinStatus = data;
 		});
 		window.electron.receive('connecting-event', async (data: string) => {
+			console.log('hmm');
 			dolphinConnected = false;
 			dolphinStatus = data;
 		});
@@ -79,7 +88,7 @@
 </script>
 
 <main style={`background: ${tempBackgroundColor}`}>
-	{#if !start && !dolphinConnected}
+	{#if !start || !dolphinConnected}
 		<div class="content" in:fly={{ y: 200, duration: 300 }} out:fly={{ y: -200, duration: 300 }}>
 			<h1 style={`margin-top: 2em; color: ${tempTextColor}`}>
 				Dolphin: {dolphinStatus}
@@ -127,7 +136,7 @@
 			</div>
 			<button
 				type="button"
-				disabled={!hasSlippiCriteria}
+				disabled={!hasSlippiCriteria || !dolphinConnected}
 				class="btn btn-success"
 				on:click={storeData}>Start</button
 			>
