@@ -4,10 +4,6 @@
 	import { fly } from 'svelte/transition';
 	import type { GameStartType, OverallType, StatsType } from '@slippi/slippi-js';
 
-	let clear: NodeJS.Timeout;
-
-	const ms = 100;
-
 	$: UpdatePlayer1(playerId1);
 	$: UpdatePlayer2(playerId2);
 
@@ -98,7 +94,11 @@
 </svelte:head>
 
 {#if player1.displayName && player2.displayName}
-	<div class="content" transition:fly={{ y: 200, duration: 300 }}>
+	<div
+		class="content"
+		in:fly={{ y: 200, duration: 300, delay: 300 }}
+		out:fly={{ y: -200, duration: 300 }}
+	>
 		<div class="character-box">
 			<h2 style={`color: ${textColor}`}>{player1.displayName}</h2>
 			<h5 style={`color: ${textColor}`}>{player1.connectCode.code}</h5>
@@ -178,6 +178,14 @@
 			<h2 style={`color: ${textColor}`}>{player2.rankedNetplayProfile.ratingOrdinal.toFixed(1)}</h2>
 		</div>
 	</div>
+{:else}
+	<h1
+		style={`color: ${textColor}`}
+		in:fly={{ y: 200, duration: 300, delay: 300 }}
+		out:fly={{ y: -200, duration: 150 }}
+	>
+		Waiting for game..
+	</h1>
 {/if}
 
 <style>

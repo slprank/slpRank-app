@@ -6,10 +6,10 @@
 	import type { GameStartType, MetadataType, PlacementType, StatsType } from '@slippi/slippi-js';
 
 	let tempPath: string = localStorage.getItem('slippi-path') ?? '';
-	let tempBackgroundColor: string = localStorage.getItem('background-color') ?? '';
-	let tempTextColor: string = localStorage.getItem('text-color') ?? '';
+	let tempBackgroundColor: string = localStorage.getItem('background-color') ?? '#333333';
+	let tempTextColor: string = localStorage.getItem('text-color') ?? '#ffffff';
 
-	$: slippiStats = false;
+	let slippiStats = false;
 
 	$: backgroundColor = '';
 	$: textColor = '';
@@ -17,11 +17,14 @@
 	$: playerId1 = '';
 	$: playerId2 = '';
 	$: start = false;
-	//$: stats = {} as StatsType;
-	//$: settings = {} as GameStartType;
+	$: stats = {} as StatsType;
+	$: settings = {} as GameStartType;
 	$: gameOver = true;
 
+	$: dolphinStatus = 'connecting';
 	$: dolphinConnected = false;
+
+	$: hasSlippiCriteria = !slippiStats || (slippiStats && tempPath);
 
 	const storeData = () => {
 		backgroundColor = tempBackgroundColor;
@@ -36,30 +39,35 @@
 	if (window.electron && browser) {
 		window.electron.receive('player1-id', async (id: string) => {
 			playerId1 = id;
-			gameOver = false;
-			console.log('id1:', playerId1);
 		});
 		window.electron.receive('player2-id', async (id: string) => {
 			playerId2 = id;
-			gameOver = false;
-			console.log('id2:', playerId2);
 		});
 		window.electron.receive('settings', async (newSettings: GameStartType) => {
-			//settings = newSettings;
+			settings = newSettings;
 		});
 		window.electron.receive('stats', async (newStats: StatsType) => {
-			//stats = newStats;
-			//console.log(stats);
+			stats = newStats;
+			console.log(newStats);
+		});
+		window.electron.receive('game-start', async (data: any) => {
+			gameOver = false;
 		});
 		window.electron.receive('game-end', async (data: any) => {
 			gameOver = true;
 			console.log(data);
 		});
-		window.electron.receive('disconnected-event', async (data: boolean) => {
-			dolphinConnected = data;
+		window.electron.receive('disconnected-event', async (data: string) => {
+			dolphinConnected = false;
+			dolphinStatus = data;
 		});
-		window.electron.receive('connected-event', async (data: boolean) => {
-			dolphinConnected = data;
+		window.electron.receive('connected-event', async (data: string) => {
+			dolphinConnected = true;
+			dolphinStatus = data;
+		});
+		window.electron.receive('connecting-event', async (data: string) => {
+			dolphinConnected = false;
+			dolphinStatus = data;
 		});
 	}
 	function SelectDirectory() {
@@ -72,9 +80,12 @@
 
 <main style={`background: ${tempBackgroundColor}`}>
 	{#if !start && !dolphinConnected}
-		<div class="content" transition:fly={{ y: 200, duration: 300 }}>
+		<div class="content" in:fly={{ y: 200, duration: 300 }} out:fly={{ y: -200, duration: 300 }}>
+			<h1 style={`margin-top: 2em; color: ${tempTextColor}`}>
+				Dolphin: {dolphinStatus}
+			</h1>
+			<h2 style={`margin-top: 2em; color: ${tempTextColor}`}>Slippi game directory</h2>
 			<div class="options-container">
-				<h1 style={`margin-top: 2em; color: ${tempTextColor}`}>Slippi game directory</h1>
 				<button on:click={SelectDirectory} type="button" class="btn btn-primary"
 					>Select Directory</button
 				>
@@ -101,31 +112,37 @@
 						id="exampleColorInput"
 					/>
 				</div>
-				<!--
 				<div class="option">
 					<h5 style={`margin-top: auto; margin-bottom: auto; color: ${tempTextColor}`}>
 						Post game stats:
 					</h5>
 					<input
-						bind:value={slippiStats}
+						bind:checked={slippiStats}
 						class="form-check-input"
 						type="checkbox"
 						id="flexCheckDefault"
 						style="height: 35px; width: 47px"
 					/>
 				</div>
-				-->
 			</div>
-			<button type="button" class="btn btn-success" on:click={storeData}>Start</button>
+			<button
+				type="button"
+				disabled={!hasSlippiCriteria}
+				class="btn btn-success"
+				on:click={storeData}>Start</button
+			>
+			<h6>
+				<a href="https://twitter.com/SniderSSBM" target="_blank" style={`color: ${tempTextColor}`}
+					>@SniderSSBM</a
+				>
+			</h6>
 		</div>
-		<!--
-	{:else if gameOver && slippiStats}
-		<div>
+	{:else if gameOver && hasSlippiCriteria}
+		<div in:fly={{ y: 200, duration: 300, delay: 300 }} out:fly={{ y: -200, duration: 300 }}>
 			<StatDisplay bind:playerId1 bind:playerId2 bind:stats bind:settings bind:textColor />
 		</div>
-	-->
 	{:else}
-		<div transition:fly={{ y: 200, duration: 300 }}>
+		<div in:fly={{ y: 200, duration: 300, delay: 300 }} out:fly={{ y: -200, duration: 300 }}>
 			<Display bind:playerId1 bind:playerId2 bind:textColor />
 		</div>
 	{/if}

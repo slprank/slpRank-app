@@ -44,6 +44,7 @@ slpStream.on(SlpStreamEvent.COMMAND, (event) => {
 	if (event.command == 54) {
 		mainWindow.webContents.send('player1-id', parser.getSettings().players[0].connectCode);
 		mainWindow.webContents.send('player2-id', parser.getSettings().players[1].connectCode);
+		mainWindow.webContents.send('game-start');
 		mainWindow.webContents.send('settings', parser.getSettings());
 	}
 });
@@ -57,11 +58,14 @@ parser.on(SlpParserEvent.END, (frameEntry) => {
 dolphinConnection.on(ConnectionEvent.STATUS_CHANGE, (status) => {
 	// Disconnect from Slippi server when we disconnect from Dolphin
 	if (status === ConnectionStatus.DISCONNECTED) {
-		mainWindow.webContents.send('disconnected-event', false);
+		mainWindow.webContents.send('disconnected-event', 'disconnected');
+		dolphinConnection.connect('127.0.0.1', Ports.DEFAULT);
 	}
 	if (status === ConnectionStatus.CONNECTED) {
-		mainWindow.webContents.send('connected-event', true);
-		console.log('status', status);
+		mainWindow.webContents.send('connected-event', 'connected');
+	}
+	if (status === ConnectionStatus.CONNECTING) {
+		mainWindow.webContents.send('connecting-event', 'connecting');
 	}
 });
 
@@ -209,7 +213,7 @@ ipcMain.on('ipc', (event, arg) => {
 	}
 });
 
-ipcMain.handle('get/slippi', async (_, dir) => {
+ipcMain.handle('get/stats', async (_, dir) => {
 	gameDirectory = dir;
 	GetLatestGameStats(dir);
 });
@@ -229,6 +233,11 @@ function GetLatestGameStats(dir) {
 	newGame = files.sort((a, b) => a.length - b.length);
 
 	const sourceGame = `${dir}/${newGame[newGame.length - 1]}`;
+
+	const settings = new SlippiGame(sourceGame).getSettings();
+
+	mainWindow.webContents.send('player1-id', settings.players[0].connectCode);
+	mainWindow.webContents.send('player2-id', settings.players[1].connectCode);
 
 	mainWindow.webContents.send('stats', new SlippiGame(sourceGame).getStats());
 }

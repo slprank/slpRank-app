@@ -72,9 +72,6 @@
 
 	$: UpdatePlayer1(playerId1);
 	$: UpdatePlayer2(playerId2);
-
-	$: console.log(playerId1);
-	$: console.log(playerId2);
 </script>
 
 <svelte:head>
@@ -83,7 +80,11 @@
 </svelte:head>
 
 {#if player1.displayName || player2.displayName}
-	<div class="content" transition:fly={{ y: 200, duration: 300 }}>
+	<div
+		class="content"
+		in:fly={{ y: 200, duration: 300, delay: 300 }}
+		out:fly={{ y: -200, duration: 300 }}
+	>
 		<div class="character-box">
 			<h1 style={`color: ${textColor}`}>{player1.displayName}</h1>
 			<h3 style={`color: ${textColor}`}>{player1?.connectCode?.code}</h3>
@@ -157,7 +158,13 @@
 		</div>
 	</div>
 {:else}
-	<h1>Waiting for game..</h1>
+	<h1
+		style={`color: ${textColor}`}
+		in:fly={{ y: 200, duration: 300, delay: 300 }}
+		out:fly={{ y: -200, duration: 150 }}
+	>
+		Getting game..
+	</h1>
 {/if}
 
 <style>

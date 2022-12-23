@@ -12,6 +12,6 @@ contextBridge.exposeInMainWorld('electron', {
 	receive: (channel, func) => {
 		ipcRenderer.on(channel, (event, ...args) => func(...args));
 	},
-	getStats: (dir) => ipcRenderer.invoke('get/slippi', dir),
+	getStats: (dir) => ipcRenderer.invoke('get/stats', dir),
 	selectFolder: () => ipcRenderer.invoke('dialog:openDirectory')
 });
