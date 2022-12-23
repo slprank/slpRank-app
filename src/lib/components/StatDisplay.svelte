@@ -25,7 +25,6 @@
 		player1Stats = stats?.overall[0];
 		player1Stocks = stats?.stocks?.filter((s) => s.playerIndex == 0).length;
 		player1CharacterId = settings?.players[0]?.characterId ?? 0;
-		console.log(player1);
 	}
 
 	async function UpdatePlayer2(playerId: string) {

@@ -46,7 +46,7 @@
 	$: hasSlippiCriteria = !slippiStats || (slippiStats && tempPath);
 
 	const storeData = () => {
-		console.log(slippiStats);
+		window.electron.getDolphinStatus();
 		backgroundColor = tempBackgroundColor;
 		textColor = tempTextColor;
 		localStorage.setItem('slippi-path', tempPath);
@@ -111,8 +111,7 @@
 </script>
 
 <main style={`background: ${tempBackgroundColor}`}>
-	<!--|| !dolphinConnected fix-->
-	{#if !start}
+	{#if !start || !dolphinConnected}
 		<div class="content" in:fly={{ y: 200, duration: 300 }} out:fly={{ y: -200, duration: 300 }}>
 			<h1 style={`color: ${tempTextColor}`}>
 				Dolphin: {dolphinStatus}
@@ -297,7 +296,7 @@
 		height: 100vh;
 		width: 420px;
 		flex-direction: column;
-		gap: 1em;
+		gap: 0.5em;
 	}
 
 	.options-container {
