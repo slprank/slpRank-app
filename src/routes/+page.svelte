@@ -7,7 +7,6 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		console.log('here');
 		window.electron.getDolphinStatus();
 	});
 
@@ -37,8 +36,6 @@
 		playerWinLoss: Boolean(localStorage.getItem('playerWinLoss') == 'true'),
 		playerCharacters: Boolean(localStorage.getItem('playerCharacters') == 'true')
 	};
-
-	$: console.log(displayOptions);
 
 	$: dolphinStatus = 'connected';
 	$: dolphinConnected = true;
@@ -78,14 +75,12 @@
 		});
 		window.electron.receive('stats', async (newStats: StatsType) => {
 			stats = newStats;
-			console.log(newStats);
 		});
 		window.electron.receive('game-start', async (data: any) => {
 			gameOver = false;
 		});
 		window.electron.receive('game-end', async (data: any) => {
 			gameOver = true;
-			console.log(data);
 		});
 		window.electron.receive('disconnected-event', async (data: string) => {
 			dolphinConnected = false;
