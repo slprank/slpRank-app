@@ -326,7 +326,7 @@
 						{#each [...Array(4).keys()] as _, i}
 							<img
 								style={`height: 28px; width: 28px; filter: brightness(${
-									(players[1].stats?.stocks[3 - i].deathAnimation ?? null) == null ? '100' : '50'
+									(players[1].stats?.stocks[3 - i]?.deathAnimation ?? null) == null ? '100' : '50'
 								}%)`}
 								src={`./characters/${$setStartStats?.characters[1]?.characterId}/${$setStartStats?.characters[1]?.characterColorId}/stock.png`}
 								alt="character icon"
