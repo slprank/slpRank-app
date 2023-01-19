@@ -415,8 +415,8 @@ function GetRecentGameStats(files) {
 async function RunTests() {
 	mainWindow.webContents.send('is-test');
 	let files = GetGameFiles()
-		.sort((a, b) => 0.5 - Math.random())
-		.slice(0, 10);
+		//.sort((a, b) => 0.5 - Math.random())
+		.slice(-6);
 	files.forEach((file, i) => {
 		let game = new SlippiGame(file);
 		if (game.getSettings().gameMode !== GameMode.ONLINE) return;

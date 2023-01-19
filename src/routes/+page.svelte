@@ -130,6 +130,7 @@
 			}
 		);
 		window.electron.receive('game-end', async (data: GameEndType, newStats: StatsType) => {
+			console.log(data, newStats);
 			if (!players[0] || !players[1]) return;
 			players[0]!.stats = {
 				actionCounts: newStats.actionCounts[0],
@@ -149,10 +150,12 @@
 			};
 
 			if (!data) return;
-
 			await HandleStatChange();
 
 			gameOver = true;
+			let player1won =
+				players[1]!.stats.stocks.filter((s) => s.deathAnimation !== null).length <
+				players[0]!.stats.stocks.filter((s) => s.deathAnimation !== null).length;
 
 			let placements = [data?.placements[0]?.position ?? 0, data?.placements[1]?.position ?? 0];
 
@@ -160,13 +163,15 @@
 				placements = [0, 1];
 			} else if (data.lrasInitiatorIndex === 1) {
 				placements = [1, 0];
-			} else if (placements[0] !== 0) {
+			} else if (player1won) {
 				placements[1] = 1;
 				placements[0] = 0;
-			} else if (placements[1] !== 0) {
+			} else if (!player1won) {
 				placements[0] = 1;
 				placements[1] = 0;
 			}
+
+			console.log(placements);
 
 			$setStartStats = {
 				...$setStartStats,
