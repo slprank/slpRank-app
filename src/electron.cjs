@@ -274,6 +274,7 @@ ipcMain.handle('update:download', async () => {
 ipcMain.handle('update:install', async () => {
 	log.info('Installing..');
 	log.info(autoUpdater.currentVersion);
+	autoUpdater.quitAndInstall();
 });
 
 ipcMain.handle('update:external', async (_, url) => {

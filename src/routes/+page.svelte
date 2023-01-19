@@ -148,13 +148,11 @@
 				combos: newStats.combos.filter((c) => c.playerIndex === 1)
 			};
 
-			console.log('data', data);
 			if (!data) return;
 
 			await HandleStatChange();
 
 			gameOver = true;
-
 			let placements = [data?.placements[0].position ?? -1, data?.placements[1].position ?? -1];
 
 			// Find a better way to handle L+R+A+S
