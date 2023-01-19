@@ -275,6 +275,13 @@ ipcMain.handle('update:install', async () => {
 	log.info(autoUpdater.currentVersion);
 });
 
+ipcMain.handle('update:external', async (_, url) => {
+	log.info('external', url);
+	// Make this work
+	const open = require('open');
+	open(url);
+});
+
 autoUpdater.on('checking-for-update', () => {
 	log.info(autoUpdater.currentVersion);
 	mainWindow.webContents.send('update-status', `Checking for update`);
@@ -291,6 +298,13 @@ autoUpdater.on('update-available', () => {
 autoUpdater.on('update-downloaded', (data) => {
 	mainWindow.webContents.send('update-status', `Install`);
 	log.info(`${data.version} downloaded`);
+	log.info(
+		`Download url: https://github.com/slprank/slpRank-app/releases/download/${data.releaseName}/${data.files[0].url}`
+	); //
+	mainWindow.webContents.send(
+		'download-url',
+		`https://github.com/slprank/slpRank-app/releases/download/${data.releaseName}/${data.files[0].url}`
+	);
 	autoUpdater.quitAndInstall();
 });
 

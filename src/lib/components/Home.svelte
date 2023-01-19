@@ -39,6 +39,12 @@
 
 	$: status = '';
 	$: appVersion = '';
+	$: downloadUrl = '';
+
+	window.electron.receive('download-url', async (url: string) => {
+		downloadUrl = url;
+	});
+
 	window.electron.receive('update-status', async (newStatus: string) => {
 		status = newStatus;
 	});
@@ -285,7 +291,6 @@
 	out:fly={{ y: -100, duration: 300 }}
 >
 	<div class="box">
-		<p style={`color: ${textColor}`}>{appVersion}</p>
 		<div class="col-2-container">
 			<h2 class="right" style={`color: ${textColor}`}>Dolphin:</h2>
 			<h2 class="left" style={`color: ${dolphinStatus == 'connected' ? winColor : textColor}`}>
@@ -297,9 +302,20 @@
 			class="btn btn-success"
 			disabled={!['Download', 'Install'].includes(status)}
 			on:click={() => (status == 'Download' ? DownloadUpdate() : InstallUpdate())}
-			>{status ? status : 'update'}</button
+			>{status ? status : 'update'} - {appVersion}</button
 		>
-		<h3 style={`margin-top: 1em; color: ${textColor}`}>Slippi replays directory</h3>
+		{#if downloadUrl}
+			<p
+				style={`color: ${textColor}`}
+				in:fly={{ x: -20, duration: 300, delay: 305 }}
+				out:fly={{ x: -20, duration: 300 }}
+			>
+				Trouble installing: <a href="" on:click={() => window.electron.externalUpdate(downloadUrl)}
+					>download</a
+				>
+			</p>
+		{/if}
+		<h3 style={`margin-top: 0.5em; color: ${textColor}`}>Slippi replays directory</h3>
 		<button on:click={SelectDirectory} type="button" class="btn btn-primary"
 			>Select Directory</button
 		>

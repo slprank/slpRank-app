@@ -21,5 +21,6 @@ contextBridge.exposeInMainWorld('electron', {
 	checkUpdate: () => ipcRenderer.invoke('update:check'),
 	downloadUpdate: () => ipcRenderer.invoke('update:download'),
 	installUpdate: () => ipcRenderer.invoke('update:install'),
+	externalUpdate: (url) => ipcRenderer.invoke('update:external', url),
 	runTests: () => ipcRenderer.invoke('run:tests')
 });
