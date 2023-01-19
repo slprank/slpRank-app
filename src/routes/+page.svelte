@@ -153,10 +153,14 @@
 			await HandleStatChange();
 
 			gameOver = true;
-			let placements = [data?.placements[0].position ?? -1, data?.placements[1].position ?? -1];
 
-			// Find a better way to handle L+R+A+S
-			if (placements[0] !== 0) {
+			let placements = [data?.placements[0].position ?? 0, data?.placements[1].position ?? 0];
+
+			if (data.lrasInitiatorIndex === 0) {
+				placements = [0, 1];
+			} else if (data.lrasInitiatorIndex === 1) {
+				placements = [0, 1];
+			} else if (placements[0] !== 0) {
 				placements[1] = 1;
 				placements[0] = 0;
 			} else if (placements[1] !== 0) {
