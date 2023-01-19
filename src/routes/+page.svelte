@@ -107,9 +107,11 @@
 					stageId: settings.stageId ?? -1
 				};
 
+				setTimeout(() => {
+					gameOver = false;
+				}, 100);
 				showPlayer = false;
 				clearTimeout(showPlayerTimeout);
-				gameOver = false;
 
 				const prevOpponentDisplayName =
 					$setStartStats.players[$currentStats.opponentPlayerIndex] ?? '';
