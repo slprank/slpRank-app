@@ -293,12 +293,14 @@ autoUpdater.on('update-not-available', () => {
 	mainWindow.webContents.send('update-status', `No update available`);
 });
 
-autoUpdater.on('update-available', () => {
+autoUpdater.on('update-available', (data) => {
+	mainWindow.webContents.send('version', data.version);
 	mainWindow.webContents.send('update-status', `Download`);
 });
 
 autoUpdater.on('update-downloaded', (data) => {
 	mainWindow.webContents.send('update-status', `Install`);
+	data.version;
 	log.info(`${data.version} downloaded`);
 	log.info(
 		`Download url: https://github.com/slprank/slpRank-app/releases/download/${data.releaseName}/${data.files[0].url}`
@@ -307,11 +309,10 @@ autoUpdater.on('update-downloaded', (data) => {
 		'download-url',
 		`https://github.com/slprank/slpRank-app/releases/download/${data.releaseName}/${data.files[0].url}`
 	);
-	autoUpdater.quitAndInstall();
 });
 
 autoUpdater.on('download-progress', (data) => {
-	mainWindow.webContents.send('update-status', `Downloading ${data.percent.toFixed()}%`);
+	mainWindow.webContents.send('download-progress', `Downloading ${data.percent.toFixed()}%`);
 	if (data.percent == 100) mainWindow.webContents.send('update-status', `Install`);
 });
 

@@ -40,6 +40,7 @@
 	$: status = '';
 	$: appVersion = '';
 	$: downloadUrl = '';
+	$: downloadProgress = '';
 
 	window.electron.receive('download-url', async (url: string) => {
 		downloadUrl = url;
@@ -47,6 +48,10 @@
 
 	window.electron.receive('update-status', async (newStatus: string) => {
 		status = newStatus;
+	});
+
+	window.electron.receive('download-progress', async (progress: string) => {
+		if (progress > downloadProgress) downloadProgress = progress;
 	});
 
 	window.electron.receive('version', async (version: string) => {
@@ -302,7 +307,9 @@
 			class="btn btn-success"
 			disabled={!['Download', 'Install'].includes(status)}
 			on:click={() => (status == 'Download' ? DownloadUpdate() : InstallUpdate())}
-			>{status ? status : 'update'} - {appVersion}</button
+			>{status ? status : 'Update'} - {'0' < downloadProgress && downloadProgress < '100'
+				? downloadProgress
+				: appVersion}</button
 		>
 		{#if downloadUrl}
 			<p
