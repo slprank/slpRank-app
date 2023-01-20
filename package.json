@@ -2,7 +2,7 @@
 	"name": "slippi-stats-display",
 	"productName": "Slippi Stats Display",
 	"description": "Display slippi stats realtime",
-	"version": "1.0.14",
+	"version": "1.0.15",
 	"main": "src/electron.cjs",
 	"type": "module",
 	"nodeIntegration": true,

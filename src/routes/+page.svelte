@@ -155,9 +155,7 @@
 			await HandleStatChange();
 
 			gameOver = true;
-			let player1won =
-				players[1]!.stats.stocks.filter((s) => s.deathAnimation !== null).length <
-				players[0]!.stats.stocks.filter((s) => s.deathAnimation !== null).length;
+			let player1won = data?.placements[0]?.position === 0;
 
 			let placements = [data?.placements[0]?.position ?? 0, data?.placements[1]?.position ?? 0];
 
@@ -166,11 +164,11 @@
 			} else if (data.lrasInitiatorIndex === 1) {
 				placements = [1, 0];
 			} else if (player1won) {
-				placements[1] = 1;
-				placements[0] = 0;
-			} else if (!player1won) {
 				placements[0] = 1;
 				placements[1] = 0;
+			} else if (!player1won) {
+				placements[0] = 0;
+				placements[1] = 1;
 			}
 
 			console.log(placements);
