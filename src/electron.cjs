@@ -415,10 +415,11 @@ function GetRecentGameStats(files) {
 
 async function RunTests() {
 	mainWindow.webContents.send('is-test');
-	let files = GetGameFiles().slice(-6);
+	let files = GetGameFiles()
+		.slice(-10)
+		.filter((file) => new SlippiGame(file).getSettings().gameMode === GameMode.ONLINE);
 	files.forEach((file, i) => {
-		let game = new SlippiGame(file);
-		if (game.getSettings().gameMode !== GameMode.ONLINE) return;
+		console.log(game.getSettings());
 		setTimeout(() => {
 			mainWindow.webContents.send(
 				'game-start',
