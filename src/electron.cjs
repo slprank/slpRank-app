@@ -23,9 +23,11 @@ const log = require('electron-log');
 
 const fs = require('fs');
 
-if (!fs.existsSync(`${__dirname}/logs`)) {
-	fs.mkdirSync(`${__dirname}/logs/main.log`, { recursive: true });
+if (!fs.existsSync(path.join(`C:/logs`))) {
+	fs.mkdirSync(path.join(`C:/logs/main.log`), { recursive: true });
 }
+
+console.log(path.join(`${__dirname}/logs/main.log`));
 
 log.transports.file.resolvePath = () => path.join(`${__dirname}/logs/main.log`);
 
