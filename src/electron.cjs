@@ -29,7 +29,7 @@ if (!fs.existsSync(path.join(`C:/logs`))) {
 
 console.log(path.join(`${__dirname}/logs/main.log`));
 
-log.transports.file.resolvePath = () => path.join(`${__dirname}/logs/main.log`);
+log.transports.file.resolvePath = () => path.join(`C:/logs`);
 
 log.info('start');
 
@@ -427,7 +427,6 @@ async function RunTests() {
 		.slice(-10)
 		.filter((file) => new SlippiGame(file).getSettings().gameMode === GameMode.ONLINE);
 	files.forEach((file, i) => {
-		console.log(game.getSettings());
 		setTimeout(() => {
 			mainWindow.webContents.send(
 				'game-start',
