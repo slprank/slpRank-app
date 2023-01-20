@@ -279,7 +279,6 @@ ipcMain.handle('update:install', async () => {
 
 ipcMain.handle('update:external', async (_, url) => {
 	log.info('external', url);
-	// Make this work
 	const open = require('open');
 	open(url);
 });

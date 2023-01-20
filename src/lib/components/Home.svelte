@@ -51,7 +51,7 @@
 	});
 
 	window.electron.receive('download-progress', async (progress: string) => {
-		if (progress > downloadProgress) downloadProgress = progress;
+		downloadProgress = progress;
 	});
 
 	window.electron.receive('version', async (version: string) => {
@@ -309,7 +309,7 @@
 			on:click={() => (status == 'Download' ? DownloadUpdate() : InstallUpdate())}
 			>{status ? status : 'Update'} - {'0' < downloadProgress && downloadProgress < '100'
 				? downloadProgress
-				: appVersion}</button
+				: appVersion}{downloadProgress}</button
 		>
 		{#if downloadUrl}
 			<p
