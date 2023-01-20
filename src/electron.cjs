@@ -21,8 +21,11 @@ const serve = require('electron-serve');
 const path = require('path');
 const log = require('electron-log');
 
-log.transports.file.resolvePath = () =>
-	path.join('/Users/sindrevatnaland/RiderProjects/melee-ranking', '/logs/main.log');
+if (!fs.existsSync(`${__dirname}/logs`)) {
+	fs.mkdirSync(dir, { recursive: true });
+}
+
+log.transports.file.resolvePath = () => path.join(`${__dirname}/logs/main.log`);
 
 log.info('start');
 
@@ -289,10 +292,12 @@ autoUpdater.on('checking-for-update', () => {
 });
 
 autoUpdater.on('update-not-available', () => {
+	log.info('update not available');
 	mainWindow.webContents.send('update-status', `No update available`);
 });
 
 autoUpdater.on('update-available', (data) => {
+	log.info('update not available');
 	mainWindow.webContents.send('version', data.version);
 	mainWindow.webContents.send('update-status', `Download`);
 });
