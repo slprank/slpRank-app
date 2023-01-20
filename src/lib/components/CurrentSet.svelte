@@ -27,7 +27,7 @@
 				}}
 			>
 				<h4
-					class="right myText"
+					class="right"
 					style={`color: ${textColor};overflow: hidden; width: 100%;`}
 					use:textfit={{ parent, mode: 'multi' }}
 				>
@@ -62,7 +62,7 @@
 				}}
 			>
 				<h4
-					class="left myText"
+					class="left"
 					style={`color: ${textColor};overflow: hidden; width: 100%; `}
 					use:textfit={{ parent, mode: 'multi' }}
 				>
@@ -113,9 +113,5 @@
 		display: flex;
 		justify-content: flex-end;
 		text-align: end;
-	}
-
-	.myText {
-		display: block;
 	}
 </style>
