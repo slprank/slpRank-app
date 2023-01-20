@@ -21,6 +21,8 @@ const serve = require('electron-serve');
 const path = require('path');
 const log = require('electron-log');
 
+const fs = require('fs');
+
 if (!fs.existsSync(`${__dirname}/logs`)) {
 	fs.mkdirSync(dir, { recursive: true });
 }
