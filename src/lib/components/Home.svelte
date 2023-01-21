@@ -323,7 +323,11 @@
 			</p>
 		{/if}
 		<h3 style={`margin-top: 0.5em; color: ${textColor}`}>Slippi replays directory</h3>
-		<button on:click={SelectDirectory} type="button" class="btn btn-primary"
+		<button
+			on:click={SelectDirectory}
+			type="button"
+			class="btn btn-primary"
+			data-tooltip="Preferred not to use monthly sub folders for replays. Select most recent sub folder if you so chooses to use them"
 			>Select Directory</button
 		>
 		<p style={`color: ${textColor}`}>{gamePath ?? 'No directory selected'}</p>
