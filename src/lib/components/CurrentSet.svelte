@@ -28,7 +28,7 @@
 			>
 				<h4
 					class="right"
-					style={`color: ${textColor};overflow: hidden; width: 100%;`}
+					style={`color: ${textColor}; width: 100%;`}
 					use:textfit={{ parent, mode: 'multi' }}
 				>
 					{$setStartStats?.players[0] ?? ''}
@@ -63,7 +63,7 @@
 			>
 				<h4
 					class="left"
-					style={`color: ${textColor};overflow: hidden; width: 100%; `}
+					style={`color: ${textColor}; width: 100%; `}
 					use:textfit={{ parent, mode: 'multi' }}
 				>
 					{$setStartStats?.players[1] ?? ''}
