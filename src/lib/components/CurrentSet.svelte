@@ -11,7 +11,7 @@
 	{#key $setStartStats?.scores}
 		<div
 			class="content-head"
-			style={`z-index: 10; overflow: hidden`}
+			style={`z-index: 10;`}
 			in:fly={{ y: -100, duration: 300, delay: 950 }}
 			out:fly={{ y: -100, duration: 300 }}
 		>
@@ -97,10 +97,8 @@
 		justify-items: center;
 		font-size: 1em;
 		margin: 0;
-		overflow: hidden;
 		white-space: nowrap;
 		max-width: 145px;
-		text-overflow: ellipsis;
 	}
 
 	.left {
