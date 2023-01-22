@@ -40,7 +40,7 @@
 	$: status = '';
 	$: appVersion = '';
 	$: downloadUrl = '';
-	$: downloadProgress = '';
+	$: downloadProgress = 0;
 
 	window.electron.receive('download-url', async (url: string) => {
 		downloadUrl = url;
@@ -50,7 +50,7 @@
 		status = newStatus;
 	});
 
-	window.electron.receive('download-progress', async (progress: string) => {
+	window.electron.receive('download-progress', async (progress: number) => {
 		downloadProgress = progress;
 	});
 
@@ -305,10 +305,11 @@
 
 		<button
 			class="btn btn-success"
-			disabled={!['Download', 'Install'].includes(status)}
+			disabled={!['Download', 'Install'].includes(status) ||
+				(0 < downloadProgress && downloadProgress < 100)}
 			on:click={() => (status == 'Download' ? DownloadUpdate() : InstallUpdate())}
-			>{status ? status : 'Update'} - {'0' < downloadProgress && downloadProgress < '100'
-				? downloadProgress
+			>{status ? status : 'Update'} - {0 < downloadProgress && downloadProgress < 100
+				? downloadProgress.toFixed()
 				: appVersion}</button
 		>
 		{#if downloadUrl}
@@ -317,7 +318,7 @@
 				in:fly={{ x: -20, duration: 300, delay: 305 }}
 				out:fly={{ x: -20, duration: 300 }}
 			>
-				Trouble installing: <a href="" on:click={() => window.electron.externalUpdate(downloadUrl)}
+				Trouble installing: <a href="" on:click={() => window.electron.externalUrl(downloadUrl)}
 					>download</a
 				>
 			</p>
@@ -850,9 +851,10 @@
 		>
 		<h6>
 			<a
-				href="https://twitter.com/SniderSSBM"
+				href=""
 				target="_blank"
 				rel="noreferrer"
+				on:click={() => window.electron.externalUrl('https://twitter.com/SniderSSBM')}
 				style={`color: ${textColor}`}>@SniderSSBM</a
 			>
 		</h6>

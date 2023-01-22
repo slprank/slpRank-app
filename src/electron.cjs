@@ -264,6 +264,7 @@ try {
 
 	ipcMain.handle('update:check', async () => {
 		mainWindow.webContents.send('version', autoUpdater.currentVersion.version);
+		log.info('current version', autoUpdater.currentVersion);
 		if (dev) return;
 		autoUpdater
 			.checkForUpdates()
@@ -273,7 +274,6 @@ try {
 
 	ipcMain.handle('update:download', async () => {
 		log.info('Downloading..');
-		log.info(autoUpdater.currentVersion);
 		autoUpdater
 			.downloadUpdate()
 			.then((data) => log.info(data))
@@ -282,18 +282,17 @@ try {
 
 	ipcMain.handle('update:install', async () => {
 		log.info('Installing..');
-		log.info(autoUpdater.currentVersion);
 		autoUpdater.quitAndInstall();
 	});
 
-	ipcMain.handle('update:external', async (_, url) => {
+	ipcMain.handle('external:url', async (_, url) => {
 		log.info('external', url);
 		const open = require('open');
 		open(url);
 	});
 
 	autoUpdater.on('checking-for-update', () => {
-		log.info(autoUpdater.currentVersion);
+		log.info('Checking for update');
 		mainWindow.webContents.send('update-status', `Checking for update`);
 	});
 
@@ -303,14 +302,13 @@ try {
 	});
 
 	autoUpdater.on('update-available', (data) => {
-		log.info('update not available');
+		log.info('update available');
 		mainWindow.webContents.send('version', data.version);
 		mainWindow.webContents.send('update-status', `Download`);
 	});
 
 	autoUpdater.on('update-downloaded', (data) => {
 		mainWindow.webContents.send('update-status', `Install`);
-		data.version;
 		log.info(`${data.version} downloaded`);
 		log.info(
 			`Download url: https://github.com/slprank/slpRank-app/releases/download/${data.releaseName}/${data.files[0].url}`
@@ -322,8 +320,7 @@ try {
 	});
 
 	autoUpdater.on('download-progress', (data) => {
-		mainWindow.webContents.send('download-progress', `Downloading ${data.percent.toFixed()}%`);
-		if (data.percent == 100) mainWindow.webContents.send('update-status', `Install`);
+		mainWindow.webContents.send('download-progress', `Downloading ${data.percent}`);
 	});
 
 	ipcMain.on('to-main', (event, count) => {
