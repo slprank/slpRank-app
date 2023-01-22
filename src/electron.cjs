@@ -302,14 +302,14 @@ try {
 	});
 
 	autoUpdater.on('update-available', (data) => {
-		log.info('update available');
+		log.info(`update available: ${data.version}`);
 		mainWindow.webContents.send('version', data.version);
 		mainWindow.webContents.send('update-status', `Download`);
 	});
 
 	autoUpdater.on('update-downloaded', (data) => {
 		mainWindow.webContents.send('update-status', `Install`);
-		log.info(`${data.version} downloaded`);
+		log.info(`Download complete: ${data.version}`);
 		log.info(
 			`Download url: https://github.com/slprank/slpRank-app/releases/download/${data.releaseName}/${data.files[0].url}`
 		); //
@@ -320,6 +320,8 @@ try {
 	});
 
 	autoUpdater.on('download-progress', (data) => {
+		log.info(`Downloading: ${data.percent}`);
+		mainWindow.webContents.send('update-status', `Downloading..`);
 		mainWindow.webContents.send('download-progress', `Downloading ${data.percent}`);
 	});
 

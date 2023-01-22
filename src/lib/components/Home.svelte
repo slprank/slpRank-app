@@ -309,8 +309,8 @@
 				(0 < downloadProgress && downloadProgress < 100)}
 			on:click={() => (status == 'Download' ? DownloadUpdate() : InstallUpdate())}
 			>{status ? status : 'Update'} - {0 < downloadProgress && downloadProgress < 100
-				? downloadProgress.toFixed()
-				: appVersion}</button
+				? `${downloadProgress.toFixed()}%`
+				: `v${appVersion}`}</button
 		>
 		{#if downloadUrl}
 			<p
