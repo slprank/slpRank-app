@@ -80,6 +80,7 @@ try {
 				parser.getSettings().players[1].connectCode,
 				parser.getSettings()
 			);
+			console.log(parser.getSettings());
 		}
 	});
 
@@ -308,21 +309,22 @@ try {
 	});
 
 	autoUpdater.on('update-downloaded', (data) => {
-		mainWindow.webContents.send('update-status', `Install`);
 		log.info(`Download complete: ${data.version}`);
 		log.info(
 			`Download url: https://github.com/slprank/slpRank-app/releases/download/${data.releaseName}/${data.files[0].url}`
 		); //
-		mainWindow.webContents.send(
-			'download-url',
-			`https://github.com/slprank/slpRank-app/releases/download/${data.releaseName}/${data.files[0].url}`
-		);
+		setTimeout(() => {
+			mainWindow.webContents.send('update-status', `Install`);
+			mainWindow.webContents.send(
+				'download-url',
+				`https://github.com/slprank/slpRank-app/releases/download/${data.releaseName}/${data.files[0].url}`
+			);
+		}, 1000);
 	});
 
 	autoUpdater.on('download-progress', (data) => {
 		log.info(`Downloading: ${data.percent}`);
-		mainWindow.webContents.send('update-status', `Downloading..`);
-		mainWindow.webContents.send('download-progress', `Downloading ${data.percent}`);
+		mainWindow.webContents.send('update-status', `Downloading: ${data.percent}%`);
 	});
 
 	ipcMain.on('to-main', (event, count) => {
