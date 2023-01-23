@@ -107,7 +107,7 @@ export async function fetchSlippiUser(connectCode: string): Promise<Player | und
 						(c: Character): Character => ({
 							character: c.character,
 							gameCount: c.gameCount,
-							icon: `${c.character}.png`,
+							icon: `${c.character.replace(/\s+/g, '_')}.png`,
 							characterId: -1,
 							characterColorId: -1,
 							characterName: c.characterName?.toUpperCase() ?? ''
