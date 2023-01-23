@@ -282,7 +282,7 @@
 </script>
 
 <svelte:head>
-	<title>Rank display</title>
+	<title>Stat Display</title>
 </svelte:head>
 
 <main

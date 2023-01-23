@@ -852,8 +852,6 @@
 		<h6>
 			<a
 				href=""
-				target="_blank"
-				rel="noreferrer"
 				on:click={() => window.electron.externalUrl('https://twitter.com/SniderSSBM')}
 				style={`color: ${textColor}`}>@SniderSSBM</a
 			>
