@@ -34,7 +34,7 @@ export async function fetchSlippiUser(connectCode: string): Promise<Player | und
 							character: c.characterName?.toUpperCase() ?? '',
 							characterName: c.characterName?.toUpperCase() ?? '',
 							gameCount: c.gameCount,
-							icon: `${c.characterName?.toUpperCase()}.png`,
+							icon: `${c.characterName?.toUpperCase().replace(/\s+/g, '_')}.png`,
 							characterId: -1,
 							characterColorId: -1
 						})
