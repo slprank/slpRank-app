@@ -40,7 +40,6 @@
 	$: status = '';
 	$: appVersion = '';
 	$: downloadUrl = '';
-	$: downloadProgress = 0;
 
 	window.electron.receive('download-url', async (url: string) => {
 		downloadUrl = url;
@@ -48,10 +47,6 @@
 
 	window.electron.receive('update-status', async (newStatus: string) => {
 		status = newStatus;
-	});
-
-	window.electron.receive('download-progress', async (progress: number) => {
-		downloadProgress = progress;
 	});
 
 	window.electron.receive('version', async (version: string) => {
@@ -305,12 +300,9 @@
 
 		<button
 			class="btn btn-success"
-			disabled={!['Download', 'Install'].includes(status) ||
-				(0 < downloadProgress && downloadProgress < 100)}
+			disabled={!['Download', 'Install'].includes(status)}
 			on:click={() => (status == 'Download' ? DownloadUpdate() : InstallUpdate())}
-			>{status ? status : 'Update'} - {0 < downloadProgress && downloadProgress < 100
-				? `${downloadProgress.toFixed()}%`
-				: `v${appVersion}`}</button
+			>{status ? status : 'Update'} - {`v${appVersion}`}</button
 		>
 		{#if downloadUrl}
 			<p
