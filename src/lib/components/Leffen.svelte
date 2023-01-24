@@ -1,10 +1,7 @@
 <script lang="ts">
-	import { fetchSlippiUser } from '$lib/util/api';
-	import { getPlayerRank } from '$lib/util/rank';
 	import type { Options, Player } from '$lib/util/types';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
-	import PlayerDisplay from './PlayerDisplay.svelte';
 
 	onMount(() => {
 		document.body.scrollIntoView();

@@ -191,6 +191,7 @@
 				connectCode: currentRankStats.connectCode,
 				characters: [],
 				rating: currentRankStats.rankedNetplayProfile.ratingOrdinal,
+				rank: currentRankStats.rankedNetplayProfile.rank,
 				regionalPlacement: currentRankStats.rankedNetplayProfile.dailyRegionalPlacement,
 				globalPlacement: currentRankStats.rankedNetplayProfile.dailyGlobalPlacement,
 				wins: currentRankStats.rankedNetplayProfile.wins,

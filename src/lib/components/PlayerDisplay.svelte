@@ -25,10 +25,7 @@
 			in:fly={{ x: 100, duration: 300, delay: 400 }}
 			out:fly={{ x: -100, duration: 300, delay: 100 }}
 			style="width: 56px; height: 56px;"
-			src={`./rank-icons/${getPlayerRank(
-				player?.rankedNetplayProfile?.ratingOrdinal,
-				player?.rankedNetplayProfile?.dailyRegionalPlacement
-			)}.svg`}
+			src={`./rank-icons/${player?.rankedNetplayProfile?.rank}.svg`}
 			alt={'rank'}
 		/>
 	{/if}
@@ -38,10 +35,7 @@
 			in:fly={{ x: 100, duration: 300, delay: 450 }}
 			out:fly={{ x: -100, duration: 300, delay: 150 }}
 		>
-			{getPlayerRank(
-				player?.rankedNetplayProfile?.ratingOrdinal,
-				player?.rankedNetplayProfile?.dailyRegionalPlacement
-			)}
+			{player?.rankedNetplayProfile?.rank}
 		</h3>
 	{/if}
 	{#if displayOptions?.playerRating}

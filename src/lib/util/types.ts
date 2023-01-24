@@ -71,6 +71,7 @@ export interface PlayerSessionStats {
 	currentPlayerIndex: number;
 	opponentPlayerIndex: number;
 	rating: number;
+	rank: string;
 	regionalPlacement: number;
 	globalPlacement: number;
 	wins: number;

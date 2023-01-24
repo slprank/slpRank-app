@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { getPlayerRank } from '$lib/util/rank';
 	import { currentStats, setStartStats } from '$lib/util/store.svelte';
-	import type { Options, PlayerSessionStats } from '$lib/util/types';
+	import type { PlayerSessionStats } from '$lib/util/types';
 	import { fly } from 'svelte/transition';
 
 	export let updatingStats = true;
@@ -58,19 +57,16 @@
 		<h3 style={`color: ${textColor}`} in:fly={{ y: -100, duration: 350 }}>
 			{$setStartStats?.displayName}
 		</h3>
-		{#key getPlayerRank($setStartStats.rating, $setStartStats.regionalPlacement)}
+		{#key $setStartStats.rank}
 			<img
 				in:fly={{ y: -10, duration: 350 }}
 				style="width: 56px; height: 56px;"
-				src={`./rank-icons/${getPlayerRank(
-					$setStartStats.rating,
-					$setStartStats.regionalPlacement
-				)}.svg`}
+				src={`./rank-icons/${$setStartStats.rank}.svg`}
 				alt={'rank'}
 			/>
 
 			<h3 style={`color: ${textColor}`} in:fly={{ y: -10, duration: 350 }}>
-				{getPlayerRank($setStartStats.rating, $setStartStats.regionalPlacement)}
+				{$setStartStats.rank}
 			</h3>
 		{/key}
 		<div class="col-3-container">
