@@ -213,6 +213,12 @@ try {
 				click: () => {
 					mainWindow.webContents.send('decrease-player2-score');
 				}
+			},
+			{
+				label: 'Settings menu',
+				click: () => {
+					setTimeout(() => mainWindow.webContents.send('return-home'), 20000);
+				}
 			}
 		]
 	});
@@ -426,24 +432,24 @@ try {
 
 	async function RunTests() {
 		mainWindow.webContents.send('is-test');
-		let files = GetGameFiles()
-			.slice(-6)
-			.filter((file) => new SlippiGame(file).getSettings().gameMode === GameMode.ONLINE);
-		files.forEach((file, i) => {
-			const game = new SlippiGame(file);
+		let files = GetGameFiles();
+		let file = files.filter(
+			(file) => new SlippiGame(file).getSettings().gameMode === GameMode.ONLINE
+		)[Math.floor(Math.random() * files.length)];
+		const game = new SlippiGame(file);
+		setTimeout(() => {
+			mainWindow.webContents.send(
+				'game-start',
+				game.getSettings().players[0].connectCode,
+				game.getSettings().players[1].connectCode,
+				game.getSettings()
+			);
 			setTimeout(() => {
-				mainWindow.webContents.send(
-					'game-start',
-					game.getSettings().players[0].connectCode,
-					game.getSettings().players[1].connectCode,
-					game.getSettings()
-				);
-				setTimeout(() => {
-					let stats = GetRecentGameStats([file]);
-					mainWindow.webContents.send('game-end', game.getGameEnd(), stats);
-				}, 12000);
-			}, 2000 + 45000 * i);
-		});
+				let stats = GetRecentGameStats([file]);
+				mainWindow.webContents.send('game-end', game.getGameEnd(), stats);
+				setTimeout(() => mainWindow.webContents.send('return-home'), 20000);
+			}, 12000);
+		}, 2000);
 	}
 
 	ipcMain.handle('run:tests', async () => {

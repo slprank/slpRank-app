@@ -222,6 +222,13 @@
 		window.electron.receive('decrease-player2-score', async () => {
 			$setStartStats.scores[1] -= 1;
 		});
+		window.electron.receive('return-home', async () => {
+			$: start = false;
+			$: gameOver = false;
+			$: updatingStats = false;
+
+			$: players = [] as (Player | undefined)[];
+		});
 		window.electron.receive('disconnected-event', async (data: string) => {
 			dolphinConnected = false;
 			dolphinStatus = data;

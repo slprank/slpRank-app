@@ -19,14 +19,14 @@
 {#if players[0] && players[1]}
 	<div class="content">
 		<div class="stat-container">
-			{#if displayOptions.statsRank}
+			{#if displayOptions?.statsRank}
 				<div class="stat">
 					<h4
 						style={`color: ${textColor}`}
 						in:fly={{ x: -100, duration: 300, delay: 1000 }}
 						out:fly={{ x: -100, duration: 300, delay: 150 }}
 					>
-						{players[0]?.rankedNetplayProfile.dailyRegionalPlacement
+						{players[0]?.rankedNetplayProfile?.dailyRegionalPlacement
 							? `#${players[0]?.rankedNetplayProfile.dailyRegionalPlacement}`
 							: 'N/A'}
 						{players[0]?.rankedNetplayProfile?.continentInitials
@@ -45,17 +45,17 @@
 						in:fly={{ x: 100, duration: 300, delay: 1000 }}
 						out:fly={{ x: 100, duration: 300, delay: 150 }}
 					>
-						{players[1]?.rankedNetplayProfile.dailyRegionalPlacement
-							? `#${players[1]?.rankedNetplayProfile.dailyRegionalPlacement}`
+						{players[1]?.rankedNetplayProfile?.dailyRegionalPlacement
+							? `#${players[1]?.rankedNetplayProfile?.dailyRegionalPlacement}`
 							: 'N/A'}
 						{players[1]?.rankedNetplayProfile?.continentInitials
-							? `[${players[1]?.rankedNetplayProfile.continentInitials}]`
+							? `[${players[1]?.rankedNetplayProfile?.continentInitials}]`
 							: ''}
 					</h4>
 				</div>
 				<hr />
 			{/if}
-			{#if displayOptions.statsNeutralWins}
+			{#if displayOptions?.statsNeutralWins}
 				<div class="stat">
 					<h4
 						style={`color: ${textColor}`}
@@ -81,7 +81,7 @@
 				</div>
 				<hr />
 			{/if}
-			{#if displayOptions.statsOpeningsKill}
+			{#if displayOptions?.statsOpeningsKill}
 				<div class="stat">
 					<h4
 						style={`color: ${textColor}`}
@@ -107,7 +107,7 @@
 				</div>
 				<hr />
 			{/if}
-			{#if displayOptions.statsDamageOpening}
+			{#if displayOptions?.statsDamageOpening}
 				<div class="stat">
 					<h4
 						style={`color: ${textColor}`}
@@ -159,7 +159,7 @@
 				</div>
 				<hr />
 			{/if}
-			{#if displayOptions.statsDigitalInputsMin}
+			{#if displayOptions?.statsDigitalInputsMin}
 				<div class="stat">
 					<h4
 						style={`color: ${textColor}`}
@@ -185,7 +185,7 @@
 				</div>
 				<hr />
 			{/if}
-			{#if displayOptions.statsTotalDamage}
+			{#if displayOptions?.statsTotalDamage}
 				<div class="stat">
 					<h4
 						style={`color: ${textColor}`}
@@ -211,14 +211,14 @@
 				</div>
 				<hr />
 			{/if}
-			{#if displayOptions.statsSpotDodges}
+			{#if displayOptions?.statsSpotDodges}
 				<div class="stat">
 					<h4
 						style={`color: ${textColor}`}
 						in:fly={{ x: -100, duration: 300, delay: 1150 }}
 						out:fly={{ x: -100, duration: 300 }}
 					>
-						{players[0]?.stats?.actionCounts.spotDodgeCount ?? 0}
+						{players[0]?.stats?.actionCounts?.spotDodgeCount ?? 0}
 					</h4>
 					<h4
 						style={`color: ${textColor}`}
@@ -232,12 +232,12 @@
 						in:fly={{ x: 100, duration: 300, delay: 1150 }}
 						out:fly={{ x: 100, duration: 300 }}
 					>
-						{players[1]?.stats?.actionCounts.spotDodgeCount ?? 0}
+						{players[1]?.stats?.actionCounts?.spotDodgeCount ?? 0}
 					</h4>
 				</div>
 				<hr />
 			{/if}
-			{#if displayOptions.statsSpotDodges}
+			{#if displayOptions?.statsSpotDodges}
 				<div class="stat">
 					<h4
 						style={`color: ${textColor}`}
@@ -258,12 +258,12 @@
 						in:fly={{ x: 100, duration: 300, delay: 1150 }}
 						out:fly={{ x: 100, duration: 300 }}
 					>
-						{players[1]?.stats?.actionCounts.rollCount ?? 0}
+						{players[1]?.stats?.actionCounts?.rollCount ?? 0}
 					</h4>
 				</div>
 				<hr />
 			{/if}
-			{#if displayOptions.statsLCancel}
+			{#if displayOptions?.statsLCancel}
 				<div class="stat">
 					<h4
 						style={`color: ${textColor}`}
@@ -271,9 +271,9 @@
 						out:fly={{ x: -100, duration: 300 }}
 					>
 						{(
-							((players[0]?.stats?.actionCounts.lCancelCount.success ?? 0) /
-								((players[0]?.stats?.actionCounts.lCancelCount.success ?? 0) +
-									(players[0]?.stats?.actionCounts.lCancelCount.fail ?? 0))) *
+							((players[0]?.stats?.actionCounts?.lCancelCount?.success ?? 0) /
+								((players[0]?.stats?.actionCounts?.lCancelCount?.success ?? 0) +
+									(players[0]?.stats?.actionCounts?.lCancelCount?.fail ?? 0))) *
 							100
 						).toFixed(1)}%
 					</h4>
@@ -290,16 +290,16 @@
 						out:fly={{ x: 100, duration: 300 }}
 					>
 						{(
-							((players[1]?.stats?.actionCounts.lCancelCount.success ?? 0) /
-								((players[1]?.stats?.actionCounts.lCancelCount.success ?? 0) +
-									(players[1]?.stats?.actionCounts.lCancelCount.fail ?? 0))) *
+							((players[1]?.stats?.actionCounts?.lCancelCount?.success ?? 0) /
+								((players[1]?.stats?.actionCounts?.lCancelCount?.success ?? 0) +
+									(players[1]?.stats?.actionCounts?.lCancelCount?.fail ?? 0))) *
 							100
 						).toFixed(1)}%
 					</h4>
 				</div>
 				<hr />
 			{/if}
-			{#if displayOptions.statsStocks}
+			{#if displayOptions?.statsStocks}
 				<div class="stat">
 					<div class="stocks left">
 						{#each [...Array(4).keys()] as _, i}
