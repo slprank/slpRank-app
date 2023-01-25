@@ -181,6 +181,7 @@
 			ShowPostGameStats();
 		});
 		window.electron.receive('init-stats', async () => {
+			console.log('here');
 			let currentRankStats = await fetchSlippiUser($currentPlayerConnectCode);
 			players[0] = await fetchSlippiUser($currentPlayerConnectCode);
 			players[0]!.stats = {} as PlayerStatsType;
@@ -223,11 +224,11 @@
 			$setStartStats.scores[1] -= 1;
 		});
 		window.electron.receive('return-home', async () => {
-			$: start = false;
-			$: gameOver = false;
-			$: updatingStats = false;
+			start = false;
+			gameOver = false;
+			updatingStats = false;
 
-			$: players = [] as (Player | undefined)[];
+			players = [] as (Player | undefined)[];
 		});
 		window.electron.receive('disconnected-event', async (data: string) => {
 			dolphinConnected = false;

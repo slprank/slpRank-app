@@ -28,6 +28,10 @@ try {
 	const isWindows = os.platform() === 'win32';
 	const isLinux = os.platform() === 'linux';
 
+	let gameStartTimeout;
+	let gameEndTimeout;
+	let returnHomeTimeout;
+
 	const fs = require('fs');
 
 	if (isWindows && !fs.existsSync(path.join(`C:slippi-stats-display-logs`))) {
@@ -217,7 +221,10 @@ try {
 			{
 				label: 'Settings menu',
 				click: () => {
-					setTimeout(() => mainWindow.webContents.send('return-home'), 20000);
+					mainWindow.webContents.send('return-home');
+					clearTimeout(gameStartTimeout);
+					clearTimeout(gameEndTimeout);
+					clearTimeout(returnHomeTimeout);
 				}
 			}
 		]
@@ -270,9 +277,9 @@ try {
 	});
 
 	ipcMain.handle('update:check', async () => {
+		if (dev) return;
 		mainWindow.webContents.send('version', autoUpdater.currentVersion.version);
 		log.info('current version', autoUpdater.currentVersion);
-		if (dev) return;
 		autoUpdater
 			.checkForUpdates()
 			.then((data) => log.info('update', data))
@@ -437,17 +444,17 @@ try {
 			(file) => new SlippiGame(file).getSettings().gameMode === GameMode.ONLINE
 		)[Math.floor(Math.random() * files.length)];
 		const game = new SlippiGame(file);
-		setTimeout(() => {
+		gameStartTimeout = setTimeout(() => {
 			mainWindow.webContents.send(
 				'game-start',
 				game.getSettings().players[0].connectCode,
 				game.getSettings().players[1].connectCode,
 				game.getSettings()
 			);
-			setTimeout(() => {
+			gameEndTimeout = setTimeout(() => {
 				let stats = GetRecentGameStats([file]);
 				mainWindow.webContents.send('game-end', game.getGameEnd(), stats);
-				setTimeout(() => mainWindow.webContents.send('return-home'), 20000);
+				returnHomeTimeout = setTimeout(() => mainWindow.webContents.send('return-home'), 20000);
 			}, 12000);
 		}, 2000);
 	}

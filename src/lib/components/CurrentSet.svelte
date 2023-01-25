@@ -21,7 +21,7 @@
 				style="height: 35px; align-items: center"
 				use:textfit={{
 					mode: 'multi',
-					width: 155,
+					width: 150,
 					height: 20,
 					forceSingleModeWidth: false
 				}}
@@ -98,7 +98,7 @@
 		font-size: 1em;
 		margin: 0;
 		white-space: nowrap;
-		max-width: 145px;
+		max-width: 150px;
 	}
 
 	.left {

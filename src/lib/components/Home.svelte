@@ -150,7 +150,8 @@
 			currentPlayerIndex: -1,
 			opponentPlayerIndex: -1,
 			players: [],
-			scores: []
+			scores: [],
+			rank: 'UNRANKED'
 		};
 
 		$sessionStartStats = JSON.parse(
@@ -180,7 +181,8 @@
 			currentPlayerIndex: -1,
 			opponentPlayerIndex: -1,
 			players: [],
-			scores: []
+			scores: [],
+			rank: 'UNRANKED'
 		};
 	}
 
@@ -816,7 +818,7 @@
 				type="button"
 				class="btn btn-success"
 				style="width: 150px"
-				data-tooltip="Saves settings and runs through 10 of your recent games which has been online. (Some data might not be correct) Restart application when done"
+				data-tooltip="Saves settings and runs 1 random recent games which has been online. (Some data might not be correct) Restart application when done"
 				on:click={RunTests}>Test</button
 			>
 		</div>
