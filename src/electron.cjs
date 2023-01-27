@@ -336,7 +336,7 @@ try {
 	});
 
 	autoUpdater.on('download-progress', (data) => {
-		log.info(`Downloading: ${data.percent}`);
+		log.info(`Downloading: ${data.percent.toFixed()}`);
 		mainWindow.webContents.send('update-status', `Downloading: ${data.percent}%`);
 	});
 
