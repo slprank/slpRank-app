@@ -27,7 +27,7 @@
 				}}
 			>
 				<h4 style={`color: ${textColor}; width: 145px; `} use:textfit={{ parent, mode: 'multi' }}>
-					{'RandomSmasher' ?? ''}
+					{$setStartStats?.players[0] ?? ''}
 				</h4>
 			</div>
 			<img
@@ -48,7 +48,7 @@
 
 			<div bind:this={parent} class="left" style="height: 35px; align-items: center">
 				<h4 style={`color: ${textColor}; width: 145px; `} use:textfit={{ parent, mode: 'multi' }}>
-					{'Logos' ?? ''}
+					{$setStartStats?.players[1] ?? ''}
 				</h4>
 			</div>
 		</div>
