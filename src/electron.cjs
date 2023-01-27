@@ -139,7 +139,7 @@ try {
 	function createWindow() {
 		let windowState = windowStateManager({
 			defaultWidth: 480,
-			defaultHeight: 740
+			defaultHeight: 820
 		});
 
 		const mainWindow = new BrowserWindow({

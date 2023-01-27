@@ -251,7 +251,7 @@
 			() => {
 				showPlayer = true;
 			},
-			isTest ? 20000 : 60000
+			isTest ? 20000 : 90000
 		);
 	}
 
