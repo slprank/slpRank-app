@@ -20,7 +20,6 @@ const {
 const serve = require('electron-serve');
 const path = require('path');
 const log = require('electron-log');
-const { data } = require('autoprefixer');
 
 try {
 	const os = require('os');
