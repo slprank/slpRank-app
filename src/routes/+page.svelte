@@ -181,7 +181,7 @@
 			ShowPostGameStats();
 		});
 		window.electron.receive('init-stats', async () => {
-			console.log('here');
+			console.log('Initializing stats');
 			let currentRankStats = await fetchSlippiUser($currentPlayerConnectCode);
 			players[0] = await fetchSlippiUser($currentPlayerConnectCode);
 			players[0]!.stats = {} as PlayerStatsType;

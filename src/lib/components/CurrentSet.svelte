@@ -21,16 +21,12 @@
 				style="height: 35px; align-items: center"
 				use:textfit={{
 					mode: 'multi',
-					width: 150,
-					height: 20,
+					width: 145,
+					height: 35,
 					forceSingleModeWidth: false
 				}}
 			>
-				<h4
-					class="right"
-					style={`color: ${textColor}; width: 100%;`}
-					use:textfit={{ parent, mode: 'multi' }}
-				>
+				<h4 style={`color: ${textColor}; width: 145px; `} use:textfit={{ parent, mode: 'multi' }}>
 					{$setStartStats?.players[0] ?? ''}
 				</h4>
 			</div>
@@ -50,22 +46,8 @@
 				class="column right"
 			/>
 
-			<div
-				bind:this={parent}
-				class="right"
-				style="height: 35px; align-items: center"
-				use:textfit={{
-					mode: 'multi',
-					width: 145,
-					height: 155,
-					forceSingleModeWidth: false
-				}}
-			>
-				<h4
-					class="left"
-					style={`color: ${textColor}; width: 100%; `}
-					use:textfit={{ parent, mode: 'multi' }}
-				>
+			<div bind:this={parent} class="right" style="height: 35px; align-items: center">
+				<h4 style={`color: ${textColor}; width: 145px; `} use:textfit={{ parent, mode: 'multi' }}>
 					{$setStartStats?.players[1] ?? ''}
 				</h4>
 			</div>
@@ -111,5 +93,11 @@
 		display: flex;
 		justify-content: flex-end;
 		text-align: end;
+	}
+
+	.text-center {
+		display: flex;
+		justify-content: center;
+		text-align: center;
 	}
 </style>

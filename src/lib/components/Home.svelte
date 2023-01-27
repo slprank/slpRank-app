@@ -61,7 +61,7 @@
 		window.electron.installUpdate();
 	}
 
-	const storeData = () => {
+	const storeData = (test: boolean) => {
 		if (displayOptions.automaticSessionReset) resetSession();
 
 		$currentPlayerConnectCode = player?.connectCode.toUpperCase().trim() ?? '';
@@ -123,6 +123,8 @@
 		setWon.volume = setWonVolume / 100;
 		setLost.volume = setLostVolume / 100;
 		setEnd.volume = setEndVolume / 100;
+
+		$isTest = test;
 
 		start = true;
 	};
@@ -202,8 +204,7 @@
 	}
 
 	function RunTests() {
-		storeData();
-		$isTest = true;
+		storeData(true);
 		window.electron.runTests();
 	}
 
@@ -841,7 +842,7 @@
 			disabled={!gamePath || !dolphinConnected || !player || !connectCode}
 			class="btn btn-success"
 			style="width: 200px"
-			on:click={storeData}>Start</button
+			on:click={() => storeData(false)}>Start</button
 		>
 		<h6>
 			<a
