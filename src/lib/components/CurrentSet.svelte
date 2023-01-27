@@ -17,7 +17,7 @@
 		>
 			<div
 				bind:this={parent}
-				class="left"
+				class="right"
 				style="height: 35px; align-items: center"
 				use:textfit={{
 					mode: 'multi',
@@ -27,7 +27,7 @@
 				}}
 			>
 				<h4 style={`color: ${textColor}; width: 145px; `} use:textfit={{ parent, mode: 'multi' }}>
-					{$setStartStats?.players[0] ?? ''}
+					{'RandomSmasher' ?? ''}
 				</h4>
 			</div>
 			<img
@@ -46,9 +46,9 @@
 				class="column right"
 			/>
 
-			<div bind:this={parent} class="right" style="height: 35px; align-items: center">
+			<div bind:this={parent} class="left" style="height: 35px; align-items: center">
 				<h4 style={`color: ${textColor}; width: 145px; `} use:textfit={{ parent, mode: 'multi' }}>
-					{$setStartStats?.players[1] ?? ''}
+					{'Logos' ?? ''}
 				</h4>
 			</div>
 		</div>
@@ -93,11 +93,5 @@
 		display: flex;
 		justify-content: flex-end;
 		text-align: end;
-	}
-
-	.text-center {
-		display: flex;
-		justify-content: center;
-		text-align: center;
 	}
 </style>
