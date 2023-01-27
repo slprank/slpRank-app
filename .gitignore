@@ -3,6 +3,7 @@ node_modules
 /build
 /dist
 /out
+/C:
 /logs
 /.svelte-kit
 /package

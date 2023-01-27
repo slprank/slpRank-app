@@ -20,6 +20,7 @@ const {
 const serve = require('electron-serve');
 const path = require('path');
 const log = require('electron-log');
+const { data } = require('autoprefixer');
 
 try {
 	const os = require('os');
@@ -422,12 +423,12 @@ try {
 
 	function GetGameFiles() {
 		const fs = require('fs');
+		const re = new RegExp('^Game_.*([12]d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]d|3[01]))*.slp$');
 		const path = require('path');
 
 		let files = fs.readdirSync(gameDirectory).map((filename) => `${path.parse(filename).name}.slp`);
 
-		files = files.filter((f) => f.match('^Game.*.slp$')).map((f) => `${gameDirectory}/${f}`);
-
+		files = files.filter((f) => re.test(f)).map((f) => `${gameDirectory}/${f}`);
 		return files.sort((a, b) => a.length - b.length);
 	}
 
