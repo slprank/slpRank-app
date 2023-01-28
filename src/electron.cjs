@@ -337,7 +337,7 @@ try {
 
 	autoUpdater.on('download-progress', (data) => {
 		log.info(`Downloading: ${data.percent.toFixed()}`);
-		mainWindow.webContents.send('update-status', `Downloading: ${data.percent}%`);
+		mainWindow.webContents.send('update-status', `Downloading: ${data.percent.toFixed()}%`);
 	});
 
 	ipcMain.on('to-main', (event, count) => {
