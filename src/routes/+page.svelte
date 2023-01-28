@@ -131,55 +131,60 @@
 				};
 			}
 		);
-		window.electron.receive('game-end', async (data: GameEndType, newStats: StatsType) => {
-			console.log(data, newStats);
-			if (!players[0] || !players[1]) return;
-			players[0]!.stats = {
-				actionCounts: newStats.actionCounts[0],
-				gameComplete: newStats.gameComplete,
-				overall: newStats.overall[0],
-				stocks: newStats.stocks.filter((s) => s.playerIndex === 0),
-				conversions: newStats.conversions.filter((c) => c.playerIndex === 0),
-				combos: newStats.combos.filter((c) => c.playerIndex === 0)
-			};
-			players[1]!.stats = {
-				actionCounts: newStats.actionCounts[1],
-				gameComplete: newStats.gameComplete,
-				overall: newStats.overall[1],
-				stocks: newStats.stocks.filter((s) => s.playerIndex === 1),
-				conversions: newStats.conversions.filter((c) => c.playerIndex === 1),
-				combos: newStats.combos.filter((c) => c.playerIndex === 1)
-			};
+		window.electron.receive(
+			'game-end',
+			async (data: GameEndType, newStats: StatsType, settings: GameStartType) => {
+				console.log(data, newStats, settings);
+				if (!players[0] || !players[1]) return;
+				players[0]!.character = getPlayerCharacter(settings?.players[0]);
+				players[0]!.stats = {
+					actionCounts: newStats.actionCounts[0],
+					gameComplete: newStats.gameComplete,
+					overall: newStats.overall[0],
+					stocks: newStats.stocks.filter((s) => s.playerIndex === 0),
+					conversions: newStats.conversions.filter((c) => c.playerIndex === 0),
+					combos: newStats.combos.filter((c) => c.playerIndex === 0)
+				};
+				players[1]!.character = getPlayerCharacter(settings?.players[1]);
+				players[1]!.stats = {
+					actionCounts: newStats.actionCounts[1],
+					gameComplete: newStats.gameComplete,
+					overall: newStats.overall[1],
+					stocks: newStats.stocks.filter((s) => s.playerIndex === 1),
+					conversions: newStats.conversions.filter((c) => c.playerIndex === 1),
+					combos: newStats.combos.filter((c) => c.playerIndex === 1)
+				};
 
-			if (!data) return;
-			await HandleStatChange();
+				if (!data) return;
+				await HandleStatChange();
 
-			gameOver = true;
-			let player1won = data?.placements[0]?.position === 0;
+				gameOver = true;
+				let player1won = data?.placements[0]?.position === 0;
 
-			let placements = [data?.placements[0]?.position ?? 0, data?.placements[1]?.position ?? 0];
+				let placements = [data?.placements[0]?.position ?? 0, data?.placements[1]?.position ?? 0];
 
-			if (data.lrasInitiatorIndex === 0) {
-				placements = [0, 1];
-			} else if (data.lrasInitiatorIndex === 1) {
-				placements = [1, 0];
-			} else if (player1won) {
-				placements[0] = 1;
-				placements[1] = 0;
-			} else if (!player1won) {
-				placements[0] = 0;
-				placements[1] = 1;
+				if (data.lrasInitiatorIndex === 0) {
+					placements = [0, 1];
+				} else if (data.lrasInitiatorIndex === 1) {
+					placements = [1, 0];
+				} else if (player1won) {
+					placements[0] = 1;
+					placements[1] = 0;
+				} else if (!player1won) {
+					placements[0] = 0;
+					placements[1] = 1;
+				}
+
+				console.log(placements);
+
+				$setStartStats = {
+					...$setStartStats,
+					scores: $setStartStats.scores.map((score, i) => (score += placements[i]!))
+				};
+
+				ShowPostGameStats();
 			}
-
-			console.log(placements);
-
-			$setStartStats = {
-				...$setStartStats,
-				scores: $setStartStats.scores.map((score, i) => (score += placements[i]!))
-			};
-
-			ShowPostGameStats();
-		});
+		);
 		window.electron.receive('init-stats', async () => {
 			console.log('Initializing stats');
 			let currentRankStats = await fetchSlippiUser($currentPlayerConnectCode);

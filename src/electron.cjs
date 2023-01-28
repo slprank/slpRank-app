@@ -94,7 +94,7 @@ try {
 		if (!slippiFiles.length) return;
 		setTimeout(() => {
 			let stats = GetRecentGameStats(slippiFiles);
-			mainWindow.webContents.send('game-end', frameEntry, stats);
+			mainWindow.webContents.send('game-end', frameEntry, stats, parser.getSettings());
 		}, 500);
 	});
 
