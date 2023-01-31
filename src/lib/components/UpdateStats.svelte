@@ -85,7 +85,7 @@
 					style={`left: 0; color: ${statDifference.rating >= 0 ? winColor : loseColor};`}
 				>
 					{statDifference.rating >= 0 ? '+' : ''}{statDifference.rating.toFixed(
-						statDifference.rating >= 1 ? 1 : 2
+						-1 < statDifference.rating && statDifference.rating < 1 ? 2 : 1
 					)}
 				</h3>
 			{/if}
