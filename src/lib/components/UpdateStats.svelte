@@ -84,7 +84,9 @@
 					class="grid-item"
 					style={`left: 0; color: ${statDifference.rating >= 0 ? winColor : loseColor};`}
 				>
-					{statDifference.rating >= 0 ? '+' : ''}{statDifference.rating.toFixed(1)}
+					{statDifference.rating >= 0 ? '+' : ''}{statDifference.rating.toFixed(
+						statDifference.rating >= 1 ? 1 : 2
+					)}
 				</h3>
 			{/if}
 		</div>

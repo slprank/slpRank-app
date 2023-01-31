@@ -346,6 +346,7 @@
 		padding-left: 1.5em;
 		padding-right: 1.5em;
 		padding-top: 2em;
+		margin-top: 1em;
 		display: flex;
 		height: 100%;
 		width: inherit;
@@ -383,7 +384,6 @@
 	hr {
 		width: 100%;
 		margin: 0;
-		margin-bottom: 0.2em;
 	}
 
 	*::-webkit-scrollbar {

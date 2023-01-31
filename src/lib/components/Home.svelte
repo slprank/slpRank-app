@@ -229,7 +229,7 @@
 		playerRating: true,
 		playerPlacement: true,
 		playerWinLoss: true,
-		playerCharacters: false,
+		playerCharacters: true,
 		playerRankIcon: true,
 		playerRankText: true,
 		slippiStats: true,

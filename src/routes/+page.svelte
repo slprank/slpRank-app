@@ -121,6 +121,7 @@
 
 				$setStartStats = {
 					...$currentStats,
+					rank: $currentStats.rank,
 					characters: [
 						getPlayerCharacter(settings?.players[0]),
 						getPlayerCharacter(settings?.players[1])

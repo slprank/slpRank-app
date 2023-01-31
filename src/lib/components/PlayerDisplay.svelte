@@ -111,6 +111,7 @@
 	.player-box {
 		display: flex;
 		padding-top: 2em;
+		margin-top: 1em;
 		align-items: center;
 		justify-content: center;
 		width: 100%;
