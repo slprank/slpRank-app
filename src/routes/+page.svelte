@@ -20,6 +20,7 @@
 	import CurrentSet from '$lib/components/CurrentSet.svelte';
 	import Leffen from '$lib/components/Leffen.svelte';
 	import { getPlayerCharacter } from '$lib/util/character';
+	import { getPlayerRank } from '$lib/util/rank';
 
 	onMount(() => {
 		window.electron.getDolphinStatus();
@@ -269,6 +270,12 @@
 			((Math.random() < 0.5 ? -1 : 1) * (1 * Math.floor(Math.random() * 3500))) / 10;
 		$currentStats = {
 			...$currentStats,
+			rank: !$isTest
+				? currentRankStats.rankedNetplayProfile.rank
+				: getPlayerRank(
+						currentRankStats.rankedNetplayProfile.ratingOrdinal + RANDOM_RATING,
+						currentRankStats.rankedNetplayProfile.dailyRegionalPlacement
+				  ),
 			rating: currentRankStats.rankedNetplayProfile.ratingOrdinal + ($isTest ? RANDOM_RATING : 0),
 			regionalPlacement: currentRankStats.rankedNetplayProfile.dailyRegionalPlacement,
 			globalPlacement: currentRankStats.rankedNetplayProfile.dailyGlobalPlacement,

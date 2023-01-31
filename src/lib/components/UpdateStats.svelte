@@ -39,12 +39,14 @@
 		PlayAnnouncer(statDifference.rating >= 0 ? 'setWon' : 'setLost');
 	}, 2500);
 	setTimeout(() => {
+		console.log($setStartStats, $currentStats);
 		$setStartStats = {
 			...$currentStats,
 			scores: $setStartStats?.scores,
 			players: $setStartStats?.players,
 			currentPlayerIndex: $setStartStats?.currentPlayerIndex
 		};
+		console.log($setStartStats, $currentStats);
 	}, 4000);
 	setTimeout(() => {
 		updatingStats = false;
