@@ -303,7 +303,7 @@
 
 		<button
 			class="btn btn-success"
-			disabled={!['Download', 'Install'].includes(status)}
+			disabled={!['Install'].includes(status)}
 			on:click={() => (status == 'Download' ? DownloadUpdate() : InstallUpdate())}
 			>{status ? status : 'Update'} - {`v${appVersion}`}</button
 		>

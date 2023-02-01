@@ -41,9 +41,21 @@
 			>
 				{players[0]?.rankedNetplayProfile.dailyRegionalPlacement
 					? `#${players[0]?.rankedNetplayProfile.dailyRegionalPlacement}`
-					: 'N/A'}
+					: `${
+							players[0]?.rankedNetplayProfile.dailyGlobalPlacement
+								? `#${players[0]?.rankedNetplayProfile.dailyGlobalPlacement}`
+								: 'N/A'
+					  }`}
 				{players[0]?.rankedNetplayProfile?.continentInitials
-					? `[${players[0]?.rankedNetplayProfile.continentInitials}]`
+					? `[${
+							players[0]?.rankedNetplayProfile.dailyRegionalPlacement
+								? players[0]?.rankedNetplayProfile.continentInitials
+								: `${
+										players[0]?.rankedNetplayProfile.dailyGlobalPlacement
+											? 'GL'
+											: players[0]?.rankedNetplayProfile.continentInitials
+								  }`
+					  }]`
 					: ''}
 			</h4>
 			<div class="win-loss right">
@@ -150,9 +162,21 @@
 			>
 				{players[1]?.rankedNetplayProfile.dailyRegionalPlacement
 					? `#${players[1]?.rankedNetplayProfile.dailyRegionalPlacement}`
-					: 'N/A'}
+					: `${
+							players[1]?.rankedNetplayProfile.dailyGlobalPlacement
+								? `#${players[1]?.rankedNetplayProfile.dailyGlobalPlacement}`
+								: 'N/A'
+					  }`}
 				{players[1]?.rankedNetplayProfile?.continentInitials
-					? `[${players[1]?.rankedNetplayProfile.continentInitials}]`
+					? `[${
+							players[1]?.rankedNetplayProfile.dailyRegionalPlacement
+								? players[1]?.rankedNetplayProfile.continentInitials
+								: `${
+										players[1]?.rankedNetplayProfile.dailyGlobalPlacement
+											? 'GL'
+											: players[1]?.rankedNetplayProfile.continentInitials
+								  }`
+					  }]`
 					: ''}
 			</h4>
 			<div class="win-loss left">
