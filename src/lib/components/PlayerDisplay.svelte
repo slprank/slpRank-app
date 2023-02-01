@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { getPlayerRank } from '$lib/util/rank';
 	import type { Options, Player } from '$lib/util/types';
 	import { fly } from 'svelte/transition';
 

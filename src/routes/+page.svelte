@@ -289,6 +289,7 @@
 				...players[$currentStats.currentPlayerIndex]!.rankedNetplayProfile,
 				ratingOrdinal:
 					currentRankStats.rankedNetplayProfile.ratingOrdinal + ($isTest ? RANDOM_RATING : 0),
+				rank: currentRankStats.rankedNetplayProfile.rank,
 				wins: currentRankStats.rankedNetplayProfile.wins + ($isTest && RANDOM_RATING > 0 ? 1 : 0),
 				losses:
 					currentRankStats.rankedNetplayProfile.losses + ($isTest && RANDOM_RATING <= 0 ? 1 : 0)

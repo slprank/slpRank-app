@@ -32,7 +32,7 @@ jobs:
           file: ./out/*.dmg; ./out/*.dmg.blockmap; ./out/*mac.zip; ./out/*.zip.blockmap; ./out/latest-mac.yml;
           tags: false
           draft: false
-          tag_name: v1.0.${{ github.run_number }}
+          tag_name: v1.1.${{ github.run_number }}
 
   build_on_ubuntu:
     runs-on: ubuntu-20.04
@@ -61,7 +61,7 @@ jobs:
           file: ./out/*.AppImage; ./out/builder-debug.yml; ./out/latest-linux.yml;
           tags: false
           draft: false
-          tag_name: v1.0.${{ github.run_number }}
+          tag_name: v1.1.${{ github.run_number }}
 
   build_on_windows:
     runs-on: windows-2019
@@ -90,4 +90,4 @@ jobs:
           file: ./out/*.exe; ./out/*.exe.blockmap; ./out/builder-debug.yml; ./out/latest.yml;
           tags: false
           draft: false
-          tag_name: v1.0.${{ github.run_number }}
+          tag_name: v1.1.${{ github.run_number }}
