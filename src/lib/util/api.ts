@@ -43,7 +43,7 @@ export async function fetchSlippiUser(connectCode: string): Promise<Player | und
 				dailyRegionalPlacement: slpPlayer.dailyRegionalPlacement,
 				wins: slpPlayer.wins ?? 0,
 				losses: slpPlayer.losses ?? 0,
-				ratingOrdinal: parseFloat(slpPlayer.rating.toFixed(1)),
+				ratingOrdinal: slpPlayer.rating,
 				rank: slpPlayer.rank.toUpperCase()
 			},
 			stats: undefined
