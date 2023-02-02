@@ -348,11 +348,9 @@ try {
 		const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
 			properties: ['openDirectory']
 		});
-		if (canceled) {
-			return;
-		} else {
-			return filePaths[0];
-		}
+		if (canceled) return;
+
+		return filePaths[0];
 	});
 
 	ipcMain.handle('dialog:openFile', async () => {

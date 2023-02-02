@@ -52,9 +52,13 @@
 			in:fly={{ x: 100, duration: 300, delay: 550 }}
 			out:fly={{ x: -100, duration: 300, delay: 250 }}
 		>
-			{player?.rankedNetplayProfile?.dailyRegionalPlacement
-				? `#${player?.rankedNetplayProfile?.dailyRegionalPlacement}`
-				: ''}
+			{player?.rankedNetplayProfile.dailyRegionalPlacement
+				? `#${player?.rankedNetplayProfile.dailyRegionalPlacement}`
+				: `${
+						player?.rankedNetplayProfile.dailyGlobalPlacement
+							? `#${player?.rankedNetplayProfile.dailyGlobalPlacement}`
+							: ''
+				  }`}
 			{player?.rankedNetplayProfile?.continentInitials
 				? `[${player?.rankedNetplayProfile?.continentInitials}]`
 				: ''}
