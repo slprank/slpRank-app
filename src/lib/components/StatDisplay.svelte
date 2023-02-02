@@ -28,7 +28,7 @@
 					>
 						{players[0]?.rankedNetplayProfile?.dailyRegionalPlacement
 							? `#${players[0]?.rankedNetplayProfile.dailyRegionalPlacement}`
-							: 'N/A'}
+							: ''}
 						{players[0]?.rankedNetplayProfile?.continentInitials
 							? `[${players[0]?.rankedNetplayProfile.continentInitials}]`
 							: ''}
@@ -47,7 +47,7 @@
 					>
 						{players[1]?.rankedNetplayProfile?.dailyRegionalPlacement
 							? `#${players[1]?.rankedNetplayProfile?.dailyRegionalPlacement}`
-							: 'N/A'}
+							: ''}
 						{players[1]?.rankedNetplayProfile?.continentInitials
 							? `[${players[1]?.rankedNetplayProfile?.continentInitials}]`
 							: ''}

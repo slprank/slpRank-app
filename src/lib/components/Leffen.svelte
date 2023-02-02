@@ -44,7 +44,7 @@
 					: `${
 							players[0]?.rankedNetplayProfile.dailyGlobalPlacement
 								? `#${players[0]?.rankedNetplayProfile.dailyGlobalPlacement}`
-								: 'N/A'
+								: ''
 					  }`}
 				{players[0]?.rankedNetplayProfile?.continentInitials
 					? `[${
@@ -165,7 +165,7 @@
 					: `${
 							players[1]?.rankedNetplayProfile.dailyGlobalPlacement
 								? `#${players[1]?.rankedNetplayProfile.dailyGlobalPlacement}`
-								: 'N/A'
+								: ''
 					  }`}
 				{players[1]?.rankedNetplayProfile?.continentInitials
 					? `[${
