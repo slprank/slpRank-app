@@ -26,11 +26,23 @@
 						in:fly={{ x: -100, duration: 300, delay: 1000 }}
 						out:fly={{ x: -100, duration: 300, delay: 150 }}
 					>
-						{players[0]?.rankedNetplayProfile?.dailyRegionalPlacement
+						{players[0]?.rankedNetplayProfile.dailyRegionalPlacement
 							? `#${players[0]?.rankedNetplayProfile.dailyRegionalPlacement}`
-							: ''}
+							: `${
+									players[0]?.rankedNetplayProfile.dailyGlobalPlacement
+										? `#${players[0]?.rankedNetplayProfile.dailyGlobalPlacement}`
+										: ''
+							  }`}
 						{players[0]?.rankedNetplayProfile?.continentInitials
-							? `[${players[0]?.rankedNetplayProfile.continentInitials}]`
+							? `[${
+									players[0]?.rankedNetplayProfile.dailyRegionalPlacement
+										? players[0]?.rankedNetplayProfile.continentInitials
+										: `${
+												players[0]?.rankedNetplayProfile.dailyGlobalPlacement
+													? 'GL'
+													: players[0]?.rankedNetplayProfile.continentInitials
+										  }`
+							  }]`
 							: ''}
 					</h4>
 					<h4
@@ -45,11 +57,23 @@
 						in:fly={{ x: 100, duration: 300, delay: 1000 }}
 						out:fly={{ x: 100, duration: 300, delay: 150 }}
 					>
-						{players[1]?.rankedNetplayProfile?.dailyRegionalPlacement
-							? `#${players[1]?.rankedNetplayProfile?.dailyRegionalPlacement}`
-							: ''}
+						{players[1]?.rankedNetplayProfile.dailyRegionalPlacement
+							? `#${players[1]?.rankedNetplayProfile.dailyRegionalPlacement}`
+							: `${
+									players[1]?.rankedNetplayProfile.dailyGlobalPlacement
+										? `#${players[1]?.rankedNetplayProfile.dailyGlobalPlacement}`
+										: ''
+							  }`}
 						{players[1]?.rankedNetplayProfile?.continentInitials
-							? `[${players[1]?.rankedNetplayProfile?.continentInitials}]`
+							? `[${
+									players[1]?.rankedNetplayProfile.dailyRegionalPlacement
+										? players[1]?.rankedNetplayProfile.continentInitials
+										: `${
+												players[1]?.rankedNetplayProfile.dailyGlobalPlacement
+													? 'GL'
+													: players[1]?.rankedNetplayProfile.continentInitials
+										  }`
+							  }]`
 							: ''}
 					</h4>
 				</div>
