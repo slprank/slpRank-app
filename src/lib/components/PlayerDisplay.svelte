@@ -60,7 +60,15 @@
 							: ''
 				  }`}
 			{player?.rankedNetplayProfile?.continentInitials
-				? `[${player?.rankedNetplayProfile?.continentInitials}]`
+				? `[${
+						player?.rankedNetplayProfile.dailyRegionalPlacement
+							? player?.rankedNetplayProfile.continentInitials
+							: `${
+									player?.rankedNetplayProfile.dailyGlobalPlacement
+										? 'GL'
+										: player?.rankedNetplayProfile.continentInitials
+							  }`
+				  }]`
 				: ''}
 		</h3>
 	{/if}
