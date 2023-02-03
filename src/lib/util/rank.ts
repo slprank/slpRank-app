@@ -1,4 +1,4 @@
-export function getPlayerRank(rating: number, regionalPlacement: number) {
+export function getPlayerRank(rating: number, regionalPlacement: number, globalPlacement: number) {
 	switch (true) {
 		case rating < 766:
 			return 'BRONZE 1';
@@ -30,14 +30,14 @@ export function getPlayerRank(rating: number, regionalPlacement: number) {
 			return 'DIAMOND 2';
 		case rating < 2192:
 			return 'DIAMOND 3';
-		case rating < 2275 && regionalPlacement > 50:
-			return 'MASTER 1';
-		case rating < 2350 && regionalPlacement > 50:
-			return 'MASTER 2';
-		case rating >= 2350 && regionalPlacement > 50:
-			return 'MASTER 3';
-		case rating >= 2192 && regionalPlacement <= 50:
+		case rating >= 2192 && (regionalPlacement <= 100 || globalPlacement <= 300):
 			return 'GRANDMASTER';
+		case rating < 2275:
+			return 'MASTER 1';
+		case rating < 2350:
+			return 'MASTER 2';
+		case rating >= 2350:
+			return 'MASTER 3';
 		default:
 			return 'NONE';
 	}

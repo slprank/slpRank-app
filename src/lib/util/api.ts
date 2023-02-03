@@ -114,15 +114,14 @@ export async function fetchSlippiUser(connectCode: string): Promise<Player | und
 						})
 					) as unknown as Character,
 				dailyGlobalPlacement: player.rankedNetplayProfile.dailyGlobalPlacement,
-				dailyRegionalPlacement:
-					player.rankedNetplayProfile.leaderboardPlacement ??
-					player.rankedNetplayProfile.dailyRegionalPlacement,
+				dailyRegionalPlacement: player.rankedNetplayProfile.dailyRegionalPlacement,
 				wins: player.rankedNetplayProfile.wins ?? 0,
 				losses: player.rankedNetplayProfile.losses ?? 0,
 				ratingOrdinal: player.rankedNetplayProfile.ratingOrdinal,
 				rank: getPlayerRank(
 					player.rankedNetplayProfile.ratingOrdinal,
-					player.rankedNetplayProfile.dailyRegionalPlacement
+					player.rankedNetplayProfile.dailyRegionalPlacement,
+					player.rankedNetplayProfile.dailyGlobalPlacement
 				)
 			},
 			stats: undefined

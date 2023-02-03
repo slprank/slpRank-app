@@ -275,7 +275,8 @@
 				? currentRankStats.rankedNetplayProfile.rank
 				: getPlayerRank(
 						currentRankStats.rankedNetplayProfile.ratingOrdinal + RANDOM_RATING,
-						currentRankStats.rankedNetplayProfile.dailyRegionalPlacement
+						currentRankStats.rankedNetplayProfile.dailyRegionalPlacement,
+						currentRankStats.rankedNetplayProfile.dailyGlobalPlacement
 				  ),
 			rating: currentRankStats.rankedNetplayProfile.ratingOrdinal + ($isTest ? RANDOM_RATING : 0),
 			regionalPlacement: currentRankStats.rankedNetplayProfile.dailyRegionalPlacement,
