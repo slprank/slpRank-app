@@ -216,7 +216,7 @@
 						in:fly={{ x: -100, duration: 300, delay: 1150 }}
 						out:fly={{ x: -100, duration: 300 }}
 					>
-						{(players[0]?.stats?.overall?.totalDamage ?? 0).toFixed(1)}%
+						{(players[0]?.stats?.overall?.totalDamage ?? 0).toFixed(1)}
 					</h4>
 					<h4
 						style={`color: ${textColor}`}
@@ -230,7 +230,7 @@
 						in:fly={{ x: 100, duration: 300, delay: 1150 }}
 						out:fly={{ x: 100, duration: 300 }}
 					>
-						{(players[1]?.stats?.overall?.totalDamage ?? 0).toFixed(1)}%
+						{(players[1]?.stats?.overall?.totalDamage ?? 0).toFixed(1)}
 					</h4>
 				</div>
 				<hr />
