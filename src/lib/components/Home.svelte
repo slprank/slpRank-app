@@ -696,7 +696,7 @@
 			<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>Start game:</h5>
 			<input
 				bind:value={obsStartScene}
-				placeholder="Scene 1"
+				placeholder="eg. Scene 1"
 				data-tooltip="Switches to scene when game is starting"
 			/>
 			<button
@@ -711,7 +711,7 @@
 			<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>End game:</h5>
 			<input
 				bind:value={obsEndScene}
-				placeholder="Scene 2"
+				placeholder="eg. Scene 2"
 				data-tooltip="Switches to scene after game and or after updating stats"
 			/>
 			<button
@@ -726,7 +726,7 @@
 			<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>Update stats:</h5>
 			<input
 				bind:value={obsUpdateStatsScene}
-				placeholder="Scene 3"
+				placeholder="eg. Scene 3"
 				data-tooltip="Switching temporary to scene while updating stats, then back to end-game scene"
 			/>
 			<button

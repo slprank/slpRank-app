@@ -300,7 +300,7 @@
 			window.electron.switchScene(obsEndScene);
 			return;
 		}
-		window.electron.switchScene(obsUpdateStatsScene);
+		window.electron.switchScene(obsUpdateStatsScene?.length ? obsUpdateStatsScene : obsEndScene);
 		updatingStats = true;
 	}
 </script>
