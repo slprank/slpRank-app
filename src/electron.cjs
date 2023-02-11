@@ -384,8 +384,12 @@ try {
 
 	ipcMain.handle('obs:switch', async (_, scene) => {
 		if (!scene) return;
-		await obs.connect('ws://127.0.0.1:4455');
-		await obs.call('SetCurrentProgramScene', { sceneName: scene });
+		try {
+			await obs.connect('ws://127.0.0.1:4455');
+			await obs.call('SetCurrentProgramScene', { sceneName: scene });
+		} catch (error) {
+			log.info(error);
+		}
 	});
 
 	ipcMain.on('ipc', (event, arg) => {
@@ -420,7 +424,7 @@ try {
 
 	function GetGameFiles() {
 		const fs = require('fs');
-		const re = new RegExp('^Game_.*([12]d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]d|3[01]))*.slp$');
+		const re = new RegExp('^Game_.*.slp$');
 		const path = require('path');
 
 		let files = fs.readdirSync(gameDirectory).map((filename) => `${path.parse(filename).name}.slp`);
