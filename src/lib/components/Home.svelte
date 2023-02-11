@@ -24,6 +24,7 @@
 	export let obsStartScene = '';
 	export let obsEndScene = '';
 	export let obsUpdateStatsScene = '';
+	export let obsPostGameStatsScene = '';
 	export let setWon: HTMLAudioElement;
 	export let setLost: HTMLAudioElement;
 	export let setEnd: HTMLAudioElement;
@@ -76,6 +77,7 @@
 		localStorage.setItem('hot-key-start', obsStartScene.trim());
 		localStorage.setItem('hot-key-end', obsEndScene.trim());
 		localStorage.setItem('hot-key-update', obsUpdateStatsScene.trim());
+		localStorage.setItem('hot-key-post-game-stats', obsPostGameStatsScene.trim());
 
 		localStorage.setItem(
 			'automatic-session-reset',
@@ -220,6 +222,7 @@
 		obsStartScene = '';
 		obsEndScene = '';
 		obsUpdateStatsScene = '';
+		obsPostGameStatsScene = '';
 	}
 
 	const defaultOptions = {
@@ -735,6 +738,21 @@
 				class="btn btn-success"
 				style="width: 60px"
 				data-tooltip="Should switch to rank-up/down scene on click">Test</button
+			>
+		</div>
+		<div class="option">
+			<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>Post stats:</h5>
+			<input
+				bind:value={obsPostGameStatsScene}
+				placeholder="eg. Scene 4"
+				data-tooltip="Switching to a desired scene after displaying post game stats"
+			/>
+			<button
+				on:click={() => SwitchScene(obsPostGameStatsScene)}
+				type="button"
+				class="btn btn-success"
+				style="width: 60px"
+				data-tooltip="Should switch to desired scene on click">Test</button
 			>
 		</div>
 		<hr />

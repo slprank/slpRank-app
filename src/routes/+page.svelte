@@ -43,6 +43,7 @@
 	let obsStartScene: string = localStorage.getItem('hot-key-start') ?? '';
 	let obsEndScene: string = localStorage.getItem('hot-key-end') ?? '';
 	let obsUpdateStatsScene: string = localStorage.getItem('hot-key-update') ?? '';
+	let obsPostGameStatsScene: string = localStorage.getItem('hot-key-post-game-stats') ?? '';
 
 	let sessionTitle: string;
 	$: hasPlayers = players.filter((p) => p?.connectCode).length;
@@ -254,12 +255,10 @@
 	function ShowPostGameStats() {
 		showPlayer = !displayOptions.slippiStats;
 		if (!displayOptions.slippiStats) return;
-		showPlayerTimeout = setTimeout(
-			() => {
-				showPlayer = true;
-			},
-			isTest ? 20000 : 90000
-		);
+		showPlayerTimeout = setTimeout(() => {
+			showPlayer = true;
+			window.electron.switchScene(obsPostGameStatsScene);
+		}, 35000);
 	}
 
 	async function HandleStatChange() {
@@ -334,6 +333,7 @@
 				bind:obsStartScene
 				bind:obsEndScene
 				bind:obsUpdateStatsScene
+				bind:obsPostGameStatsScene
 				bind:setWon
 				bind:setLost
 				bind:setEnd

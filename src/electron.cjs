@@ -452,8 +452,8 @@ try {
 			gameEndTimeout = setTimeout(() => {
 				let stats = GetRecentGameStats([file]);
 				mainWindow.webContents.send('game-end', game.getGameEnd(), stats);
-				returnHomeTimeout = setTimeout(() => mainWindow.webContents.send('return-home'), 20000);
-			}, 12000);
+				returnHomeTimeout = setTimeout(() => mainWindow.webContents.send('return-home'), 30000);
+			}, 8000);
 		}, 2000);
 	}
 
