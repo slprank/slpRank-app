@@ -1,36 +1,32 @@
 <p align="center">
-  <img src="static/sveltekit-electron.svg" />
+  <img src="static/favicon.ico" />
 </p>
 
-# Sveltekit + Electron
+# Slippi Stats Display
 
-Minimal [Sveltekit](https://github.com/sveltejs/kit#readme) + [Electron](https://www.electronjs.org/) starter template.
+## Download
 
-<br />
+[Download](https://github.com/slprank/slpRank-app/releases/tag/v1.1.251)
 
-## Getting Started
+[Other releases](https://github.com/slprank/slpRank-app/releases)
 
-Unfortunately you must use `npm` as there are issues that arise when using `pnpm` or `yarn`
+## Demo
 
-|         |                                             |
-| ------- | ------------------------------------------- |
-| Clone   | · `npx degit fractalhq/sveltekit-electron ` |
-| Install | · `npm install`                             |
-| Develop | · `npm run dev`                             |
-| Build   | · `npm run build`                           |
-
-In order to eliminate vulnerabilities caused by electron itself, please run `npm update` and `npm audit fix`. This will apply overrides.
-
-<br />
+[Twitter video](https://twitter.com/SniderSSBM/status/1617592751423373312)
 
 <p align="center">
-  <img src="screenshot.png" />
+  <img src="static/demo.gif" />
 </p>
 
-## Recommended IDE Setup
+## Features
 
-[VSCode](https://code.visualstudio.com/) + [Svelte for VSCode](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode)
-
-## Change Build Targets
-
-In the scripts section of package.json you can update the `build:electron` command and change the flags to set the targets, by default it uses `-mwl` which is Mac, Windows, and Linux
+- Both players rank stats during set
+- Rank up/down animation post set
+- Keep track of players scores in ranked and friendlies
+- Keep track of current session win, loss and rating change
+- Post game stats
+- Automatic scene switching between games with OBS
+- Sound effects on set end, win and loss
+- Customizable background, text, win and lose color
+- Customizable sound effects
+- Overlay `Test` button to simulate a game. Also triggers OBS transitions
