@@ -76,6 +76,7 @@
 		playerConnectCode: localStorage.getItem('player-connect-code') == 'true',
 		playerRankIcon: localStorage.getItem('player-rank-icon') == 'true',
 		playerRankText: localStorage.getItem('player-rank-text') == 'true',
+		playerRating: localStorage.getItem('player-rating') == 'true',
 		playerPlacement: localStorage.getItem('player-regional-placement') == 'true',
 		playerWinLoss: localStorage.getItem('player-win-loss') == 'true',
 		playerCharacters: localStorage.getItem('player-characters') == 'true',

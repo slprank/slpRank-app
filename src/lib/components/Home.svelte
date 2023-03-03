@@ -98,7 +98,7 @@
 		localStorage.setItem('digital-inputs-min', displayOptions.statsDigitalInputsMin.toString());
 		localStorage.setItem('total-damage', displayOptions.statsTotalDamage.toString());
 		localStorage.setItem('stats-rolls', displayOptions.statsRolls.toString());
-		localStorage.setItem('stats-l-cancel', displayOptions.statsSpotDodges.toString());
+		localStorage.setItem('stats-l-cancel', displayOptions.statsLCancel.toString());
 		localStorage.setItem('stats-spot-dodges', displayOptions.statsSpotDodges.toString());
 		localStorage.setItem('stats-stocks', displayOptions.statsStocks.toString());
 		localStorage.setItem('session', displayOptions.session.toString());
@@ -106,6 +106,7 @@
 		localStorage.setItem('player-display-name', displayOptions.playerDisplayName.toString());
 		localStorage.setItem('player-connect-code', displayOptions.playerConnectCode.toString());
 		localStorage.setItem('player-rank-icon', displayOptions.playerRankIcon.toString());
+		localStorage.setItem('player-rating', displayOptions.playerRating.toString());
 		localStorage.setItem('player-rank-text', displayOptions.playerRankText.toString());
 		localStorage.setItem('player-regional-placement', displayOptions.playerPlacement.toString());
 		localStorage.setItem('player-win-loss', displayOptions.playerWinLoss.toString());
