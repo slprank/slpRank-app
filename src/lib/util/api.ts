@@ -5,6 +5,8 @@ import type { Character, Player, slpPlayer } from './types';
 export async function fetchSlippiUser(connectCode: string): Promise<Player | undefined> {
 	if (!connectCode) return;
 
+	await new Promise((resolve) => setTimeout(resolve, 2000));
+
 	try {
 		let slpPlayer: slpPlayer = (
 			await axios.get(`http://slprank.com/rank/${connectCode.replace('#', '-')}?raw`)
@@ -21,10 +23,10 @@ export async function fetchSlippiUser(connectCode: string): Promise<Player | und
 				continentInitials:
 					slpPlayer.continent?.split(' ').length == 2
 						? slpPlayer.continent
-								.split(' ')
-								.map((c: string) => c[0])
-								.join('')
-								.toUpperCase()
+							.split(' ')
+							.map((c: string) => c[0])
+							.join('')
+							.toUpperCase()
 						: slpPlayer.continent?.substring(0, 2).toUpperCase() ?? '',
 				characters: slpPlayer?.characters
 					.sort((a: Character, b: Character) => b.gameCount - a.gameCount)
@@ -96,9 +98,9 @@ export async function fetchSlippiUser(connectCode: string): Promise<Player | und
 				continentInitials:
 					player.rankedNetplayProfile.continent?.split('_').length == 2
 						? player.rankedNetplayProfile.continent
-								.split('_')
-								.map((c: string) => c[0])
-								.join('')
+							.split('_')
+							.map((c: string) => c[0])
+							.join('')
 						: player.rankedNetplayProfile.continent?.substring(0, 2) ?? '',
 				characters: player?.rankedNetplayProfile?.characters
 					.sort((a: Character, b: Character) => b.gameCount - a.gameCount)
