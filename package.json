@@ -30,7 +30,6 @@
 		"Chrome 89"
 	],
 	"dependencies": {
-		"@nut-tree/nut-js": "^2.3.0",
 		"@slippi/slippi-js": "^6.5.0",
 		"axios": "^1.2.1",
 		"chokidar": "^3.5.3",
