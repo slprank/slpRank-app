@@ -1,0 +1,15 @@
+{
+  "svelte.enable-ts-plugin": true,
+  "svelte.plugin.svelte.defaultScriptLanguage": "ts",
+  "[svelte]": {
+    "editor.defaultFormatter": "jkillian.custom-local-formatters"
+  },
+  "customLocalFormatters.formatters": [
+    {
+      "languages": [
+        "svelte"
+      ],
+      "command": "npm exec --offline --  prettier --parser svelte"
+    }
+  ]
+}
