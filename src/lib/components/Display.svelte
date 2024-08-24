@@ -4,11 +4,13 @@
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import PlayerDisplay from './PlayerDisplay.svelte';
+	import RecentPlayers from '$lib/components/RecentPlayers.svelte';
 
 	export let textColor = '';
 	export let displayOptions = {} as Options;
 	export let winColor: string;
 	export let loseColor: string;
+	export let recentPlayersByCode: Record<string, RecentPlayer> = {};
 
 	onMount(() => {
 		document.body.scrollIntoView();
@@ -24,6 +26,9 @@
 		out:fly={{ y: -100, duration: 300 }}
 	>
 		<PlayerDisplay {player} {textColor} {displayOptions} {winColor} {loseColor} />
+		{#if displayOptions.recentPlayers}
+			<RecentPlayers {recentPlayersByCode} {textColor} {winColor} {loseColor} />
+		{/if}
 	</div>
 {/if}
 

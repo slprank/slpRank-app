@@ -6,7 +6,7 @@
 	import type { GameEndType, GameStartType, SlippiGame, StatsType } from '@slippi/slippi-js';
 	import { onMount } from 'svelte';
 	import Home from '$lib/components/Home.svelte';
-	import type { Options, Player, PlayerStatsType } from '$lib/util/types';
+	import type { Options, Player, PlayerStatsType, RecentPlayer } from '$lib/util/types';
 	import {
 		currentPlayerConnectCode,
 		currentStats,
@@ -17,6 +17,7 @@
 	import { fetchSlippiUser } from '$lib/util/api';
 	import UpdateStats from '$lib/components/UpdateStats.svelte';
 	import SessionStats from '$lib/components/SessionStats.svelte';
+	import RecentPlayers from '$lib/components/RecentPlayers.svelte';
 	import CurrentSet from '$lib/components/CurrentSet.svelte';
 	import Leffen from '$lib/components/Leffen.svelte';
 	import { getPlayerCharacter } from '$lib/util/character';
@@ -56,6 +57,7 @@
 	let showPlayerTimeout: NodeJS.Timeout;
 
 	$: players = [] as (Player | undefined)[];
+	$: recentPlayersByCode = {} as Record<string, Player>;
 
 	$: displayOptions = {
 		automaticSessionReset: localStorage.getItem('automatic-session-reset') == 'true',
@@ -72,6 +74,7 @@
 		statsSpotDodges: localStorage.getItem('stats-spot-dodges') == 'true',
 		statsStocks: localStorage.getItem('stats-stocks') == 'true',
 		session: localStorage.getItem('session') == 'true',
+		recentPlayers: localStorage.getItem('recentPlayers') == 'true',
 		playerDisplayName: localStorage.getItem('player-display-name') == 'true',
 		playerConnectCode: localStorage.getItem('player-connect-code') == 'true',
 		playerRankIcon: localStorage.getItem('player-rank-icon') == 'true',
@@ -186,6 +189,19 @@
 					scores: $setStartStats.scores.map((score, i) => (score += placements[i]!))
 				};
 
+				for (const player of players) {
+					if (player.connectCode === $currentPlayerConnectCode) continue;
+
+					fetchSlippiUser(player.connectCode).then((slippiUser) => {
+						recentPlayers[player.connectCode] = {
+							...slippiUser,
+							...player,
+							name: player.displayName,
+							didUserWin: player.stats.stocks.length === 0
+						};
+					});
+				}
+
 				ShowPostGameStats();
 			}
 		);
@@ -217,6 +233,23 @@
 				...$currentStats
 			};
 		});
+
+		window.electron.receive(
+			'previous-opponents',
+			async (_recentPlayers: Partial<RecentPlayer>[]) => {
+				if (!_recentPlayers) return;
+
+				for (const recentPlayer of _recentPlayers) {
+					fetchSlippiUser(recentPlayer.connectCode).then((slippiUser) => {
+						recentPlayersByCode[recentPlayer.connectCode] = {
+							...slippiUser,
+							...recentPlayer
+						};
+					});
+				}
+			}
+		);
+
 		window.electron.receive('reset-score', async () => {
 			$setStartStats.scores = [0, 0];
 		});
@@ -349,6 +382,7 @@
 				{textColor}
 				{displayOptions}
 				player={players[$setStartStats?.currentPlayerIndex ?? 0]}
+				{recentPlayersByCode}
 				{winColor}
 				{loseColor}
 			/>
