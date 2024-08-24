@@ -20,12 +20,10 @@
 </script>
 
 {#if player}
-	<div
-		class="content"
-		in:fly={{ y: 100, duration: 300, delay: 305 }}
-		out:fly={{ y: -100, duration: 300 }}
-	>
-		<PlayerDisplay {player} {textColor} {displayOptions} {winColor} {loseColor} />
+	<div class="content">
+		<div in:fly={{ y: 100, duration: 300, delay: 305 }} out:fly={{ y: -100, duration: 300 }}>
+			<PlayerDisplay {player} {textColor} {displayOptions} {winColor} {loseColor} />
+		</div>
 		{#if displayOptions.recentPlayers}
 			<RecentPlayers {recentPlayersByCode} {textColor} {winColor} {loseColor} />
 		{/if}

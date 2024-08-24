@@ -74,7 +74,7 @@
 		statsSpotDodges: localStorage.getItem('stats-spot-dodges') == 'true',
 		statsStocks: localStorage.getItem('stats-stocks') == 'true',
 		session: localStorage.getItem('session') == 'true',
-		recentPlayers: localStorage.getItem('recentPlayers') == 'true',
+		recentPlayers: localStorage.getItem('recent-players') == 'true',
 		playerDisplayName: localStorage.getItem('player-display-name') == 'true',
 		playerConnectCode: localStorage.getItem('player-connect-code') == 'true',
 		playerRankIcon: localStorage.getItem('player-rank-icon') == 'true',

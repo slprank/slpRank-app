@@ -27,17 +27,8 @@
 </script>
 
 <div class="container" style={`color: ${textColor}`}>
-	<h5
-		in:fly={{ y: 100, duration: 300, delay: 10000 }}
-		out:fly={{ y: 100, duration: 300, delay: 700 }}
-	>
-		Recent players
-	</h5>
-	<div
-		class="players-row"
-		in:fly={{ y: 100, duration: 300, delay: 10000 }}
-		out:fly={{ y: 100, duration: 300, delay: 650 }}
-	>
+	<h5>Recent players</h5>
+	<div class="players-row">
 		{#each recentPlayers as player}
 			<div class="player">
 				{#if player.didUserWin}

@@ -86,6 +86,7 @@
 			displayOptions.automaticSessionReset.toString()
 		);
 		localStorage.setItem('slippi-stats', displayOptions.slippiStats.toString());
+		localStorage.setItem('recent-players', displayOptions.recentPlayers.toString());
 		localStorage.setItem(
 			`session-stats-${connectCode}`,
 			JSON.stringify($sessionStartStats) ?? ({} as PlayerSessionStats)
@@ -466,6 +467,7 @@
 				type="checkbox"
 				id="flexCheckDefault"
 				style="height: 35px; width: 47px"
+				data-tooltip="Show names and ranks of recent opponents"
 			/>
 		</div>
 		<hr />
