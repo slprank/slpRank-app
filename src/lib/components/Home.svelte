@@ -84,6 +84,7 @@
 			displayOptions.automaticSessionReset.toString()
 		);
 		localStorage.setItem('slippi-stats', displayOptions.slippiStats.toString());
+		localStorage.setItem('recent-players', displayOptions.recentPlayers.toString());
 		localStorage.setItem(
 			`session-stats-${connectCode}`,
 			JSON.stringify($sessionStartStats) ?? ({} as PlayerSessionStats)
@@ -322,16 +323,12 @@
 				>
 			</p>
 		{/if}
-		<h3 style={`margin-top: 0.5em; color: ${textColor}`}>Slippi replays directory</h3>
-		<button
-			on:click={SelectDirectory}
-			type="button"
-			class="btn btn-primary"
-			data-tooltip="Preferred not to use monthly sub folders for replays. Select most recent sub folder if you so chooses to use them"
-			>Select Directory</button
-		>
-		<p style={`color: ${textColor}`}>{gamePath ?? 'No directory selected'}</p>
-		<h3 style={`color: ${textColor}`}>Connect code</h3>
+		<h4 style={`margin-top: 0.5em; color: ${textColor}`}>Slippi replays directory</h4>
+		<div class="directory-input">
+			<button on:click={SelectDirectory} class="btn btn-success">Select</button>
+			<p style={`color: ${textColor}`}>{gamePath ?? 'No directory selected'}</p>
+		</div>
+		<h4 style={`color: ${textColor}`}>Connect code</h4>
 		<div class="col-2-container">
 			<input bind:value={connectCode} placeholder="abcd#123" />
 			<button
@@ -341,30 +338,21 @@
 				data-tooltip="Updating player will reset session">Update</button
 			>
 		</div>
-		<div>
-			{#if player}
-				<h5
-					class="left"
-					style={`color: ${textColor};`}
+		<div class="greeting-box">
+			{#key player?.displayName}
+				<p
+					style={`color: ${textColor}; visibility: ${
+						player?.displayName.length > 0 ? 'visible' : 'hidden'
+					};`}
 					in:fly={{ x: -20, duration: 300, delay: 305 }}
 					out:fly={{ x: -20, duration: 300 }}
 				>
-					Hi,
-				</h5>
-				{#key player?.displayName}
-					<h3
-						class="left"
-						style={`color: ${textColor}`}
-						in:fly={{ x: -20, duration: 300, delay: 350 }}
-						out:fly={{ x: -20, duration: 300 }}
-					>
-						{player?.displayName}
-					</h3>
-				{/key}
-			{/if}
+					Hi, {player?.displayName || 'player'}
+				</p>
+			{/key}
 		</div>
 	</div>
-	<div class="options-container">
+	<div class="options-container scrollbox">
 		<div class="option">
 			<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>
 				Background color:
@@ -388,20 +376,22 @@
 		</div>
 		<div class="option">
 			<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>W/L color:</h5>
-			<h5 style={`margin-top: auto; margin-bottom: auto; color: ${winColor}`}>W</h5>
-			<input
-				bind:value={winColor}
-				type="color"
-				class="form-control form-control-color"
-				id="exampleColorInput"
-			/>
-			<h5 style={`margin-top: auto; margin-bottom: auto; color: ${loseColor}`}>L</h5>
-			<input
-				bind:value={loseColor}
-				type="color"
-				class="form-control form-control-color"
-				id="exampleColorInput"
-			/>
+			<div class="win-loss-colors">
+				<h5 style={`margin-top: auto; margin-bottom: auto; color: ${winColor}`}>W</h5>
+				<input
+					bind:value={winColor}
+					type="color"
+					class="form-control form-control-color"
+					id="exampleColorInput"
+				/>
+				<h5 style={`margin-top: auto; margin-bottom: auto; color: ${loseColor}`}>L</h5>
+				<input
+					bind:value={loseColor}
+					type="color"
+					class="form-control form-control-color"
+					id="exampleColorInput"
+				/>
+			</div>
 		</div>
 		<div class="option">
 			<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>
@@ -454,6 +444,17 @@
 				id="flexCheckDefault"
 				style="height: 35px; width: 47px"
 				data-tooltip="Show post game stats"
+			/>
+		</div>
+		<div class="option">
+			<h5 style={`margin-top: auto; margin-bottom: auto; color: ${textColor}`}>Recent players:</h5>
+			<input
+				bind:checked={displayOptions.recentPlayers}
+				class="form-check-input"
+				type="checkbox"
+				id="flexCheckDefault"
+				style="height: 35px; width: 47px"
+				data-tooltip="Show names and ranks of recent opponents"
 			/>
 		</div>
 		<hr />
@@ -875,24 +876,24 @@
 
 <style>
 	.home {
-		padding-top: 1em;
-		padding-bottom: 1em;
-		display: flex;
-		grid-template-rows: repeat(3, 1fr);
-		grid-template-columns: repeat(1);
-		grid-gap: auto;
-		align-items: center;
-		justify-content: center;
 		height: 95vh;
+		display: flex;
 		flex-direction: column;
 		gap: 2em;
-		padding: 2em;
+	}
+
+	.greeting-box {
+		height: 1.5em;
+		overflow: hidden;
+	}
+
+	.win-loss-colors {
+		display: flex;
+		gap: 0.6em;
 	}
 
 	.box {
 		display: flex;
-		align-items: left;
-		justify-content: space-evenly;
 		flex-direction: column;
 		gap: 1em;
 	}
@@ -912,7 +913,22 @@
 		width: 100%;
 		flex-direction: column;
 		gap: 1em;
-		overflow-x: auto;
+	}
+
+	.directory-input {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+	}
+
+	.directory-input p {
+		width: 10px;
+		flex-grow: 1;
+		overflow: hidden;
+		direction: rtl;
+		white-space: nowrap;
+		position: relative;
+		text-overflow: ellipsis;
 	}
 
 	.option {

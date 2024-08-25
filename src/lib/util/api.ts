@@ -12,9 +12,23 @@ export async function fetchSlippiUser(connectCode: string): Promise<Player | und
 			await axios.get(`http://slprank.com/rank/${connectCode.replace('#', '-')}?raw`)
 		).data;
 		console.log(slpPlayer);
+		const characters = slpPlayer?.characters
+			.sort((a: Character, b: Character) => b.gameCount - a.gameCount)
+			.slice(0, 3)
+			.map(
+				(c: Character): Character => ({
+					character: c.characterName?.toUpperCase() ?? '',
+					characterName: c.characterName?.toUpperCase() ?? '',
+					gameCount: c.gameCount,
+					icon: `${c.characterName?.toUpperCase().replace(/\s+/g, '_')}.png`,
+					characterId: -1,
+					characterColorId: -1
+				})
+			) as unknown as Character[];
 		return {
 			connectCode: connectCode,
 			displayName: slpPlayer.displayName,
+			character: characters[0],
 			totalGames: slpPlayer.characters
 				.map((c: any) => c.gameCount)
 				.reduce((a: number, b: number) => a + b, 0),
@@ -28,19 +42,7 @@ export async function fetchSlippiUser(connectCode: string): Promise<Player | und
 							.join('')
 							.toUpperCase()
 						: slpPlayer.continent?.substring(0, 2).toUpperCase() ?? '',
-				characters: slpPlayer?.characters
-					.sort((a: Character, b: Character) => b.gameCount - a.gameCount)
-					.slice(0, 3)
-					.map(
-						(c: Character): Character => ({
-							character: c.characterName?.toUpperCase() ?? '',
-							characterName: c.characterName?.toUpperCase() ?? '',
-							gameCount: c.gameCount,
-							icon: `${c.characterName?.toUpperCase().replace(/\s+/g, '_')}.png`,
-							characterId: -1,
-							characterColorId: -1
-						})
-					) as unknown as Character,
+				characters,
 				dailyGlobalPlacement: slpPlayer.dailyGlobalPlacement,
 				dailyRegionalPlacement: slpPlayer.dailyRegionalPlacement,
 				wins: slpPlayer.wins ?? 0,
@@ -114,7 +116,7 @@ export async function fetchSlippiUser(connectCode: string): Promise<Player | und
 							characterColorId: -1,
 							characterName: c.characterName?.toUpperCase() ?? ''
 						})
-					) as unknown as Character,
+				) as unknown as Character[],
 				dailyGlobalPlacement: player.rankedNetplayProfile.dailyGlobalPlacement,
 				dailyRegionalPlacement: player.rankedNetplayProfile.dailyRegionalPlacement,
 				wins: player.rankedNetplayProfile.wins ?? 0,

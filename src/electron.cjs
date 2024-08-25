@@ -9,17 +9,16 @@ const {
 	ConnectionStatus,
 	DolphinMessageType,
 	Command,
-	SlpCommandEventPayload,
 	SlpParserEvent,
-	FrameEntryType,
 	SlpStream,
 	SlpStreamEvent,
 	SlippiGame,
-	GameMode
+	GameMode,
 } = require('@slippi/slippi-js');
 const serve = require('electron-serve');
 const path = require('path');
 const log = require('electron-log');
+const fs = require('fs');
 
 try {
 	const os = require('os');
@@ -31,8 +30,6 @@ try {
 	let gameStartTimeout;
 	let gameEndTimeout;
 	let returnHomeTimeout;
-
-	const fs = require('fs');
 
 	if (isWindows && !fs.existsSync(path.join(`C:slippi-stats-display-logs`))) {
 		fs.mkdirSync(path.join(`C:/slippi-stats-display-logs`), { recursive: true });
@@ -75,16 +72,14 @@ try {
 	let gameDirectory = '';
 
 	slpStream.on(SlpStreamEvent.COMMAND, (event) => {
-		// console.log("Commmand parsed by SlpStream: " + event.command + event.payload)
 		parser.handleCommand(event.command, event.payload);
 		if (event.command == 54) {
 			mainWindow.webContents.send(
 				'game-start',
-				parser.getSettings().players[0].connectCode,
-				parser.getSettings().players[1].connectCode,
+				parser.getSettings()?.players[0].connectCode,
+				parser.getSettings()?.players[1].connectCode,
 				parser.getSettings()
 			);
-			console.log(parser.getSettings());
 		}
 	});
 
@@ -362,16 +357,12 @@ try {
 
 		if (canceled) return;
 
-		const fs = require('fs');
-		const path = require('path');
-
 		let file = await fs.promises.readFile(filePaths[0], { encoding: 'base64' });
 
 		return base64 + file;
 	});
 
 	ipcMain.handle('get-file', async (_, destination, filename) => {
-		const fs = require('fs');
 
 		const file = path.join(__dirname, destination, filename);
 
@@ -407,6 +398,13 @@ try {
 		gameDirectory = dir;
 		currentPlayerConnectCode = connectCode;
 		mainWindow.webContents.send('init-stats');
+
+		GetPreviousOpponents()
+			.then(previousOpponents => {
+				mainWindow.webContents.send('previous-opponents', previousOpponents);
+			})
+			.catch(err => console.error(err));
+
 	});
 
 	ipcMain.handle('dolphin/status', async (_, dir) => {
@@ -423,13 +421,15 @@ try {
 	});
 
 	function GetGameFiles() {
-		const fs = require('fs');
 		const re = new RegExp('^Game_.*.slp$');
-		const path = require('path');
 
 		let files = fs.readdirSync(gameDirectory).map((filename) => `${path.parse(filename).name}.slp`);
 
-		files = files.filter((f) => re.test(f)).map((f) => `${gameDirectory}/${f}`);
+		files = files.filter((f) => re.test(f))
+			.map((f) => path.format({
+				dir: gameDirectory,
+				base: path.basename(f),
+			}));
 		return files.sort((a, b) => a.length - b.length);
 	}
 
@@ -439,18 +439,73 @@ try {
 		return game.getStats();
 	}
 
+	async function GetPreviousOpponents() {
+
+		let files = GetGameFiles();
+		if (!files.length) return;
+		files.sort((a, b) => {
+			if (a < b) return 1;
+			if (a > b) return -1;
+			return 0;
+		});
+
+		const limitCountFiles = files.slice(0, 25);
+
+		const previousOpponentsByConnectCode = {};
+
+		for (const file of limitCountFiles) {
+
+			const game = new SlippiGame(file);
+			const settings = game.getSettings();
+			if (settings.gameMode !== GameMode.ONLINE) continue;
+
+			const metadata = game.getMetadata();
+
+			const players = Object.entries(metadata.players)
+				.map(([playerIndex, player]) => ({
+					playerIndex: parseInt(playerIndex),
+					characters: player.characters,
+					dateStarted: metadata.startAt,
+					...player.names,
+				}));
+
+			const userPlayer = players.find(p => p.code === currentPlayerConnectCode);
+			if (!userPlayer) continue;
+
+			const opponents = players.filter(p => p.code !== currentPlayerConnectCode);
+
+			const winnersPlayerIndexes = game.getWinners().map(winner => winner.playerIndex);
+			const didUserWin = winnersPlayerIndexes.includes(userPlayer.playerIndex);
+
+			for (const opponent of opponents) {
+				if (previousOpponentsByConnectCode[opponent.code]) continue;
+
+				previousOpponentsByConnectCode[opponent.code] = {
+					...opponent,
+					name: opponent.netplay,
+					connectCode: opponent.code,
+					didUserWin,
+				};
+			}
+
+			if (Object.keys(previousOpponentsByConnectCode).length >= 3) break;
+		}
+
+		return Object.values(previousOpponentsByConnectCode);
+	}
+
 	async function RunTests() {
 		mainWindow.webContents.send('is-test');
 		let files = GetGameFiles();
 		let file = files.filter(
-			(file) => new SlippiGame(file).getSettings().gameMode === GameMode.ONLINE
+			(file) => new SlippiGame(file).getSettings()?.gameMode === GameMode.ONLINE
 		)[Math.floor(Math.random() * files.length)];
 		const game = new SlippiGame(file);
 		gameStartTimeout = setTimeout(() => {
 			mainWindow.webContents.send(
 				'game-start',
-				game.getSettings().players[0].connectCode,
-				game.getSettings().players[1].connectCode,
+				game.getSettings()?.players[0].connectCode,
+				game.getSettings()?.players[1].connectCode,
 				game.getSettings()
 			);
 			gameEndTimeout = setTimeout(() => {

@@ -38,6 +38,13 @@ export interface PlayerStatsType {
 	overall: OverallType;
 }
 
+export interface RecentPlayer extends Player {
+	name: string;
+	connectCode: string;
+	didUserWin: boolean;
+	dateStarted: string;
+}
+
 export interface Options {
 	automaticSessionReset: boolean;
 	playerDisplayName: boolean;
@@ -87,7 +94,7 @@ interface RankedNetplayProfile {
 	continent: string;
 	continentInitials: string;
 	characters: Character[];
-	leaderboardPlacement: number;
+	leaderboardPlacement?: number;
 	dailyGlobalPlacement: number;
 	dailyRegionalPlacement: number;
 	losses: number;
