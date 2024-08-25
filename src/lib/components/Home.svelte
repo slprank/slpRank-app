@@ -31,8 +31,6 @@
 	export let setWonDir = localStorage.getItem('setWonBase64');
 	export let setLostDir = localStorage.getItem('setLostBase64');
 	export let setEndDir = localStorage.getItem('setEndBase64');
-	export let previousOpponents = [] as (PreviousOpponent | undefined)[];
-	export let slippiUsersByCode = {} as Record<string, Player>;
 
 	let connectCode = localStorage.getItem('player-code') ?? '';
 	let player: Player | undefined;

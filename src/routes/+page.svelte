@@ -199,7 +199,7 @@
 							...player,
 							name: player.displayName,
 							playerIndex,
-							didUserWin: placements[playerIndex] === 1,
+							didUserWin: placements[playerIndex] === 0,
 							dateStarted: (new Date()).toISOString(),
 						};
 					});
