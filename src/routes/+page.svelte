@@ -191,13 +191,16 @@
 
 				for (const player of players) {
 					if (player.connectCode === $currentPlayerConnectCode) continue;
+					const { playerIndex } = player.stats.overall;
 
 					fetchSlippiUser(player.connectCode).then((slippiUser) => {
-						recentPlayers[player.connectCode] = {
+						recentPlayersByCode[player.connectCode] = {
 							...slippiUser,
 							...player,
 							name: player.displayName,
-							didUserWin: player.stats.stocks.length === 0
+							playerIndex,
+							didUserWin: placements[playerIndex] === 1,
+							dateStarted: (new Date()).toISOString(),
 						};
 					});
 				}
