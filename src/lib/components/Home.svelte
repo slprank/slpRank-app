@@ -18,7 +18,33 @@
 	export let dolphinStatus = '';
 	export let dolphinConnected = false;
 	export let gamePath = '';
-	export let displayOptions = {} as Options;
+	export let displayOptions = {
+		automaticSessionReset: false,
+		playerDisplayName: true,
+		playerConnectCode: false,
+		playerRating: true,
+		playerPlacement: true,
+		playerWinLoss: true,
+		playerCharacters: true,
+		playerRankIcon: true,
+		playerRankText: true,
+		slippiStats: true,
+		displayOpponent: false,
+		statsRank: false,
+		statsNeutralWins: true,
+		statsOpeningsKill: true,
+		statsDamageOpening: true,
+		statsInputsMin: true,
+		statsDigitalInputsMin: false,
+		statsRolls: false,
+		statsLCancel: false,
+		statsTotalDamage: true,
+		statsSpotDodges: false,
+		statsStocks: true,
+		session: true,
+		currentGameCharacters: false,
+		recentPlayers: true
+	} as Options;
 	export let start = false;
 	export let sessionTitle = localStorage.getItem('session-title') ?? "Today's stats";
 	export let obsStartScene = '';
@@ -212,21 +238,6 @@
 		window.electron.runTests();
 	}
 
-	function SetDefaultOptions() {
-		displayOptions = {
-			...defaultOptions
-		};
-
-		backgroundColor = '#2C2F33';
-		textColor = '#ffffff';
-		winColor = '#2ECC40';
-		loseColor = '#FF4D00';
-		obsStartScene = '';
-		obsEndScene = '';
-		obsUpdateStatsScene = '';
-		obsPostGameStatsScene = '';
-	}
-
 	const defaultOptions = {
 		automaticSessionReset: false,
 		playerDisplayName: true,
@@ -251,8 +262,24 @@
 		statsSpotDodges: false,
 		statsStocks: true,
 		session: true,
-		currentGameCharacters: false
+		currentGameCharacters: false,
+		recentPlayers: true
 	} as Options;
+
+	function SetDefaultOptions() {
+		displayOptions = {
+			...defaultOptions
+		};
+
+		backgroundColor = '#2C2F33';
+		textColor = '#ffffff';
+		winColor = '#2ECC40';
+		loseColor = '#FF4D00';
+		obsStartScene = '';
+		obsEndScene = '';
+		obsUpdateStatsScene = '';
+		obsPostGameStatsScene = '';
+	}
 
 	function SwitchScene(sceneName: string) {
 		window.electron.switchScene(sceneName);
