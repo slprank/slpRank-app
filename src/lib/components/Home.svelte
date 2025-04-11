@@ -357,7 +357,12 @@
 		</div>
 		<h4 style={`color: ${textColor}`}>Connect code</h4>
 		<div class="col-2-container">
-			<input bind:value={connectCode} placeholder="abcd#123" />
+			<div class="input-container">
+				<input bind:value={connectCode} placeholder="abcd#123" />
+				{#if connectCode && !player}
+					<span class="error-indicator" title="Failed to fetch player data">!</span>
+				{/if}
+			</div>
 			<button
 				class="btn btn-success"
 				style="width: 5em"
@@ -1053,5 +1058,22 @@
 	[data-tooltip='false']:hover:after {
 		visibility: hidden;
 		opacity: 0;
+	}
+
+	.input-container {
+		position: relative;
+		display: flex;
+		align-items: center;
+		margin-right: 25px;
+	}
+
+	.error-indicator {
+		position: absolute;
+		right: -25px;
+		color: #ff4444;
+		font-weight: bold;
+		font-size: 1.2em;
+		cursor: help;
+		padding: 0 8px;
 	}
 </style>
