@@ -57,77 +57,51 @@ export async function fetchSlippiUser(connectCode: string): Promise<Player | und
 	}
 
 	try {
-		let res = await axios.post('https://gql-gateway-dot-slippi.uc.r.appspot.com/graphql', {
-			operationName: 'AccountManagementPageQuery',
-			variables: {
-				cc: connectCode,
-				uid: connectCode
+		const response = await axios.post(
+			"https://gql-gateway-dot-slippi.uc.r.appspot.com/graphql",
+			{
+				query: `query AccountManagementPageQuery($cc: String!) {
+			          getConnectCode(code: $cc) {
+			            user {
+			              fbUid
+			              displayName
+			              connectCode {
+			                code
+			              }
+			              status
+			              activeSubscription {
+			                level
+			                hasGiftSub
+			              }
+			              rankedNetplayProfile {
+			                id
+			                ratingOrdinal
+			                ratingUpdateCount
+					ratingMu
+					ratingSigma
+			                wins
+			                losses
+			                dailyGlobalPlacement
+			                dailyRegionalPlacement
+			                continent
+			                characters {
+			                  character
+			                  gameCount
+			                }
+			              }
+			            }
+			          }
+			        }`,
+				variables: { cc: connectCode },
 			},
-			query: `fragment profileFieldsV2 on NetplayProfileV2 {
-				id
-				ratingOrdinal
-				ratingUpdateCount
-				wins
-				losses
-				dailyGlobalPlacement
-				dailyRegionalPlacement
-				continent
-				characters {
-					character
-					gameCount
-					__typename
-				}
-				__typename
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "*/*",
+					"apollographql-client-name": "slippi-web",
+				},
 			}
-
-			fragment userProfilePage on User {
-				fbUid
-				displayName
-				connectCode {
-					code
-					__typename
-				}
-				status
-				activeSubscription {
-					level
-					hasGiftSub
-					__typename
-				}
-				rankedNetplayProfile {
-					...profileFieldsV2
-					__typename
-				}
-				__typename
-			}
-
-			query AccountManagementPageQuery($cc: String!, $uid: String!) {
-				getUser(fbUid: $uid) {
-					...userProfilePage
-					__typename
-				}
-				getConnectCode(code: $cc) {
-					user {
-						...userProfilePage
-						__typename
-					}
-					__typename
-				}
-			}`
-		}, {
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: '*/*',
-				'Accept-Encoding': 'gzip, deflate, br',
-				Host: 'gql-gateway-dot-slippi.uc.r.appspot.com',
-				'Accept-Language': 'en-GB,en;q=0.9',
-				Origin: 'https://slippi.gg',
-				'User-Agent':
-					'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
-				Connection: 'keep-alive',
-				Referer: 'https://slippi.gg/',
-				'apollographql-client-name': 'slippi-web'
-			}
-		});
+		);
 
 		let player = res.data?.data?.getConnectCode?.user;
 		if (!player) return;
