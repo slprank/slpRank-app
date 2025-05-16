@@ -6,74 +6,84 @@ export async function fetchSlippiUser(connectCode: string): Promise<Player | und
 	if (!connectCode) return;
 
 	try {
-		let res = await axios.post('https://gql-gateway-2-dot-slippi.uc.r.appspot.com/graphql', {
-			operationName: 'AccountManagementPageQuery',
-			variables: {
-				cc: connectCode,
-				uid: connectCode
+		const response = await axios.post(
+			"https://internal.slippi.gg/graphql",
+			{
+				query: `
+				fragment profileFields on NetplayProfile {
+					id
+					ratingMu
+					ratingSigma
+					ratingOrdinal
+					ratingUpdateCount
+					wins
+					losses
+					dailyGlobalPlacement
+					dailyRegionalPlacement
+					continent
+					characters {
+						character
+						gameCount
+						__typename
+					}
+					__typename
+				}
+				fragment userProfilePage on User {
+					fbUid
+					displayName
+					connectCode {
+						code
+						__typename
+					}
+					status
+					activeSubscription {
+						level
+						hasGiftSub
+						__typename
+					}
+					rankedNetplayProfile {
+						...profileFields
+						__typename
+					}
+					rankedNetplayProfileHistory {
+						...profileFields
+						season {
+							id
+							startedAt
+							endedAt
+							name
+							status
+							__typename
+						}
+						__typename
+					}
+					__typename
+				}
+				query UserProfilePageQuery($cc: String, $uid: String) {
+					getUser(fbUid: $uid, connectCode: $cc) {
+						...userProfilePage
+						__typename
+					}
+				}
+			`,
+				variables: { cc: connectCode, uid: null },
 			},
-			query: `fragment profileFieldsV2 on NetplayProfileV2 {
-	id
-	ratingOrdinal
-	ratingUpdateCount
-	wins
-	losses
-	dailyGlobalPlacement
-	dailyRegionalPlacement
-	continent
-	characters {
-		character
-		gameCount
-		__typename
-	}
-	__typename
-}
-
-fragment userProfilePage on User {
-	fbUid
-	displayName
-	connectCode {
-		code
-		__typename
-	}
-	status
-	activeSubscription {
-		level
-		hasGiftSub
-		__typename
-	}
-	rankedNetplayProfile {
-		...profileFieldsV2
-		__typename
-	}
-	__typename
-}
-
-query AccountManagementPageQuery($cc: String!, $uid: String!) {
-	getUser(fbUid: $uid) {
-		...userProfilePage
-		__typename
-	}
-	getConnectCode(code: $cc) {
-		user {
-			...userProfilePage
-			__typename
-		}
-		__typename
-	}
-}`
-		}, {
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: '*/*',
-				'Accept-Language': 'en-US,en;q=0.5',
-				'apollographql-client-name': 'slippi-web'
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "*/*",
+					"apollographql-client-name": "slippi-web",
+				},
 			}
-		});
+		);
 
-		let player = res.data?.data?.getConnectCode?.user || res.data?.data?.getUser;
+		const data =
+			response?.data.data;
+
+
+		let player: Player = await data?.getUser;
 		if (!player) {
-			console.log('No player data found in response:', res.data);
+			console.log('No player data found in response:', response.data.data);
 			return;
 		}
 
